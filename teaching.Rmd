@@ -1,0 +1,30 @@
+---
+title: "Teaching"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 4
+---
+
+#### Current Teaching
+
++ MTH 017 Linear Algebra for Mathematical Science, Fall 2021
+
+
+#### Past Teaching
+
++ MTH 002 Multivariable Calculus and Statistics, Xi'an Jiaotong-Liverpool University
++ MTH 007 Linear Algebra, Xi'an Jiaotong-Liverpool University
++ Stats3Y03/3J04  Probability and Statistics for Engineering, McMaster University
+
+
+#### Summer Research Project
+
+#### Final Year Project 
+
+[Topics](https://hemu0626.github.io/Final-Year-Project/):
+
++ Advanced Statistical Methods
++ Survival Analysis 
++ Epidimiology

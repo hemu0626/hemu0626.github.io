@@ -1,17 +1,28 @@
 ---
 title: "HomePage"
+output:
+  html_document:
+    toc: true
 ---
 
 
-I am a Lecturer at Xi'an Jiaotong-Liverpool University， I received the Ph.D. in Mathematics under Prof. Balakrishnan's supervison at McMaster University, Ontario, Canada in 2021. My research interests include Survival Analysis, Biostatistics, Reliability and Epidemiology.
+
+![](https://www.xjtlu.edu.cn/en/assets/image-cache/upload/ZZXy8uNxGWTAWatwd3zi.5217ba1e.jpg){width=30%}
 
 
+I am a Lecturer at Xi'an Jiaotong-Liverpool University, I received the Ph.D. in Mathematics under Prof. Balakrishnan's supervison at McMaster University, Ontario, Canada in 2021. My research interests include Survival Analysis, Biostatistics, Reliability and Epidemiology.
 
 
-|Contact:                                                                |
-|:--------------------------------------------|--------------------------|
-| MB530                                       | Tel: 8897 3043           |
-| Department of Foundational Mathematics      |                          |
-| Xi'an Jiaotong-Liverpool University         | Email: mu.he@xjtlu.edu.cn|
-| Suzhou, JiangSu, CHina                      |                          |
+$~$
+
+$~$
+
+$~$
+
+|Contact Information:                                                              |
+|:--------------------------------------------|------------------------------------|
+| MB530                                       | Tel: +86 (0512)8897 3043           |
+| Department of Foundational Mathematics      |                                    |
+| Xi'an Jiaotong-Liverpool University         | Email: mu.he@xjtlu.edu.cn          |
+| Suzhou, JiangSu, China                      |                                    |
 
