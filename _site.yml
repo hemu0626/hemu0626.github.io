@@ -4,15 +4,9 @@ navbar:
   title: "Mu He"
 left:
   - text: "Research"
-    href: index.html
-  - text: "Final Year Project Outline"
-    href: fyp_outline.html
-  - text: "Advanced Statistical Methods"
-    href: adsm.html
-  - text: "Survival Analysis"
-    href: survival.html
-  - text: "Epidemiology"
-    href: epidemiology.html
+    href: research.html
+  - text: "Teaching"
+    href: teaching.html
 output:
   html_document:
     theme: cosmo
