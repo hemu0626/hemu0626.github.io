@@ -3,3 +3,7 @@ title: "HomePage"
 ---
 
 This is a homepage
+
+## About Me
+
+I am a Lecturer at Xi'an Jiaotong-Liverpool University

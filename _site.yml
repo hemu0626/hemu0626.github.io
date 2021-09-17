@@ -2,7 +2,7 @@ name: "Mu He"
 output_dir: "docs"
 navbar:
   title: "Mu He"
-left:
+  left:
   - text: "Research"
     href: research.html
   - text: "Teaching"
