@@ -18,13 +18,6 @@ output:
 + MTH 007 Linear Algebra, Xi'an Jiaotong-Liverpool University
 + Stats3Y03/3J04  Probability and Statistics for Engineering, McMaster University
 
-
-#### Summer Research Project
-
 #### Final Year Project 
 
-[Topics](https://hemu0626.github.io/Final-Year-Project/):
-
-+ Advanced Statistical Methods
-+ Survival Analysis 
-+ Epidimiology
++ [Final Year Project Website](https://hemu0626.github.io/Final-Year-Project/)
