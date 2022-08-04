@@ -13,8 +13,8 @@
 
 <title>Teaching</title>
 
-<script src="site_libs/header-attrs-2.8/header-attrs.js"></script>
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
@@ -340,18 +340,19 @@ div.tocify {
 </div>
 
 
-<div id="current-teaching" class="section level4">
-<h4>Current Teaching</h4>
+<div id="teaching" class="section level4">
+<h4>Teaching</h4>
 <ul>
-<li>MTH 017 Linear Algebra for Mathematical Science, Fall 2021</li>
-</ul>
-</div>
-<div id="past-teaching" class="section level4">
-<h4>Past Teaching</h4>
-<ul>
+<li>MTH 017 Linear Algebra for Mathematical Science</li>
 <li>MTH 002 Multivariable Calculus and Statistics, Xi’an Jiaotong-Liverpool University</li>
 <li>MTH 007 Linear Algebra, Xi’an Jiaotong-Liverpool University</li>
 <li>Stats3Y03/3J04 Probability and Statistics for Engineering, McMaster University</li>
+</ul>
+</div>
+<div id="surf-2022" class="section level4">
+<h4>SURF 2022</h4>
+<ul>
+<li><a href="https://hemu0626.github.io/Item_Repsone_Theoryu/index.html">SURF 2022 Website</a></li>
 </ul>
 </div>
 <div id="final-year-project" class="section level4">
@@ -399,6 +400,9 @@ $(document).ready(function () {
 
 <script>
 $(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
 
     // move toc-ignore selectors from section div to header
     $('div.section.toc-ignore')
