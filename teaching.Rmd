@@ -7,16 +7,17 @@ output:
     toc_depth: 4
 ---
 
-#### Current Teaching
-
-+ MTH 017 Linear Algebra for Mathematical Science, Fall 2021
 
 
-#### Past Teaching
 
+#### Teaching
+
++ MTH 017 Linear Algebra for Mathematical Science 
 + MTH 002 Multivariable Calculus and Statistics, Xi'an Jiaotong-Liverpool University
 + MTH 007 Linear Algebra, Xi'an Jiaotong-Liverpool University
 + Stats3Y03/3J04  Probability and Statistics for Engineering, McMaster University
+
+#### SURF 2022
 
 #### Final Year Project 
 
