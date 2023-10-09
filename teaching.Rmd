@@ -8,8 +8,6 @@ output:
 ---
 
 
-
-
 #### Teaching
 
 + MTH 017 Linear Algebra for Mathematical Science 
