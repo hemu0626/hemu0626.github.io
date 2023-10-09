@@ -1,21 +1,22 @@
 ---
-title: "HomePage"
+title: "Home"
 output:
   html_document:
     toc: true
 ---
 
 
-
-![](https://www.xjtlu.edu.cn/en/assets/image-cache/upload/ZZXy8uNxGWTAWatwd3zi.5217ba1e.jpg){width=30%}
-
-
-I am a Lecturer at Xi'an Jiaotong-Liverpool University, I received the Ph.D. in Mathematics under Prof. Balakrishnan's supervison at McMaster University, Ontario, Canada in 2021. My research interests include Survival Analysis, Biostatistics, Reliability and Epidemiology.
+![](http://profile.xjtlu.edu.cn/upload/ZZXy8uNxGWTAWatwd3zi.jpg){width=30%}
 
 
-$~$
+
+I am a Assistant Professor at Xi'an Jiaotong-Liverpool University, I received the Ph.D. in Mathematics under Prof. Balakrishnan's supervison at McMaster University, Ontario, Canada in 2021. My research interests include Statistics, Biostatistics, Reliability and Epidemiology.
+
 
 $~$
+
+
+![](https://www.xjtlu.edu.cn/wp-content/uploads/2022/09/campus-blossom-2.1f5be76d.jpg){width=50%}
 
 $~$
 
