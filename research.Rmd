@@ -2,4 +2,25 @@
 title: "Research"
 ---
 
-My [Google Scholar](https://scholar.google.com/citations?user=HOOCmJ0AAAAJ&hl=en) for publications (or check with my [ORCID ID](https://orcid.org/0000-0002-0085-7181) profile)
+
+#### Publications
+
++ My [Google Scholar](https://scholar.google.com/citations?user=HOOCmJ0AAAAJ&hl=en) for publications (or check with my [ORCID ID](https://orcid.org/0000-0002-0085-7181) profile)
+
+#### Reviewer
+
++ Reliability Engineering & System Safety 
+
++ Mathematical Biosciences and Engineering 
+
++ Infectious Disease Modelling 
+
++ Computational and Applied Mathematics 
+
++ Communications in Statistics - Theory and Methods 
+
++ Communications in Statistics - Simulation and Computation 
+
+#### Awards
+
++ Jiangsu Provincial Double-Innovation Doctor Program, 2022
