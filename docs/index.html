@@ -13,7 +13,7 @@
 
 <title>Home</title>
 
-<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -141,11 +141,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -174,8 +178,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -183,16 +187,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -274,12 +271,21 @@ $(document).ready(function () {
 </div>
 
 
-<p><img src="http://profile.xjtlu.edu.cn/upload/ZZXy8uNxGWTAWatwd3zi.jpg" style="width:30.0%" /></p>
-<p>I am a Assistant Professor at Xi’an Jiaotong-Liverpool University, I received the Ph.D. in Mathematics under Prof. Balakrishnan’s supervison at McMaster University, Ontario, Canada in 2021.</p>
-<p>My research interests include Statistics, Reliability and Infectious Disease Dynamics.</p>
+<p><img
+src="http://profile.xjtlu.edu.cn/upload/ZZXy8uNxGWTAWatwd3zi.jpg"
+style="width:30.0%" /></p>
+<p>I am a Assistant Professor at Xi’an Jiaotong-Liverpool University, I
+received the Ph.D. in Mathematics under Prof. Balakrishnan’s supervison
+at McMaster University, Ontario, Canada in 2021.</p>
+<p>My research interests include Statistics, Reliability and Infectious
+Disease Dynamics.</p>
 <p><span class="math inline">\(~\)</span></p>
 <p><span class="math inline">\(~\)</span></p>
 <table>
+<colgroup>
+<col width="55%" />
+<col width="44%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">Contact Information:</th>
@@ -297,7 +303,8 @@ $(document).ready(function () {
 </tr>
 <tr class="odd">
 <td align="left">Xi’an Jiaotong-Liverpool University</td>
-<td>Email: <a href="mailto:mu.he@xjtlu.edu.cn" class="email">mu.he@xjtlu.edu.cn</a></td>
+<td>Email: <a href="mailto:mu.he@xjtlu.edu.cn"
+class="email">mu.he@xjtlu.edu.cn</a></td>
 </tr>
 <tr class="even">
 <td align="left">Suzhou, JiangSu, China</td>
@@ -306,7 +313,9 @@ $(document).ready(function () {
 </tbody>
 </table>
 <p><span class="math inline">\(~\)</span></p>
-<p><img src="https://www.xjtlu.edu.cn/wp-content/uploads/2022/09/campus-blossom-2.1f5be76d.jpg" style="width:60.0%" /></p>
+<p><img
+src="https://www.xjtlu.edu.cn/wp-content/uploads/2022/09/campus-blossom-2.1f5be76d.jpg"
+style="width:60.0%" /></p>
 
 
 
