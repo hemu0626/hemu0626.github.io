@@ -1,8 +1,8 @@
 name: "Dr. Mu He"
 output_dir: "docs"
 navbar:
-  title: "Dr. Mu He"
-  left:
+  title: "Homepage"
+  right:
     - text: "Research"
       href: research.html
     - text: "Teaching"
