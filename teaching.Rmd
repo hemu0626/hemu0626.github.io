@@ -19,7 +19,7 @@ output:
 
 #### Modeling Contest Talk
 
-+ Data Visualization [(Website)](https://hemu0626.github.io/MTH020/)
++ Data Visualization [(Website)](https://hemu0626.github.io/modeling/)
 
 #### Summer Undergraduate Research Fellowship
 
