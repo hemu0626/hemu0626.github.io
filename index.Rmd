@@ -8,7 +8,7 @@ output:
 ---
 
 :::::::::::::: {.columns}
-::: {.column width="60%"}
+::: {.column width="65%"}
 
 
 $~$
@@ -18,14 +18,16 @@ Dr. Mu He, Assistant Professor in School of Mathematics and Physics at Xi'an Jia
 
 Research interests: Statistics, Reliability and Infectious Disease Dynamics.
 
-I am interested in data-driven and applied problems in statistics, such as bio-statistics, reliability and public health related data. I got my B.Sc. in Applied Mathematics (Investment Science) at the Hong Kong Polytechnic University in 2015, then I received my M.Sc. in Statistics and Ph.D. in Mathematics(Statistics) at McMaster University in 2016 and 2021. 
+I am interested in data-driven and applied problems in statistics, such as bio-statistics, reliability and public health related data. 
+
+I got my B.Sc. in Applied Mathematics (Investment Science) at the Hong Kong Polytechnic University in 2015, then I received my M.Sc. in Statistics and Ph.D. in Mathematics(Statistics) at McMaster University in 2016 and 2021. 
 
 
 
 :::
-::: {.column width="40%"}
+::: {.column width="35%"}
 
-![](http://profile.xjtlu.edu.cn/upload/9g2dtmcssCSIyqBnYR8D.JPG){width=150%}
+![](http://profile.xjtlu.edu.cn/upload/9g2dtmcssCSIyqBnYR8D.JPG){width=120%}
 
 :::
 ::::::::::::::
