@@ -1,11 +1,13 @@
 ---
-title: "About Me"
+title: ""
 classoption:
 - twocolumn
 output:
   html_document:
-    toc: true
+    toc: false
 ---
+
+## About: 
 
 :::::::::::::: {.columns}
 ::: {.column width="65%"}
@@ -32,7 +34,7 @@ I got my B.Sc. in Applied Mathematics (Investment Science) at the Hong Kong Poly
 :::
 ::::::::::::::
 
-
+## Cureent Projects:
 
 I am seeking motivated and interested undergraduate and graduate students to join my research team. We have collaborations with Shanghai Jiao Tong University School of Medicine and Jiangsu People's Hospital, and are currently seeking data analysts and research assistant to help us process and understand vast amounts of information.
 
