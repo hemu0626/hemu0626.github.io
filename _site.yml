@@ -7,9 +7,7 @@ navbar:
       href: research.html
     - text: "Teaching"
       href: teaching.html
-    - text: "Final Year Project"
-      href: fyp.html
-    - text: "Graduate Supervison"
+    - text: "Supervison"
       href: super.html
 output:
   html_document:
