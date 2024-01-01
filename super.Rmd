@@ -13,8 +13,8 @@ output:
 
 ##### Ph.D Candidate
 
-
-+ Jiahao Zhao, Jointly with Prof. Kaizhu Huang, 2023 - present
++ Yiliang Zhou, PGRS Funded, Jointly with Prof. N. Balakrishnan, 2023 - present
++ Jiahao Zhao, PGRS Funded, Jointly with Prof. Kaizhu Huang, 2023 - present
 
 
 ##### M.Sc. Candidate
@@ -23,15 +23,14 @@ output:
 
 #### Past Students
 
-+ Chenxia Liu, Msc Financial Mathematics, 2022 - 2023
++ Chenxia Liu, Msc Financial Mathematics,  2023
++ Pengyun Zhao, Msc Actuarial Science,  2023
++ Lan Wu, Msc Actuarial Science,  2023
++ Zhelin Wang, Msc Actuarial Science,  2022
 
-+ Pengyun Zhao, Msc Actuarial Science, 2022 - 2023
+### Undergraduate Supervison
 
-+ Lan Wu, Msc Actuarial Science, 2022 - 2023
-
-+ Zhelin Wang, Msc Actuarial Science, 2021 - 2022
-
-### Final Year Project 
+#### Final Year Project 
 
 At Xi'an Jiaotong-Liverpool University, each student gets an individual topic on which he/she works in the final year project for two semesters in close collaboration with a personal supervisor. The different projects and advisors are allocated at the beginning of the academic year. 
 
@@ -41,7 +40,7 @@ curiosity.
 
 + [FYP Website](https://hemu0626.github.io/Final-Year-Project/)
 
-### Summer Undergraduate Research Fellowship
+#### Summer Undergraduate Research Fellowship
 
 + SURF 2023: Elementary methods in Dimensionality Reduction and Transforms 
 
