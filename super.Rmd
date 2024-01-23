@@ -44,4 +44,4 @@ curiosity.
 
 + SURF 2023: Elementary methods in Dimensionality Reduction and Transforms 
 
-+ SURF 2023: Recent Developments in Psychometrical Methods [(Website)](https://hemu0626.github.io/educ_stat/) 
++ SURF 2022: Recent Developments in Psychometrical Methods [(Website)](https://hemu0626.github.io/educ_stat/) 
