@@ -7,7 +7,7 @@ output:
     toc: false
 ---
 
-## About Me 
+
 
 :::::::::::::: {.columns}
 ::: {.column width="70%"}
@@ -15,12 +15,7 @@ output:
 
 $~$
 
-Dr. Mu He, Assistant Professor in School of Mathematics and Physics at Xi'an Jiaotong-Liverpool University.
-
-
-Research interests: Statistics, Reliability and Infectious Disease Dynamics.
-
-I am interested in data-driven and applied problems in statistics, such as bio-statistics, reliability and public health related data. 
+Dr. Mu He, Assistant Professor in School of Mathematics and Physics at Xi'an Jiaotong-Liverpool University. I am interested in data-driven and applied problems in statistics, such as bio-statistics, reliability and public health related data. 
 
 
 :::
@@ -31,7 +26,7 @@ I am interested in data-driven and applied problems in statistics, such as bio-s
 :::
 ::::::::::::::
 
-## Current Projects
+### Current Projects
 
 I am seeking motivated and interested undergraduate and graduate students to join my research team. We are currently seeking data analysts and research assistant to help us process and understand vast amounts of information.
 
