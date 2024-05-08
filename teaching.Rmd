@@ -1,0 +1,26 @@
+---
+title: "Teaching"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 4
+---
+
+
+#### Curriculum Teaching
+
++ MTH 020 Introductory Mathematical Modelling, Xi'an Jiaotong-Liverpool University (Fall, 2023)
++ MTH 002 Multivariable Calculus and Statistics, Xi'an Jiaotong-Liverpool University (Winter 2021, Winter 2022, Winter 2023)
++ MTH 007 Linear Algebra, Xi'an Jiaotong-Liverpool University (Fall 2022, Fall 2023)
++ MTH 017 Linear Algebra for Mathematical Science, Xi'an Jiaotong-Liverpool University (Fall, 2021)
++ MTH 015 Linear Algebra, Xi'an Jiaotong-Liverpool University (Fall 2020)
++ Stats 3Y03/3J04  Probability and Statistics for Engineering, McMaster University (Spring/Summer 2018, Spring/Summer 2019, Spring/Summer 2020)
+
+#### Modeling Contest Talk
+
++ Data Visualization [(Website)](https://hemu0626.github.io/modeling/)
+
+
+
+

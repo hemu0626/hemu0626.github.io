@@ -1,0 +1,16 @@
+name: "Dr. Mu He"
+output_dir: "docs"
+navbar:
+  title: "Homepage"
+  right:
+    - text: "Research"
+      href: research.html
+    - text: "Teaching"
+      href: teaching.html
+    - text: "Supervison"
+      href: super.html
+output:
+  html_document:
+    theme: cosmo
+
+
