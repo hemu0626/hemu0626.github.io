@@ -10,7 +10,7 @@ output:
 ## About Me 
 
 :::::::::::::: {.columns}
-::: {.column width="65%"}
+::: {.column width="70%"}
 
 
 $~$
@@ -22,21 +22,18 @@ Research interests: Statistics, Reliability and Infectious Disease Dynamics.
 
 I am interested in data-driven and applied problems in statistics, such as bio-statistics, reliability and public health related data. 
 
-I got my B.Sc. in Applied Mathematics (Investment Science) at the Hong Kong Polytechnic University in 2015, then I received my M.Sc. in Statistics and Ph.D. in Mathematics(Statistics) at McMaster University in 2016 and 2021. 
-
-
 
 :::
-::: {.column width="35%"}
+::: {.column width="30%"}
 
-![](http://profile.xjtlu.edu.cn/upload/9g2dtmcssCSIyqBnYR8D.JPG){width=120%}
+![](http://profile.xjtlu.edu.cn/upload/9g2dtmcssCSIyqBnYR8D.JPG){width=100%}
 
 :::
 ::::::::::::::
 
 ## Current Projects
 
-I am seeking motivated and interested undergraduate and graduate students to join my research team. We have collaborations with Shanghai Jiao Tong University School of Medicine and Jiangsu People's Hospital, and are currently seeking data analysts and research assistant to help us process and understand vast amounts of information.
+I am seeking motivated and interested undergraduate and graduate students to join my research team. We are currently seeking data analysts and research assistant to help us process and understand vast amounts of information.
 
 Skills in R (ggplot2, survival, etc.) are essential for this position, as you will be responsible for using this programming language to manipulate, manage, and analyze data. You will be an integral part of our team, working alongside undergraduate, graduate, and doctoral students to develop and test new research ideas. This is an excellent opportunity for individuals who are interested in health research and wish to gain valuable experience in data analysis and scientific inquiry. If you have a passion for understanding complex data and are excited about the possibility of contributing to groundbreaking research, we would love to have you join our team.
 
