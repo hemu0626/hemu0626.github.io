@@ -9,6 +9,8 @@ navbar:
       href: teaching.html
     - text: "Supervison"
       href: super.html
+    - text: "blog"
+      href: https://hemu0626.github.io/blog/
 output:
   html_document:
     theme: bootstrap
