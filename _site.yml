@@ -11,6 +11,7 @@ navbar:
       href: super.html
 output:
   html_document:
-    theme: cosmo
+    theme: bootstrap
+
 
 

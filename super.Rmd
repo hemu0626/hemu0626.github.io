@@ -42,6 +42,8 @@ curiosity.
 
 #### Summer Undergraduate Research Fellowship
 
++ SURF 2024: Survival Analysis in Poisoning
+
 + SURF 2023: Elementary methods in Dimensionality Reduction and Transforms 
 
 + SURF 2022: Recent Developments in Psychometrical Methods [(Website)](https://hemu0626.github.io/educ_stat/) 
