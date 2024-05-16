@@ -11,6 +11,8 @@ navbar:
       href: super.html
     - text: "blog"
       href: https://hemu0626.github.io/blog/
+    - text: "Resources"
+      href: resource.html
 output:
   html_document:
     theme: bootstrap

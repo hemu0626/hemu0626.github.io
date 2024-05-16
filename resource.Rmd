@@ -1,0 +1,21 @@
+---
+title: "Resouce"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 4
+---
+
+#### XJTLU SMP Final Year Project Template
+
++ [Template on Overleaf](https://www.overleaf.com/latex/templates/xjtlu-fyp-template/vhppwxxmmfms)
++ [Videos for explain](https://www.bilibili.com/video/BV1hm421M7oe/?share_source=copy_web&vd_source=faa860ec5030a879e6844fa9468107ba)
++ [Latex cheat sheet](https://www.overleaf.com/gallery/tagged/cheat-sheet)
+
+#### Softwares I use everyday now
+
++ [Quarto](https://quarto.org/)
++ [Zotero](https://www.zotero.org/)
++ [Posit/Rstudio](https://posit.co/)
++ [reticulate](https://rstudio.github.io/reticulate/)

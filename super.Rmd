@@ -42,7 +42,7 @@ curiosity.
 
 #### Summer Undergraduate Research Fellowship
 
-+ SURF 2024: Survival Analysis in Poisoning
++ SURF 2024: Survival Analysis in Poisoning [(Website)](https://hemu0626.github.io/first_quarto/)
 
 + SURF 2023: Elementary methods in Dimensionality Reduction and Transforms 
 
