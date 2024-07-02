@@ -19,3 +19,10 @@ output:
 + [Zotero](https://www.zotero.org/)
 + [Posit/Rstudio](https://posit.co/)
 + [reticulate](https://rstudio.github.io/reticulate/)
+
+#### Links
+
++ [Liverpool Software Download](https://www.liverpool.ac.uk/it/software/licencecodes/)
++ [Liverpool MS Office](https://www.liverpool.ac.uk/it/office/)
++ [NSFC Login](https://grants.nsfc.gov.cn/pmpweb/login)
++ [Jiangsu Provincial Science and Technology Page](https://kjjh.kxjst.jiangsu.gov.cn/)
