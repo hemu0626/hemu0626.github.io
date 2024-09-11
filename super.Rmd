@@ -20,7 +20,7 @@ output:
 ##### M.Sc. Candidate
 
 + Wenhuan He, Msc Actuarial Science,  2024
-+ Junyuan We, Msc Actuarial Science,  2024
++ Junyuan Wu, Msc Actuarial Science,  2024
 + Tiancheng Li, Msc Data Science, 2024
 + Yanda Jiang, Msc Data Science, 2024
 
