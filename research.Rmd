@@ -5,14 +5,21 @@ output:
     toc: true
     toc_float: true
     toc_depth: 4
+bibliography: bio.bib 
+csl: apa-cv.csl
 ---
 
+#### Awards
+
++ Jiangsu Provincial Double-Innovation Doctor Program, 2022
 
 #### Publications
 
 + My [Google Scholar](https://scholar.google.com/citations?user=HOOCmJ0AAAAJ&hl=en) for publications (or check with [ORCID ID](https://orcid.org/0000-0002-0085-7181) profile)
 
+#### Selected Publications
 
-#### Awards
-
-+ Jiangsu Provincial Double-Innovation Doctor Program, 2022
+---
+nocite: |
+  @zhang2024reliability,@chen2024associations, @lin2024bifurcations, @weng2023comparison, @liu2023likelihood, @wen2023modelling, @guo2023envelope, @bai2023inference, @liu2023generalized, @zhao2022characterizing, @zhao2022non, @wen2022heterogeneous, @bai2022reliability, @balakrishnan2021record, @zhu2021reliability, @bai2021statistical, @ng2020accuracy, @liu2020unexpected
+---
