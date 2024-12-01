@@ -13,7 +13,7 @@ csl: apa-cv.csl
 
 + Jiangsu Provincial Double-Innovation Doctor Program, 2022
 
-#### Publications
+#### Full Publication List
 
 + My [Google Scholar](https://scholar.google.com/citations?user=HOOCmJ0AAAAJ&hl=en) for publications (or check with [ORCID ID](https://orcid.org/0000-0002-0085-7181) profile)
 
@@ -21,5 +21,5 @@ csl: apa-cv.csl
 
 ---
 nocite: |
-  @zhang2024reliability,@chen2024associations, @lin2024bifurcations, @weng2023comparison, @liu2023likelihood, @wen2023modelling, @guo2023envelope, @bai2023inference, @liu2023generalized, @zhao2022characterizing, @zhao2022non, @wen2022heterogeneous, @bai2022reliability, @balakrishnan2021record, @zhu2021reliability, @bai2021statistical, @ng2020accuracy, @liu2020unexpected
+  @zhang2024reliability, @liu2023likelihood, @guo2023envelope, @bai2023inference, @liu2023generalized, @bai2022reliability, @balakrishnan2021record, @zhu2021reliability, @bai2021statistical
 ---
