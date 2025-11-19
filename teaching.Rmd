@@ -20,10 +20,14 @@ output:
 #### Teaching Resouces
 
 + Data Visualization [(Website)](https://hemu0626.github.io/modeling/)
-+ Compression Demo [(Webpage)](https://hemu0626.github.io/compression_demo)
++ Compression Demo: XiPu Cat [(Webpage)](https://hemu0626.github.io/compression_demo)
+
+#### More Resouces
+
 + Setosa Visual Blog [Webpage](https://setosa.io/#/)
-+ DATA DRIVEN SCIENCE & ENGINEERING [Databook](https://databookuw.com/)
-+ Statistical Learning [ISL](https://www.statlearning.com/)
++ DATA DRIVEN SCIENCE & ENGINEERING [Databook Website](https://databookuw.com/)
++ Statistical Learning [ISL Website](https://www.statlearning.com/)
++ scikit-learn Machine Learning in Python [Website](https://scikit-learn.org/)
 
 
 
