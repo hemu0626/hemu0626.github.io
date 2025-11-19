@@ -17,11 +17,13 @@ output:
 + MTH 015 Linear Algebra, Xi'an Jiaotong-Liverpool University (Fall 2020)
 + Stats 3Y03/3J04  Probability and Statistics for Engineering, McMaster University (Spring/Summer 2018, Spring/Summer 2019, Spring/Summer 2020)
 
-#### Modeling Contest Talk
+#### Teaching Resouces
 
 + Data Visualization [(Website)](https://hemu0626.github.io/modeling/)
-+ Compression Demo[(Webpage)](https://hemu0626.github.io/compression_demo/)
++ Compression Demo[(Webpage)](https://hemu0626.github.io/compression_demo)
++ Setosa Visual Blog[Webpage](https://setosa.io/#/)
 + DATA DRIVEN SCIENCE & ENGINEERING [Databook](https://databookuw.com/)
++ Statistical Learning[ISL](www.statlearning.com/)
 
 
 
