@@ -20,10 +20,10 @@ output:
 #### Teaching Resouces
 
 + Data Visualization [(Website)](https://hemu0626.github.io/modeling/)
-+ Compression Demo[(Webpage)](https://hemu0626.github.io/compression_demo)
-+ Setosa Visual Blog[Webpage](https://setosa.io/#/)
++ Compression Demo [(Webpage)](https://hemu0626.github.io/compression_demo)
++ Setosa Visual Blog [Webpage](https://setosa.io/#/)
 + DATA DRIVEN SCIENCE & ENGINEERING [Databook](https://databookuw.com/)
-+ Statistical Learning[ISL](www.statlearning.com/)
++ Statistical Learning [ISL](www.statlearning.com/)
 
 
 
