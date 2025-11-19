@@ -20,6 +20,8 @@ output:
 #### Modeling Contest Talk
 
 + Data Visualization [(Website)](https://hemu0626.github.io/modeling/)
++ Compression Demo[(Webpage)](https://hemu0626.github.io/compression_demo/)
++ DATA DRIVEN SCIENCE & ENGINEERING [Databook](https://databookuw.com/)
 
 
 
