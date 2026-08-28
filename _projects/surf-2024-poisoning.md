@@ -1,27 +1,13 @@
 ---
 layout: page
 title: Survival Analysis in Poisoning (SURF 2024)
-description: Summer Undergraduate Research Fellowship 2024. Team of 9 (6 members + 3 volunteers).
+description: Summer Undergraduate Research Fellowship 2024
 importance: 4
 category: work
 related_publications: false
 ---
 
-Summer Undergraduate Research Fellowship (SURF) project on survival analysis applied to poisoning data.
-
-## Environment setup (from the original project site)
-
-The project was developed with RStudio + reticulate, using Python packages for survival analysis:
-
-```r
-library(reticulate)
-py_install('pandas')
-py_install('matplotlib')
-py_install('numpy')
-py_install('jupyter')
-py_install('scikit-learn')
-reticulate::repl_python()
-py_install('scikit-survival')
-```
-
-> I never really found an IDE that I liked... Most Python users I met seem to think IDEs are not really important, which confuses me even further. That's what you look at the entire time while programming! Once you get familiar with RStudio, or anyway Posit IDE, you are spoiled. Therefore, I decided to continue to teach and code in RStudio, even with Python or Jupyter notebooks.
+{% assign poster_pdf = site.static_files | where: "path", "/assets/surf/2024-poisoning.pdf" | first %}
+{% assign poster_png = site.static_files | where: "path", "/assets/surf/2024-poisoning.png" | first %}
+{% if poster_pdf %}<p><a href="/assets/surf/2024-poisoning.pdf">Download poster (PDF)</a></p>{% endif %}
+{% if poster_png %}<p><img src="/assets/surf/2024-poisoning.png" alt="SURF 2024 poster"></p>{% endif %}

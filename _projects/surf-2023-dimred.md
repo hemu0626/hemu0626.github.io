@@ -1,10 +1,13 @@
 ---
 layout: page
 title: Dimensionality Reduction and Transforms (SURF 2023)
-description: Summer Undergraduate Research Fellowship 2023. Team of 9 (6 members + 3 volunteers).
+description: Summer Undergraduate Research Fellowship 2023
 importance: 5
 category: work
 related_publications: false
 ---
 
-Summer Undergraduate Research Fellowship (SURF) project on elementary methods in dimensionality reduction and transforms.
+{% assign poster_pdf = site.static_files | where: "path", "/assets/surf/2023-dimred.pdf" | first %}
+{% assign poster_png = site.static_files | where: "path", "/assets/surf/2023-dimred.png" | first %}
+{% if poster_pdf %}<p><a href="/assets/surf/2023-dimred.pdf">Download poster (PDF)</a></p>{% endif %}
+{% if poster_png %}<p><img src="/assets/surf/2023-dimred.png" alt="SURF 2023 poster"></p>{% endif %}
