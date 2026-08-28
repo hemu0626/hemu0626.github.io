@@ -25,3 +25,9 @@ __pycache__/
 .Rhistory
 .RData
 .Ruserdata
+
+# Temporary ops scripts / secrets (never commit)
+gh-ops.js
+gh-list-repos.js
+.gh-token
+.gh-token.txt
