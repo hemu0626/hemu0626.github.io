@@ -4,7 +4,7 @@
   }
 </style> <link rel="stylesheet" href="/assets/css/tailwind.css?v=50c64c15cbb9fd1ce6056fdb8bcb4b62"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" integrity="sha256-MVopmdyC2tYTiJ8wlktf0uh0v4NgT+vNdyVFepi7Q0c=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.5/css/academicons.min.css" integrity="sha256-SzrCOBJbGVFMahewkgjwnApaV2+av1DwMAA+/QGLyZw=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/scholar-icons@1.0.3/css/scholar-icons.css" integrity="sha256-VY3hHVj/hNX3fYG6wtbA6TcKJQl7+FthzGSyIB64klY=" crossorigin="anonymous"> <link defer rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons&amp;display=swap"> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-github.css?v=591dab5a4e56573bf4ef7fd332894c99" media="" id="highlight_theme_light"> <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%F0%9F%93%88&lt;/text&gt;&lt;/svg&gt;"> <link rel="stylesheet" href="/assets/css/main.css?v=3116ba77db9ee1581d05bb3e86fbf7f1"> <link rel="canonical" href="https://hemu0626.github.io/blog/2024/exact-confidence-bounds-hybrid-censoring/"> <script src="/assets/js/theme.js?v=5286c3e4c334d0ecb8fc0c40ff4fa7ec"></script> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-native.css?v=5847e5ed4a4568527aa6cfab446049ca" media="none" id="highlight_theme_dark"> <script>
     initTheme();
-  </script> </head> <body class="fixed-top-nav "> <header> <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top" role="navigation"> <div class="container"> <a class="navbar-brand title font-weight-lighter" href="/"> Mu He </a> <button class="navbar-toggler collapsed navbar-toggler-main" type="button" data-nav-toggle="navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar top-bar"></span> <span class="icon-bar middle-bar"></span> <span class="icon-bar bottom-bar"></span> </button> <div class="collapse navbar-collapse navbar-collapse-main" id="navbarNav"> <ul class="navbar-nav navbar-menu-list flex-nowrap"> <li class="nav-item "> <a class="nav-link" href="/">about </a> </li> <li class="nav-item "> <a class="nav-link" href="/news/">news </a> </li> <li class="nav-item "> <a class="nav-link" href="/publications/">publications </a> </li> <li class="nav-item "> <a class="nav-link" href="/projects/">projects </a> </li> <li class="nav-item "> <a class="nav-link" href="/teaching/">teaching </a> </li> <li class="nav-item active"> <a class="nav-link" href="/blog/">blog </a> </li> <li class="nav-item"> <button id="search-toggle" type="button" title="Search" aria-label="Open search"> <span class="nav-link">ctrl k <i class="fa-solid fa-magnifying-glass"></i></span> </button> </li> <li class="toggle-container"> <button id="light-toggle" type="button" title="Change theme" aria-label="Change color theme"> <i class="fa-half-sun-moon" id="light-toggle-system"></i> <i class="fa-solid fa-moon" id="light-toggle-dark"></i> <i class="fa-solid fa-sun" id="light-toggle-light"></i> </button> </li> </ul> </div> </div> </nav> <progress id="progress" value="0"> <div class="progress-container"> <span class="progress-bar"></span> </div> </progress> </header> <div class="container mt-5" role="main"> <div class="post"> <header class="post-header"> <h1 class="post-title">Exact Confidence Bounds for an Exponential Parameter under Hybrid Censoring</h1> <p class="post-meta"> Created on May 15, 2024 </p> <p class="post-tags"> <a href="/blog/2024"> <i class="fa-solid fa-calendar fa-sm"></i> 2024 </a>   ·   <a href="/blog/tag/reading"> <i class="fa-solid fa-hashtag fa-sm"></i> reading</a>   <a href="/blog/tag/statistics"> <i class="fa-solid fa-hashtag fa-sm"></i> statistics</a>   <a href="/blog/tag/memo"> <i class="fa-solid fa-hashtag fa-sm"></i> memo</a> </p> </header> <article class="post-content"> <div id="markdown-content"> <p>The reading before reminds us the exact confidence bounds in hybrid censoring (Chen, 1987), maybe we can compare the conditional variance here. Here we also include the discussion on (Balakrishnan, 2013).</p> <h2 id="introduction">Introduction</h2> <blockquote> <p>Type-I and Type-II censoring schemes are the two most common and popular censoring schemes. In Type-I censoring scheme, the experimental time is fixed, but the number of observed failures is a random variable. On the other hand, in Type-II censoring scheme, number of observed failures is fixed, but the experimental time is a random variable. The mixture of Type-I and Type-II censoring schemes is known as hybrid censoring scheme, and it can be described as follows. Consider the following life-testing experiment in which n units are placed on test. The lifetimes of the sample units are assumed to be independent and identically distributed (i.i.d.) random variables. Let the ordered lifetimes of these units be denoted by $X_{1:n}, \cdots , X_{n:n}$, respectively. The test is terminated when a pre-fixed number, $r &lt; n$, out of n items has failed, or when a pre-fixed time, $T$, has been reached. In other words, the life-test is terminated at a random time $T_* = \min{X_{r:n}, T }$. It is also usually assumed that the failed units are not replaced in the experiment</p> </blockquote> <p>Suppose $n$ units i.i.d. exponential,</p> \[f(x)=\frac{1}{\theta}\exp(-x/\theta), \quad x&gt;0, \quad \theta&gt;0,\] <p>are placed for some life test, where the failed items are not replaced.</p> <p>Denote $D^<em>$ and $D$, the numbers of units that would fail before $T^</em>$ and $T$, respectively, and set</p> \[\begin{align} S&amp;=\sum_{i=1}^{D^*}X_{i,n}+(n-D^*)T^* \quad &amp;D^* &gt;1 \\ &amp;=nT &amp; D^*=0 \end{align}\] <p>which is called total time on test. Thus, the hybrid censored data from exponential distribution.</p> <h2 id="discussion-of-hattheta">Discussion of $\hat{\theta}$</h2> <p>Here maybe we can apply some new ideas.</p> </div> </article> <br> <hr> <br> <h2 class="text-3xl font-semibold mb-4 mt-12">Enjoy Reading This Article?</h2> <p class="mb-2">Here are some more articles you might like to read next:</p> <ul class="list-disc pl-7 my-3 space-y-2 marker:text-[var(--global-theme-color)]"> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2026/new-homepage/">A new homepage</a> </li> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2024/katago-memo/">Memo KataGo</a> </li> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2024/summer-camp-2024/">Summer Camp 2024</a> </li> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2024/three-musketeers/">The Three Musketeers</a> </li> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2024/graduation-xjtlu-2024/">Graduation Ceremony XJTLU 2024</a> </li> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2024/coffee-as-toast/">Coffee as Toast</a> </li> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2024/cauchy-conditional-variance-memo/">Stuck on Conditional Variance of the MLE for Cauchy</a> </li> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2024/master-graduation-2024/">Master Graduation Ceremony XJTLU 2024</a> </li> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2024/sail-to-the-world/">Sail to the World</a> </li> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2023/surf-2023/">SURF 2023</a> </li> </ul> </div> </div> <footer class="fixed-bottom" role="contentinfo"> <div class="container mt-0"> © Copyright 2026 Mu He. © 2026 Mu He · School of Mathematics and Physics, Xi'an Jiaotong-Liverpool University. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> with the <a href="https://github.com/alshedivat/al-folio" rel="external nofollow noopener" target="_blank">al-folio</a> theme. Last updated: August 28, 2026. </div> </footer> <script>
+  </script> </head> <body class="fixed-top-nav "> <header> <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top" role="navigation"> <div class="container"> <a class="navbar-brand title font-weight-lighter" href="/"> Mu He </a> <button class="navbar-toggler collapsed navbar-toggler-main" type="button" data-nav-toggle="navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar top-bar"></span> <span class="icon-bar middle-bar"></span> <span class="icon-bar bottom-bar"></span> </button> <div class="collapse navbar-collapse navbar-collapse-main" id="navbarNav"> <ul class="navbar-nav navbar-menu-list flex-nowrap"> <li class="nav-item "> <a class="nav-link" href="/">about </a> </li> <li class="nav-item "> <a class="nav-link" href="/news/">news </a> </li> <li class="nav-item "> <a class="nav-link" href="/publications/">publications </a> </li> <li class="nav-item "> <a class="nav-link" href="/projects/">projects </a> </li> <li class="nav-item "> <a class="nav-link" href="/teaching/">teaching </a> </li> <li class="nav-item "> <a class="nav-link" href="/students/">students </a> </li> <li class="nav-item "> <a class="nav-link" href="/cv/">CV </a> </li> <li class="nav-item active"> <a class="nav-link" href="/blog/">blog </a> </li> <li class="nav-item"> <button id="search-toggle" type="button" title="Search" aria-label="Open search"> <span class="nav-link">ctrl k <i class="fa-solid fa-magnifying-glass"></i></span> </button> </li> <li class="toggle-container"> <button id="light-toggle" type="button" title="Change theme" aria-label="Change color theme"> <i class="fa-half-sun-moon" id="light-toggle-system"></i> <i class="fa-solid fa-moon" id="light-toggle-dark"></i> <i class="fa-solid fa-sun" id="light-toggle-light"></i> </button> </li> </ul> </div> </div> </nav> <progress id="progress" value="0"> <div class="progress-container"> <span class="progress-bar"></span> </div> </progress> </header> <div class="container mt-5" role="main"> <div class="post"> <header class="post-header"> <h1 class="post-title">Exact Confidence Bounds for an Exponential Parameter under Hybrid Censoring</h1> <p class="post-meta"> Created on May 15, 2024 </p> <p class="post-tags"> <a href="/blog/2024"> <i class="fa-solid fa-calendar fa-sm"></i> 2024 </a>   ·   <a href="/blog/tag/reading"> <i class="fa-solid fa-hashtag fa-sm"></i> reading</a>   <a href="/blog/tag/statistics"> <i class="fa-solid fa-hashtag fa-sm"></i> statistics</a>   <a href="/blog/tag/memo"> <i class="fa-solid fa-hashtag fa-sm"></i> memo</a> </p> </header> <article class="post-content"> <div id="markdown-content"> <p>The reading before reminds us the exact confidence bounds in hybrid censoring (Chen, 1987), maybe we can compare the conditional variance here. Here we also include the discussion on (Balakrishnan, 2013).</p> <h2 id="introduction">Introduction</h2> <blockquote> <p>Type-I and Type-II censoring schemes are the two most common and popular censoring schemes. In Type-I censoring scheme, the experimental time is fixed, but the number of observed failures is a random variable. On the other hand, in Type-II censoring scheme, number of observed failures is fixed, but the experimental time is a random variable. The mixture of Type-I and Type-II censoring schemes is known as hybrid censoring scheme, and it can be described as follows. Consider the following life-testing experiment in which n units are placed on test. The lifetimes of the sample units are assumed to be independent and identically distributed (i.i.d.) random variables. Let the ordered lifetimes of these units be denoted by $X_{1:n}, \cdots , X_{n:n}$, respectively. The test is terminated when a pre-fixed number, $r &lt; n$, out of n items has failed, or when a pre-fixed time, $T$, has been reached. In other words, the life-test is terminated at a random time $T_* = \min{X_{r:n}, T }$. It is also usually assumed that the failed units are not replaced in the experiment</p> </blockquote> <p>Suppose $n$ units i.i.d. exponential,</p> \[f(x)=\frac{1}{\theta}\exp(-x/\theta), \quad x&gt;0, \quad \theta&gt;0,\] <p>are placed for some life test, where the failed items are not replaced.</p> <p>Denote $D^<em>$ and $D$, the numbers of units that would fail before $T^</em>$ and $T$, respectively, and set</p> \[\begin{align} S&amp;=\sum_{i=1}^{D^*}X_{i,n}+(n-D^*)T^* \quad &amp;D^* &gt;1 \\ &amp;=nT &amp; D^*=0 \end{align}\] <p>which is called total time on test. Thus, the hybrid censored data from exponential distribution.</p> <h2 id="discussion-of-hattheta">Discussion of $\hat{\theta}$</h2> <p>Here maybe we can apply some new ideas.</p> </div> </article> <br> <hr> <br> <h2 class="text-3xl font-semibold mb-4 mt-12">Enjoy Reading This Article?</h2> <p class="mb-2">Here are some more articles you might like to read next:</p> <ul class="list-disc pl-7 my-3 space-y-2 marker:text-[var(--global-theme-color)]"> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2026/new-homepage/">A new homepage</a> </li> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2024/katago-memo/">Memo KataGo</a> </li> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2024/summer-camp-2024/">Summer Camp 2024</a> </li> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2024/three-musketeers/">The Three Musketeers</a> </li> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2024/graduation-xjtlu-2024/">Graduation Ceremony XJTLU 2024</a> </li> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2024/coffee-as-toast/">Coffee as Toast</a> </li> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2024/cauchy-conditional-variance-memo/">Stuck on Conditional Variance of the MLE for Cauchy</a> </li> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2024/master-graduation-2024/">Master Graduation Ceremony XJTLU 2024</a> </li> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2024/sail-to-the-world/">Sail to the World</a> </li> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2023/surf-2023/">SURF 2023</a> </li> </ul> </div> </div> <footer class="fixed-bottom" role="contentinfo"> <div class="container mt-0"> © Copyright 2026 Mu He. © 2026 Mu He · Xi'an Jiaotong-Liverpool University. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> with the <a href="https://github.com/alshedivat/al-folio" rel="external nofollow noopener" target="_blank">al-folio</a> theme. Last updated: August 28, 2026. </div> </footer> <script>
   window.alFolio = {
     compatBootstrap: false
   };
@@ -45,10 +45,24 @@ ninja.data = [{
           },
         },{id: "nav-teaching",
           title: "teaching",
-          description: "Courses I have taught at XJTLU and McMaster University.",
+          description: "Modules taught and moderation activities at XJTLU.",
           section: "Navigation",
           handler: () => {
             window.location.href = "/teaching/";
+          },
+        },{id: "nav-students",
+          title: "students",
+          description: "Current and past graduate students.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/students/";
+          },
+        },{id: "nav-cv",
+          title: "CV",
+          description: "Curriculum Vitae of Mu He.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/cv/";
           },
         },{id: "nav-blog",
           title: "blog",
@@ -213,54 +227,69 @@ ninja.data = [{
               window.location.href = "/projects/fyp/";
             },},{id: "projects-psychometrical-methods-surf-2022",
           title: 'Psychometrical Methods (SURF 2022)',
-          description: "Summer Undergraduate Research Fellowship 2022.",
+          description: "Summer Undergraduate Research Fellowship 2022. Team of 8 (6 members + 2 volunteers).",
           section: "Projects",handler: () => {
               window.location.href = "/projects/surf-2022-psychometrics/";
             },},{id: "projects-dimensionality-reduction-and-transforms-surf-2023",
           title: 'Dimensionality Reduction and Transforms (SURF 2023)',
-          description: "Summer Undergraduate Research Fellowship 2023.",
+          description: "Summer Undergraduate Research Fellowship 2023. Team of 9 (6 members + 3 volunteers).",
           section: "Projects",handler: () => {
               window.location.href = "/projects/surf-2023-dimred/";
             },},{id: "projects-survival-analysis-in-poisoning-surf-2024",
           title: 'Survival Analysis in Poisoning (SURF 2024)',
-          description: "Summer Undergraduate Research Fellowship 2024.",
+          description: "Summer Undergraduate Research Fellowship 2024. Team of 9 (6 members + 3 volunteers).",
           section: "Projects",handler: () => {
               window.location.href = "/projects/surf-2024-poisoning/";
+            },},{id: "projects-lifestyle-factors-and-breast-cancer-surf-2025",
+          title: 'Lifestyle Factors and Breast Cancer (SURF 2025)',
+          description: "Summer Undergraduate Research Fellowship 2025. Team of 10 (6 members + 4 volunteers).",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/surf-2025-breast-cancer/";
+            },},{id: "projects-knowledge-augmented-survival-analysis-and-bayesian-variable-selection-surf-2026",
+          title: 'Knowledge-augmented Survival Analysis and Bayesian Variable Selection (SURF 2026)',
+          description: "Summer Undergraduate Research Fellowship 2026. Team of 10 (6 members + 4 volunteers).",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/surf-2026-knowledge-survival/";
             },},{id: "teachings-data-visualization-teaching-resources",
           title: 'Data Visualization (Teaching Resources)',
           description: "Data visualization teaching materials, migrated from the standalone course website.",
           section: "Teachings",handler: () => {
               window.location.href = "/teachings/data-visualization/";
-            },},{id: "teachings-mth-002-multivariable-calculus-and-statistics",
-          title: 'MTH 002 Multivariable Calculus and Statistics',
-          description: "Multivariable calculus and statistics, Xi&#39;an Jiaotong-Liverpool University.",
+            },},{id: "teachings-mth002-intro-to-statistics-amp-multivariate-calculus",
+          title: 'MTH002 Intro to Statistics &amp;amp; Multivariate Calculus',
+          description: "Module Leader. 2023–24, Semester 2.",
           section: "Teachings",handler: () => {
               window.location.href = "/teachings/mth002/";
-            },},{id: "teachings-mth-007-linear-algebra",
-          title: 'MTH 007 Linear Algebra',
-          description: "Linear algebra, Xi&#39;an Jiaotong-Liverpool University.",
+            },},{id: "teachings-mth007-linear-algebra",
+          title: 'MTH007 Linear Algebra',
+          description: "Co-instructor. 2025–26, Semester 1.",
           section: "Teachings",handler: () => {
               window.location.href = "/teachings/mth007/";
-            },},{id: "teachings-mth-015-linear-algebra",
-          title: 'MTH 015 Linear Algebra',
-          description: "Linear algebra, Xi&#39;an Jiaotong-Liverpool University.",
-          section: "Teachings",handler: () => {
-              window.location.href = "/teachings/mth015/";
-            },},{id: "teachings-mth-017-linear-algebra-for-mathematical-science",
-          title: 'MTH 017 Linear Algebra for Mathematical Science',
-          description: "Linear algebra for mathematical science, Xi&#39;an Jiaotong-Liverpool University.",
+            },},{id: "teachings-mth017-linear-algebra-for-mathematical-science",
+          title: 'MTH017 Linear Algebra for Mathematical Science',
+          description: "Co-instructor. 2024–25, Semester 1.",
           section: "Teachings",handler: () => {
               window.location.href = "/teachings/mth017/";
-            },},{id: "teachings-mth-020-introductory-mathematical-modelling",
-          title: 'MTH 020 Introductory Mathematical Modelling',
-          description: "Introductory mathematical modelling, Xi&#39;an Jiaotong-Liverpool University.",
+            },},{id: "teachings-mth020-introductory-mathematical-modelling",
+          title: 'MTH020 Introductory Mathematical Modelling',
+          description: "Co-instructor (extra teaching load). 2024–25, Semester 1.",
           section: "Teachings",handler: () => {
               window.location.href = "/teachings/mth020/";
-            },},{id: "teachings-stats-3y03-3j04-probability-and-statistics-for-engineering",
-          title: 'Stats 3Y03/3J04 Probability and Statistics for Engineering',
-          description: "Probability and statistics for engineering, McMaster University.",
+            },},{id: "teachings-mth022-mathematical-and-statistical-models",
+          title: 'MTH022 Mathematical and Statistical Models',
+          description: "Co-instructor (extra teaching load). 2023–24, Semester 2.",
           section: "Teachings",handler: () => {
-              window.location.href = "/teachings/stats-3y03/";
+              window.location.href = "/teachings/mth022/";
+            },},{id: "teachings-mth102-engineering-mathematics-ii",
+          title: 'MTH102 Engineering Mathematics II',
+          description: "Co-instructor. 2025–26, Semester 2.",
+          section: "Teachings",handler: () => {
+              window.location.href = "/teachings/mth102/";
+            },},{id: "teachings-mth104-introduction-to-statistics",
+          title: 'MTH104 Introduction to Statistics',
+          description: "Module Leader. 2025–26, Semester 2.",
+          section: "Teachings",handler: () => {
+              window.location.href = "/teachings/mth104/";
             },},{
         id: 'social-email',
         title: 'email',
