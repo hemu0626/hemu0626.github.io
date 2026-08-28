@@ -1,0 +1,662 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\author{}
+\date{\vspace{-2.5em}}
+
+\begin{document}
+
+{
+\setcounter{tocdepth}{4}
+\tableofcontents
+}
+\hypertarget{maximum-likelihood-estimators}{%
+\subsection{Maximum Likelihood
+Estimators}\label{maximum-likelihood-estimators}}
+
+After getting a sample from a population with pdf or pmf
+\(f(x|\theta)\), it is reasonable to obtain information of \(\theta\).
+Thus it is natural to find a good point estimator of \(\theta\) with the
+sample, here MLE (Maximum Likelihood Estimators) as a method of point
+estimator is useful.
+
+\hypertarget{definition}{%
+\subsubsection{Definition}\label{definition}}
+
+Before introducing the definition of MLE, we need to know Point
+Estimator and Likelihood Function.
+
+\hypertarget{point-estimator}{%
+\paragraph{Point Estimator}\label{point-estimator}}
+
+According to Casella \& Berger(2002), the definition of point estimator
+is any function of a sample which means any statistic is a point
+estimator.
+
+\hypertarget{likelihood-function}{%
+\paragraph{Likelihood Function}\label{likelihood-function}}
+
+Suppose we have random sample \(X_1,X_2,...X_n\) from a population with
+pmd or pdf \(p(x|\theta)\), then, given that X=x is observed, the
+function of \(\theta\) defined by the joint pdf or pmf
+(\(L(\theta|x)=f(x|\theta)\)) is called likelihood function.
+
+Casella \& Berger(2002) said that when considering pdf of pmf
+\(f(x|\theta)\), \(\theta\) is fixed and x is the variable. When
+considering likelihood function \(L(\theta|x)\), \(\theta\) is variable
+and x is the observed sample point. This is the distinction between
+joint pdf or pmf and likelihood function.
+
+\hypertarget{definition-of-mle}{%
+\paragraph{Definition of MLE}\label{definition-of-mle}}
+
+Intuitively, an event A occurs and others do not show up just because A
+has the maximum likelihood. Therefore, the maximum point of likelihood
+function should be a good guess of the parameter \(\theta\). This
+estimate is called Maximum likelihood estimate.
+
+\hypertarget{process}{%
+\subsubsection{Process}\label{process}}
+
+If \(X_1,X_2,...X_n\) are an iid sample from a population with pdf or
+pmf p(x\textbar{}\(\theta_1,\theta_2,...\theta_k\)),Likelihood function
+is defined by
+
+\[L(\theta|x)=L(\theta_1,\theta_2,...\theta_k|x_1,x_2,...x_n)=\prod_{i=1}^{n}p(x_i|\theta_1,\theta_2,...\theta_k)\]
+
+To find the maximum point of likelihood function, it is equivalent to
+find tha maximum point of the log likelihood function
+\(l(\theta|x)=logL(\theta|x)\). We just need to solve equation
+\(l'(\theta|x)=0\), the solution \(\theta_{mle}\) is the maximum
+likelihood estimate of \(\theta\).
+
+Formula of MLE:
+
+\[\theta_{MLE}=\mathop{argmax}\limits _{\theta}\log{L(x|\theta)}\]
+
+\hypertarget{evaluation}{%
+\subsubsection{Evaluation}\label{evaluation}}
+
+The advantage of MLE lies in its asymptotic consistency and efficiency.
+
+And there are two drawbacks of MLE. Firstly, how to find and verify that
+the global maximum has been found is one drawback (Casella \&
+Berger,2002). Though it is an easy problem in calculus, sometimes
+difficulties exist due to the densities.
+
+Secondly, we need to take the sensibility of estimate into
+consideration. This is a common problem in mathematical maximization
+process not just in this case. According to Casella \& Berger(2002), in
+MLE, it is unfortune that usually some small changes in sample will lead
+to vastly different estimates.
+
+\hypertarget{em-algorithm}{%
+\subsection{EM algorithm}\label{em-algorithm}}
+
+\hypertarget{introduction}{%
+\subsubsection{Introduction}\label{introduction}}
+
+Given a set of observed data, \(X=[{x_i}]_{i=1}^N\), and model parameter
+\(\theta\). Assuming the corresponding unobserved data (latent variable)
+\(Z=[{z_i}]_{i=1}^N\), we call \((x_i,z_i)\) as complete data. If we do
+not consider the unobserved data, MLE (Maximum Likelihood Estimation)
+can be directly used to estimate parameter.
+
+MLE: \[P(X|\theta)\]
+
+\[\theta_{MLE}=\underset {\theta}{argmax} \log P(X|\theta) =\underset {\theta}{argmax} \sum_i^N \log P(x_i|\theta)  \]
+
+Because of unobserved data,
+
+\[P(X|\theta)=\int_Z P(X,Z|\theta)dZ  \]
+
+It is difficult to replace (2) to (1). Thus, EM is introduced. Iteration
+is used to get final answer. By EM, expectation step and maximization
+step are alternated, until convergence.
+
+\hypertarget{em}{%
+\subsubsection{EM}\label{em}}
+
+\[\theta^{t+1}=\underset {\theta}{argmax} \int_Z \log P(X,Z|\theta)\cdot P(Z|X,\theta^t)dZ
+=\underset {\theta}{argmax} E_{Z|X,\theta^t} \log P(X,Z|\theta)]\]
+
+\textbf{E-step:}
+
+\[P(Z|X,\theta^t) \rightarrow E_{Z|X,\theta^t} [\log P(X,Z|\theta)]\]
+
+\textbf{M-step:}
+
+\[\theta^{t+1}=\underset {\theta}{argmax} E_{Z|X,\theta^t} [\log P(X,Z|\theta)]\]
+
+\textbf{Prove} procedure (use ELBO and KL Divergence):
+
+\[\log P(X|\theta)=\log P(X,Z|\theta)-\log P(Z|X,\theta) =\log\frac {P(X,Z|\theta)} {q(Z)}-\log\frac{P(Z|X,\theta)} {q(Z)}\]
+
+Integral with \(q(z)\):
+
+\begin{align}
+
+\text{left}&=\int_Z q(Z)\cdot \log P(X|\theta)dZ\\
+
+&=\log P(X|\theta)\int_Z q(Z)dZ\\
+
+&=\log P(X|\theta)\\
+
+
+\text{right}&=\int_Z q(Z)\cdot log\frac {P(X,Z|\theta)} {q(Z)}dZ-\int_Z q(Z)\cdot log\frac{P(Z|X,\theta)} {q(Z)}dZ\\
+
+\end{align}
+
+where
+
+\[\int_Z q(Z)\cdot \log\frac {P(X,Z|\theta)} {q(Z)}dZ\]
+
+is ELBO (evidence lower bound), and
+
+\[-\int_Z q(Z)\cdot \log\frac{P(Z|X,\theta)} {q(Z)}dZ=\int_Z q(Z)\cdot \log\frac {q(Z)}{P(Z|X,\theta)}dZ\]
+
+is \(KL(q(Z)||P(Z|X,\theta))\).
+
+Correspondingly,
+
+\[KL(q(Z)||P(Z|X,\theta)) \geq 0\]
+
+where 0 is gotten when \(q(Z)=P(Z|X,\theta)\).
+
+Thus,
+
+\[\log P(X|\theta)=ELBO+KL(q|P)\geq ELBO\]
+
+\begin{align}
+
+\hat \theta&=\underset \theta {argmax} ELBO\\
+
+&=\underset \theta {argmax}\int_Z q(Z)\cdot \log\frac {P(X,Z|\theta)} {q(Z)}dZ\\
+
+& =\underset \theta {argmax}\int_Z P(Z|X,\theta)\cdot \log\frac {P(X,Z|\theta)} {P(Z|X,\theta))}dZ \quad \text{because KL=0 is gotten when $q(Z)=P(Z|X,\theta)$)}\\
+
+&= \underset \theta {argmax}\int_Z P(Z|X,\theta)\cdot [\log P(X,Z|\theta)-\log P(Z|X,\theta)]dZ\\
+
+&= \underset \theta {argmax}\int_Z P(Z|X,\theta)\cdot \log P(X,Z|\theta)dZ, \quad \text{because $\log P(Z|X,\theta)$ have nothing to do with $\theta$}
+
+\end{align}
+
+\hypertarget{convergence}{%
+\subsubsection{Convergence}\label{convergence}}
+
+We want to find, if \(\theta^t \rightarrow \theta^{t+1}\), when
+\[\log P(X|\theta^t)\leq \log P(X|\theta^{t+1})\]
+
+i.e.~will \(\theta\) increase by EM
+
+Prove procedure:
+
+\[\log P(X|\theta)=\log P(X,Z|\theta)-\log P(Z|X,\theta)\] Integral with
+z
+
+\begin{align}
+
+\text{left} &=\int_Z P(Z|X,\theta^t)\cdot \log P(X|\theta)dZ\\
+
+& =\log P(X|\theta)\int_Z P(Z|X,\theta^t)dZ\\
+ 
+& = \log P(X|\theta)\\
+
+\text{right}&= \int_Z P(Z|X,\theta^t)\cdot \log P(X,Z|\theta)dZ-\int_Z P(Z|X,\theta^t)\cdot \log P(Z|X,\theta)dZ\\
+
+\end{align}
+
+Denote
+
+\[\int_Z P(Z|X,\theta^t)\cdot \log P(X,Z|\theta)dZ =Q(\theta, \theta^t)\quad \text{and} \quad \int_Z P(Z|X,\theta^t)\cdot \log P(Z|X,\theta)dZ = H(\theta, \theta^t)\]
+
+As
+
+\[\theta^{t+1}=\underset {\theta}{argmax}Q(\theta, \theta^t)\]
+
+Then,
+
+\[Q(\theta^{t+1}, \theta^t)\geq Q(\theta, \theta^t)\]
+
+\(\theta\) is a parameter, let \(\theta=\theta^t\)
+
+\(Q(\theta^{t+1}, \theta^t)\geq Q(\theta^t, \theta^t)\)
+
+Then, we have to prove
+\(H(\theta^{t+1}, \theta^t)\leq H(\theta^t, \theta^t)\)
+
+\begin{align}
+
+&H(\theta^{t+1}, \theta^t)-H(\theta^t, \theta^t)\\
+
+=&\int_Z P(Z|X,\theta^t)\cdot \log P(Z|X,\theta^{t+1})dZ-\int_Z P(Z|X,\theta^t)\cdot \log P(Z|X,\theta^t)dZ\\
+
+=&\int_Z P(Z|X,\theta^t)\cdot \log\frac {P(Z|X,\theta^{t+1})}{P(Z|X,\theta^t)}dZ\\
+  
+\leq & \log \int_Z P(Z|X,\theta^{t+1}) =\log 1= 0 \quad \text{(Because $E[log x]\leq logE[x]$ or use $=-KL(P(Z|X,\theta^t)||P(Z|X,\theta^{t+1})\leq 0)$}
+
+\end{align}
+
+\hypertarget{computerized-adaptive-testingcat}{%
+\subsection{Computerized Adaptive
+Testing(CAT)}\label{computerized-adaptive-testingcat}}
+
+This section introduces the CAT method.
+
+\hypertarget{fisher-information}{%
+\subsubsection{Fisher Information}\label{fisher-information}}
+
+The Fisher Information (MFI) method was introduced by Lord (Lord, 1980;
+Thissen \& Mislevy, 2000) and it was the most widespread ISS in the
+early days of CAT.
+
+Fisher information is a measurement of the amount of information about
+the unknown capacity \(\theta\) generated by the response pattern(Davier
+et al., 2019).
+
+\hypertarget{definition-1}{%
+\paragraph{Definition}\label{definition-1}}
+
+According to Davier et al.~(2019), firstly, We give the definition of
+the first derivative of log likelihood function as Score function:
+
+\[S(X|\theta)=\sum_{i=1}^n\frac{d\log f(X_i;\theta)}{d\theta}\]
+
+where \(f(X_i;\theta)\) refers to the likelihood function, θ is the
+underlying latent trait, and x represents the observed response pattern.
+
+Fisher information is second moment of this Score function:
+
+\[I(\theta)=E[S(X|\theta^2)]\] where \(I(\theta)\) is fisher
+information.
+
+\hypertarget{mathematical-meanings}{%
+\paragraph{Mathematical meanings}\label{mathematical-meanings}}
+
+According to Davier et al.~(2019), it can estimate the variance of the
+MLE equation:
+
+As \(E[S(X;\theta)=0\),we can get that
+
+\[I(\theta)=E[S(X|\theta^2)]-E[S(X|\theta)]=Var[S(X|\theta)]\]
+
+It is the expectation of the negative second order derivative of log
+likelihood at the true value of the parameter
+
+\[I(\theta)=-E[f''(x|\theta)]=-\int\frac{d^2\log f(x|\theta)f(x|\theta)}{d\theta^2} dx\]
+
+\[I(\theta)=-E\left[\frac  {\partial^2 \log f(x;\theta)}{\partial^2 \theta} \right]\]
+
+Fisher Information reflects the accuracy of our parameter estimates; the
+larger it is, the more accurate the parameter estimate, i.e.~the more
+information it represents.
+
+\hypertarget{application}{%
+\paragraph{Application}\label{application}}
+
+The item k's Fisher information is given by
+\(I_k(\theta)=\frac {[P_k'(\theta)]^2}{P_k(\theta)Q_k(\theta)}\)
+according to Davier et al.~(2019), where \(P_k(\theta)\) is the item
+response function for item k which is specified by the selected IRT
+model, and \(Q_k(θ) = 1 − P_k(θ)\), and \(P_k' (θ)\) refers to the first
+derivative of the item response function in relation to \(\theta\).
+
+Assuming local independence the test information I(θ) is additive in
+item information, that means \(I(\theta)=\Sigma I_k(\theta)\).
+
+For the three-parameter logistic (3PL) model, \(P_j(θ)\) is given by
+
+\[P_k(\theta)=c_k+(1-c_k)\frac{e^{a_k(\theta-b_k)}}{1+e^{a_k(\theta-b_k)}}\]
+
+where \(a_k\), \(b_k\) and \(c_k\) respectively refer to the
+discrimination, hardness, and guessing parameter for the kth item.
+
+If the MFI method is applied to item selection, under the current
+estimate of \(\theta\) , an eligible item in the bank with the largest
+Fisher information will be selected as the next item to be managed.
+
+Since the asymptotic variance of \(\theta ^{ML}\),i.e.~the maximum
+likelihood estimate of \(\theta\), is in inverse proportion to the test
+information, the MFI method is widely considered to be a method to
+minimize the asymptotic variance of the θ estimate, that is, to
+asymptotically maximize the measurement precision.
+
+\hypertarget{drawbacks}{%
+\paragraph{Drawbacks}\label{drawbacks}}
+
+Firstly, Fisher information does not naturally apply to cognitive
+diagnosis as it is by definition on a continuous variable.In the early
+phases of CAT, capacity estimation may not yet be accurate. Maximizing
+information on the basis of an inaccurate and erratic estimate of
+\(\theta\) can be described as ``capitalization on chance''(van der
+Linden \& Glas, 2000). Thus, using the MFI in the early stages of a CAT
+program may not be ideal.
+
+Secondly, the MFI prefers to pick items with large distinguishing
+parameters, but uses few items with smaller discrimination parameters.
+This means that some of the items in the item pool may be underutilized.
+At the same time,, the excessive exposure of a small number of items
+with a high degree of distinction may be a critical threat to the
+security of the test(Chang, 2015; Chang \& Ying, 1999).
+
+In addition, the number of items from various content areas or sub-areas
+often need to be balanced in order to keep the CAT surface and content
+valid (Cheng, Chang, \& Yi, 2007; Yi \& Chang, 2003).
+
+\hypertarget{improvement}{%
+\paragraph{Improvement}\label{improvement}}
+
+The global information method was put forward by Chang and Ying (1996),
+which use KL distance or information rather than Fisher information in
+item selection. They demonstrated that global information is more robust
+for addressing the problem of instability in capacity estimation in the
+early stage of CAT.
+
+\hypertarget{kl-algorithm}{%
+\subsubsection{KL Algorithm}\label{kl-algorithm}}
+
+Chang \& Ying (1996) proposed the global information method which
+utilized the KL distance or information instead of Fisher information in
+item selection. Being more robust, global information could be used to
+combat the instability of ability estimation in the early stage of CAT.
+
+Fisher information is defined on a continuous variable, if involves
+discrete, KL Algorithm is preferred.
+
+The Kullback Leibler distance (KL-distance) is defined as a natural
+distance function from a ``true'' probability distribution, p, to a
+``target'' probability distribution, q. It can be interpreted as the
+expected extra message-length per datum due to using a code based on the
+wrong (target) distribution compared to using a code based on the true
+distribution.
+
+\hypertarget{definition-2}{%
+\paragraph{Definition}\label{definition-2}}
+
+For discrete (not necessarily finite) probability distributions, p=\{p1,
+\ldots, pn\} and q=\{q1, \ldots, qn\}, the KL-distance is defined to be
+
+\[D_{KL}(P||Q)=\sum_i P(i)\log\left(\frac {P(i)}{Q(i)}\right)\]
+
+For continuous probability densities,
+
+\[D_{KL}(P||Q)=\int_{-\infty}^{\infty} P(x)\log\left(\frac {P(x)}{Q(x)}\right)\]
+
+Xu et al.'s (2005) KL Algorithm:
+
+According to Cover \& Thomas(1991), KL information is a measure of
+``distance'' between two probability distributions, which can be defined
+as:
+
+\[d[f,g]=E_f\left[\log \frac{f(x)}{g(x)}\right]\] where \(f(x)\) and
+\(g(x)\) are two probability distributions.
+
+However, because the unsymmetrical of \(d[f, g]\) and \(d[g, f]\), KL
+information is not a real distance measure. KL distance is still
+introduced due to the meaning of it, the larger d{[}f, g{]} is
+corresponding to the easier it is to single out between the two
+probability distributions \(f(x)\) and \(g(x)\) statistically (Henson \&
+Douglas, 2005).
+
+\hypertarget{the-kl-algorithm-based-on-kullbackleibler-information-cheng-2009}{%
+\paragraph{The KL Algorithm Based on Kullback--Leibler Information
+(Cheng,
+2009)}\label{the-kl-algorithm-based-on-kullbackleibler-information-cheng-2009}}
+
+Suppose t items are selected, and the available items in the pool form a
+set R(t) at this stage. Consider item h in \(R^{(t)}\). In cognitive
+diagnosis, conditional distribution of person i's item responses
+\(U_{ih}\) given his or her latent state, or cognitive profile,
+\(\alpha_i\) are what interested. According to the notation of McGlohen
+and Chang (2008),
+\(\alpha_{i}=(\alpha_{i1},\alpha_{i2},...,\alpha_{ik},...,\alpha_{iK})'\).
+
+Here \(\alpha_{ik}\) = 0 indicates that the \(i\)th examinee not masters
+the kth attribute and \(\alpha_{ik} = 1\) otherwise. An attribute is a
+task, cognitive process, or skill involved in answering an item.
+
+Due to the unknown true state, a global measure of discrimination can be
+constructed on the basis of the KL distance between the distribution of
+\(U_{ih}\) given the current estimate of person \(i\)'s latent cognitive
+state (i.e., \(f(U_{ih}|\hat \alpha_i^{(t)}\))) and the distribution of
+\(U_{ih}\) given other states.
+
+The KL distance between \(f(U_{ih}|\hat \alpha_i^{(t)}\))) and the
+conditional distribution of \(U_{ih}\) given another latent state
+\(\alpha_c\), i.e., \(f(U_{ih}|\alpha_c\))), can be computed as follows:
+
+\[D_h(\hat \alpha_i^{(t)}||\alpha_c)=\sum_{q=0}^1\log \left[\frac{P(U_{ih}=q|\hat \alpha_i^{(t)})}{P(U_{ih}=q|\alpha_c)}\right]P(U_{ih}=q|\hat \alpha_i^{(t)})\]
+
+Xu et al.~(2003) stated using the straight sum of the KL distances
+between \(f(U_{ih}|\hat \alpha_i^{(t)}\))) and all the
+\(f(U_{ih}|\alpha_c\))), c = 1, 2,\ldots, \(2^K\) (when there are K
+attributes, there are \(2^K\) possible latent cognitive states):
+
+\[KL_h(\hat \alpha_i^{(t)})=\sum _{c=1}^{2^K}D_h(\hat \alpha_i^{(t)}||\alpha_c)\]
+
+Then the \((t + 1)\)th item for the \(i\)th examinee is the item in
+\(R(t)\) that maximizes \(KL_h(\hat \alpha_i^{(t)})\). This is referred
+to as the KL algorithm. The items selected using this algorithm are the
+most powerful ones on average in distinguishing the current latent class
+estimate from all other possible latent classes.
+
+\hypertarget{use-of-kl-distance}{%
+\paragraph{Use of KL Distance}\label{use-of-kl-distance}}
+
+It is helpful to choose the optimal parameter. For instance, if p(x) is
+unknown, a \(q(x|\theta)\) can be constructed to estimate p(x). In order
+to know \(\theta\), select N samples from p(x) and construct such
+function:
+
+\[D_{KL}(p||q)=\sum_{i=1}^Np(x_i)(\log p(x_i)-\log(q(x_i|\theta))\]
+
+Then use MLE to estimate \(\theta\).
+
+\hypertarget{shannon-entropy}{%
+\subsubsection{Shannon entropy}\label{shannon-entropy}}
+
+It is necessary to know the uncertainty of a random variable and Shannon
+entropy is a good candidate to measure the uncertainty. Cheng(2009)
+listed an example about the Shannon entropy: a fair coin has entropy of
+one unit while an unfair coin has lower entropy because there is less
+uncertainty when guessing the outcome of one unfair coin.
+
+\hypertarget{definition-3}{%
+\paragraph{Definition}\label{definition-3}}
+
+For a discrete random variable X which takes value among
+\(x_1,x_2,...x_n\), the Shannon entropy is defined as:
+
+\[H(X)=-\sum_{i=1}^np(x_i)\log_b(x_i)\]
+
+In the definition, \(p(x_i)\) is the probability when X = \(x_i\).
+\(H(X)\) can also be written as \(H(P)\) or H(\(p_1,p_2,...p_n\)). Owing
+to the formula, we can conclude that independent uncertainties are
+additive. \(b\) is the base of logarithm, which takes value among 2,e
+and 10. The differences among choices of b are the unit of entropy. For
+\(b=2\), unit is bit; for \(b = e\), unit is nat; for \$ b = 10\$, unit
+is dit or digit.
+
+\hypertarget{properties}{%
+\subsubsection{Properties}\label{properties}}
+
+The choice of b does not influence the properties of Shannon entropy, so
+we do not need care the value of b in this part.
+
+\hypertarget{nonnegativity}{%
+\paragraph{Nonnegativity}\label{nonnegativity}}
+
+\[H(p_1,p_2,...p_n)\ge0\]
+
+This equality holds only when the distribution is certain which means
+\(\exists\quad p_i=1\), and other \(p_j=0\), where \(i\neq j\).
+
+\hypertarget{maximality}{%
+\paragraph{Maximality}\label{maximality}}
+
+\(H(P)\) reaches its maximum when all the events share same probability,
+which means \(p_1=p_2=p_n=\frac{1}{n}\). Moreover, if the events all
+share same probability, \(H(P)\) increases with the number of events
+increasing. It means
+
+\[H(\frac{1}{n},\frac{1}{n},...)<H(\frac{1}{n+1},\frac{1}{n+1}...)\]
+
+\hypertarget{concavity}{%
+\paragraph{Concavity}\label{concavity}}
+
+Shannon entropy is a concave function of P.
+
+\hypertarget{continuity}{%
+\paragraph{Continuity}\label{continuity}}
+
+Shannon entropy is a continuous function of P which means small changes
+on probability lead to small changes on entropy.
+
+\hypertarget{symmetry}{%
+\paragraph{Symmetry}\label{symmetry}}
+
+\[H(P_1)=H(P_2)\] if \(P_1,P_2\) are different permutations of one
+probability distribution.
+
+\hypertarget{expansible}{%
+\paragraph{Expansible}\label{expansible}}
+
+\[H(p_1,p_2,...p_n)=H(p_1,p_2,...p_n,0)\]
+
+\hypertarget{difference-between-kl-divergence-and-shannon-entropy}{%
+\subsubsection{Difference between KL-Divergence and Shannon
+Entropy}\label{difference-between-kl-divergence-and-shannon-entropy}}
+
+Shannon Entropy is used to measure the uncertainty of one probability
+distribution, while KL-Distance is used to measure the divergence
+between two probability distributions.So, in the use of Shannon Entropy,
+only one probability distribution will be involved with two involved in
+KL-Divergence.
+
+\hypertarget{reference}{%
+\subsection{Reference}\label{reference}}
+
+\begin{itemize}
+\item
+  Casella,G.,\& Berger R.L.,(2002). Statistical Inference.USA.RR
+  Donnelley
+\item
+  Chang, H. H. (2015). \{Psychometrics behind computerized adaptive
+  testing\}. Psychometrika, 80(1),1--20.
+\item
+  Chang, H. H., \& Ying, Z. (1999). \{a-Stratified multistage
+  computerized adaptive testing. Applied Psychological Measurement\},
+  23(3), 211--222.
+\item
+  Chang, H.-H., \& Ying, Z.(1996) `A Global Information Approach to
+  Computerized Adaptive Testing',
+  \textit{Applied Psychological Measurement}, 20(3), pp.~213-229.
+  \url{doi:10.1177/014662169602000303}
+\item
+  Cheng, Y. (2009). Computerized adaptive testing for cognitive
+  diagnosis. In D. J. Weiss (Ed.), Proceedings of the 2009 GMAC
+  Conference on Computerized Adaptive Testing. Retrieved {[}5 Aug
+  2022{]} from www.psych.umn.edu/psylabs/CATCentral/
+\item
+  Cheng, Y (2009) `When Cognitive Diagnose Meets Computerized Adaptive
+  Testing:CD-CAT', \emph{Psychometrika},VOL. 74, NO. 4, 619--632
+\item
+  Cheng, Y., Chang, H. H., \& Yi, Q. (2007). \{Two-phase item selection
+  procedure for flexible content balancing in CAT\}. Applied
+  Psychological Measurement, 31(6), 467--482.
+\item
+  Davier, M.V. et al.~(2019). \{Methodology of Educational Measurement
+  and Assessment\}. Available at:
+  \url{https://doi.org/10.1007/978-3-030-05584-4} (Downloaded: 18 July
+  2022)
+\item
+  Henson, R. \& Douglas J. (2005). Test construction for cognitive
+  diagnosis. \emph{Applied Psychological Measurement}, 29, 262-277.
+\item
+  Lord, F. M. (1980).
+  \textit{Applications of item response theory to practical testing problems}.
+  Hillsdale,NJ: Erlbaum.
+\item
+  McGlohen, M.K., \& Chang, H. (2008). Combining computer adaptive
+  testing technology with cognitively diagnostic assessment.
+  \emph{Behavioral Research Methods}, 40, 808--821.
+\item
+  Thissen, D., \& Mislevy, R. J. (2000). \{Testing algorithm. In H.
+  Wainer \& N. J. Dorans (Eds.), Computerized adaptive testing: A
+  primer\}. Hillsdale, NJ: Erlbarm.
+\item
+  Van der Linden, W. J., \& Glas, C. A. W. (2000). \{Capitalization on
+  item calibration error in adaptive testing\}. Applied Measurement in
+  Education, 13(1), 35--53.
+\item
+  Xu, X., Chang, H., \& Douglas, J. (2005). Computerized adaptive
+  testing strategies for cognitive diagnosis. Paper presented at the
+  annual meeting of National Council on Measurement in Education,
+  Montreal, Canada.
+\item
+  Yi, Q., \& Chang, H. H. (2003). \{a-Stratified CAT design with content
+  blocking\}. British Journal of Mathematical and Statistical
+  Psychology, 56(2), 359--378.
+\end{itemize}
+
+\end{document}

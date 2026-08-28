@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>stat.knit</title>
+
+<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Item Response Theory</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="stat.html">Statistical Methods Review</a>
+</li>
+<li>
+  <a href="ctt.html">Literature Review</a>
+</li>
+<li>
+  <a href="irt.html">CTT and IRT</a>
+</li>
+<li>
+  <a href="cdms.html">Cognitive Diagnosis Models</a>
+</li>
+<li>
+  <a href="estimation.html">Corresponding Estimation</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+
+</div>
+
+
+<div id="frequentists-vs-bayesians" class="section level1">
+<h1>Frequentists vs Bayesians</h1>
+<div id="symbol-interpretation" class="section level2">
+<h2>Symbol Interpretation</h2>
+<p><span class="math inline">\(X\)</span>: a specific data set</p>
+<p><span class="math inline">\(\theta\)</span> : parameter of the model</p>
+<p><span class="math inline">\(P(X|\theta)\)</span>：There are two explanations depending on whether <span class="math inline">\(X\)</span> or <span class="math inline">\(\theta\)</span> is variable or not</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Likelihood estimation</strong>: <span class="math inline">\(X\)</span> is given，and <span class="math inline">\(\theta\)</span> is variable，the function is called likelihood function，describing the probability of the occurrence of sample point x for different model parameters.</p></li>
+<li><p><strong>Probability function</strong>: <span class="math inline">\(\theta\)</span> is known, and <span class="math inline">\(X\)</span> is the variable. This function is called probability function, which describes the probability of occurrence for different sample points <span class="math inline">\(X\)</span>.</p></li>
+</ol>
+</div>
+<div id="frequentists" class="section level2">
+<h2>Frequentists</h2>
+<p>Consider the parameter <span class="math inline">\(\theta\)</span> to be inferred as a fixed and unknown constant, which has nothing to do with <span class="math inline">\(X\)</span>, sample <span class="math inline">\(X\)</span> is random, and the relevant probability calculations are for the distribution of X in the sample space</p>
+<p><span class="math inline">\(\theta\)</span> ：fixed and unknown constant</p>
+<p><span class="math inline">\(X\)</span>：random variable</p>
+<div id="maximum-likelihood-estimationmle--common-used-by-frequentists" class="section level3">
+<h3>Maximum Likelihood Estimation(MLE)- common used by frequentists</h3>
+<div id="explanation-of-mle" class="section level4">
+<h4>Explanation of MLE</h4>
+<p>Choose a value of <span class="math inline">\(\theta\)</span> to maxmize the likelihood function given the observed data. That is to say, to predict the parameter <span class="math inline">\(\theta\)</span> from the observed data, relying only on the observed data (sample).</p>
+<p><span class="math display">\[ \theta_{MLE}={\operatorname{argmax}}\log P(x|\theta) \]</span></p>
+</div>
+<div id="solving-steps" class="section level4">
+<h4>Solving steps</h4>
+<ul>
+<li><p>Find the likelihood function <span class="math inline">\(P(x|\theta)\)</span></p></li>
+<li><p>Find the corresponding logarithmic likelihood function <span class="math inline">\(L=\log P(x|\theta)\)</span> (easier to take the derivative; the argmax is the same since log function is monotonically increasing; avoid numerical problems involved with multiplying lots of small numbers)</p></li>
+<li><p>calculate the argmax by setting the first derivative equal to zero and solving for <span class="math inline">\(\theta_{MLE}\)</span></p></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="bayesians" class="section level2">
+<h2>Bayesians</h2>
+<p>The parameter <span class="math inline">\(\theta\)</span> is regarded as a random variable, and the sample X is fixed. Focusing on the parameter space, the distribution of parameter <span class="math inline">\(\theta\)</span> is emphasized, and the posterior distribution of parameter is obtained by combining the prior distribution of parameter with the sample information</p>
+<p><span class="math inline">\(\theta\)</span>: random variable</p>
+<p><span class="math inline">\(X\)</span>: fixed</p>
+<p><span class="math inline">\(P(\theta)\)</span>: a prejudgment of <span class="math inline">\(\theta\)</span> in the absence of any observed data</p>
+<p><span class="math inline">\(\theta \sim p(\theta)\)</span>: <span class="math inline">\(\theta\)</span> satisfies a preset prior distribution</p>
+<p>Then, the corresponding posterior probability is</p>
+<p><span class="math display">\[ 
+P(\theta|X)=\frac {P(X|\theta)P(\theta)}{P(x)}
+\]</span></p>
+<p>which is in direct proportion to $ P(X|)P()$</p>
+<div id="maximum-a-posteriorimap---common-used-by-bayesians" class="section level3">
+<h3>Maximum a-posteriori(MAP) - common used by Bayesians</h3>
+<div id="explanation-of-map" class="section level4">
+<h4>Explanation of MAP</h4>
+<p>When estimating the parameter θ of the model, we not only rely on the observation data in hand, but also from a prior. Priori can be understood as the experience of experts. MAP is to find <span class="math inline">\(\theta\)</span> by maximizing the posterior probability.</p>
+<p>Since <span class="math inline">\(p(X)\)</span> does not depend on <span class="math inline">\(\theta\)</span></p>
+<p><span class="math display">\[ 
+\theta_{MAP}=\underset{\theta}{\operatorname{argmax}} P(\theta|X)=\underset{\theta}{\operatorname{argmax}}P(X|\theta)P(\theta) 
+\]</span></p>
+</div>
+<div id="solving-steps-1" class="section level4">
+<h4>Solving steps</h4>
+<ul>
+<li><p>Determine the prior distribution and likelihood function of parameters</p></li>
+<li><p>Find the log posterior distribution function of the parameters，</p>
+<p><span class="math inline">\(L=\sum_{x_{i} \in \mathbf{X}}\left\{\log \operatorname{P}\left(x_{i} \mid \theta\right)\right\}+\log \operatorname{P}(\theta)\)</span>, which is almost the same as the MLE estimate except that we now have an additional term resulting from the prior</p></li>
+<li><p>Find <span class="math inline">\(\theta_{MAP}\)</span> by setting the first derivative of <span class="math inline">\(L\)</span> equal to zero.</p></li>
+</ul>
+</div>
+</div>
+<div id="bayesian-estimation" class="section level3">
+<h3>Bayesian estimation</h3>
+<p>Bayesian estimate is an extension of a maximum posteriori estimate. Both MLE and MAP estimate a particular value (point estimate) of <span class="math inline">\(\theta\)</span>, but Bayesian estimation estimates the posteriori distribution <span class="math inline">\(P(X|\theta)\)</span> of , so in A Bayesian estimate, the prior distribution <span class="math inline">\(P(X)\)</span> is not negligible.</p>
+<p><span class="math display">\[
+P(\theta|X)=\frac {P(X|\theta)P(\theta)}{P(x)}=\frac{p(X \mid \theta) \cdot p(\theta)}{\int_{\theta} p(X \mid \theta) \cdot p(\theta) d \theta}
+\]</span></p>
+</div>
+<div id="bayesian-forecasting" class="section level3">
+<h3>Bayesian forecasting</h3>
+<p>Bayesian prediction is commonly used to estimate the probability of the occurrence of a new measurement, for the occurrence of a new data <span class="math inline">\(\hat{x}\)</span></p>
+<p><span class="math display">\[ 
+p\left(\hat{x} \mid X\right)=\int_{\theta} p\left(\hat{x} \mid \theta\right) \cdot p(\theta \mid X) d \theta
+\]</span></p>
+</div>
+</div>
+<div id="remark" class="section level2">
+<h2>Remark</h2>
+<p>There are essential differences between frequentists and Bayesians in their cognition of the world. Frequentists believe that the world is fixed and there is an ontology whose truth value is unchanged. Our goal is to find the truth value or the range of truth value. Bayesians believe that the world is uncertain, and people have a prediction of the world, and then adjust the prediction through observational data. Our goal is to find the optimal probability distribution that describes the world.</p>
+</div>
+<div id="gaussian-distribution-mle" class="section level2">
+<h2>Gaussian Distribution-MLE</h2>
+<div id="overview" class="section level3">
+<h3>Overview</h3>
+<p><span class="math display">\[ \text{Data: }X = (x_1,x_2,…，x_N)^T, \quad \text{. $x_i$ is p-dimensional vector } \]</span></p>
+<p>A row is a row of data, and a column is the value of different data under a certain property</p>
+<p><span class="math inline">\(x_i\)</span> is independently identically distributed</p>
+<p><span class="math inline">\(x_i \sim N(\mu, \Sigma)\)</span>, <span class="math inline">\(\mu\)</span> is the expectation, <span class="math inline">\(\Sigma\)</span> is the variance matrix</p>
+<p><u>independent and identically distributed</u>: Random variables are independent of each other and obey the same probability distribution</p>
+<p>Parameter <span class="math inline">\(\theta = (\mu, \Sigma )\)</span></p>
+<p><strong>Use MLE to find <span class="math inline">\(\theta\)</span> </strong>: Suppose that there is a set of data subject to the Gaussian distribution, the purpose is to find the mean and variance of the Gaussian distribution, so that the probability of the observation of this batch of data is maximum</p>
+<p><span class="math inline">\(\theta_{MLE}\)</span> = argmax P(X|<span class="math inline">\(\theta\)</span>)</p>
+</div>
+<div id="one-dimension-mle" class="section level3">
+<h3>One-dimension MLE</h3>
+<p>Firstly, we consider the one-dimension condition</p>
+<p>let p=1, <span class="math inline">\(\theta\)</span>=(<span class="math inline">\(\mu\)</span>, <span class="math inline">\(\sigma^2\)</span>)</p>
+<p>since data <u>independently identically distributed</u>, the probability can be written as a multiplicative</p>
+<p><span class="math display">\[
+\log P(X|\theta)$= $\log\prod_{i=1}^n P(x_i,\theta)$=$\sum_{i=1}^N\log P(x_i|\theta)
+\]</span></p>
+<p>The probability density function PDF of gaussian distribution is</p>
+<p><span class="math display">\[ 
+p(x|\mu,\Sigma)=\frac{1}{(2\pi)^{p/2}|\Sigma|^{1/2}}e^{-\frac{1}{2}(x-\mu)^{T}\Sigma^{-1}(x-\mu)} 
+\]</span></p>
+<p><strong>pdf under one dimension</strong></p>
+<p><span class="math display">\[ 
+\log p(X|\theta)=\sum_ {i=1}^{N}\log p(x_i|\theta)=\sum_{i=1}^{N}\log\frac{1}{\sqrt{2\pi}\sigma}\exp(-(x_i-\mu)^{2}/2\sigma^{2})=\sum_{i=1}^{N}[log\frac{1}{\sqrt{2\pi}}+log\frac{1}{\sigma}-\frac{(x_i-\mu)^2}{2\sigma^2}] 
+\]</span></p>
+<p>Then we can calculate <span class="math inline">\(\mu_{MLE} \text{ and }\sigma^2_{MLE}\)</span></p>
+<p><strong>Find the items related to <span class="math inline">\(\mu\)</span></strong></p>
+<p><span class="math inline">\(\mu_{MLE}\)</span>=<span class="math inline">\(\underset{\mu}{\operatorname{argmax}}\log P(X|\theta)\)</span>=<span class="math inline">\(\underset{\mu}{\operatorname{argmin}}\)</span><span class="math inline">\(\sum_{i=1}^{N}(x_i-\mu)^2\)</span></p>
+<p><strong>Calculate the partial derivative of <span class="math inline">\(\mu\)</span></strong></p>
+<p><span class="math display">\[ \sum(x_i-\mu)=0 \\\mu_{MLE}=(\sum_{i=1}^{N}x_i)/N（\text{unbiased estimation}\quad E[\mu_{MLE}]=\mu) \]</span></p>
+<p><strong>Find the items related to </strong><span class="math inline">\(\sigma^2\)</span></p>
+<p><span class="math inline">\(\sigma^2_{MLE}\)</span> =<span class="math inline">\(\underset{\sigma}{\operatorname{argmax}}\)</span>(<span class="math inline">\(\log\frac{1}{\sigma}-\frac{(x_i-\mu)^2}{2\sigma^2})\)</span></p>
+<p><strong>Calculate the partial derivative of</strong> <span class="math inline">\(\sigma\)</span></p>
+<p><span class="math display">\[\sum_{i=1}^N [-\sigma^2+(x_i-\mu)^2]=0 \\\sigma^2_{MLE}=\frac{1}{N}\sum_{i=1}^N (x_i-\mu)^2（\text{biased estimation}\quad E[\sigma^2_{MLE}]= \frac{N-1}{N} \sigma^2)\]</span></p>
+<div id="unbiased-vs-biased" class="section level4">
+<h4>Unbiased vs biased</h4>
+<p>To judge the biased and unbiased estimators, observe if the following two equations hold</p>
+<p><span class="math display">\[
+E[\hat{\mu}]=\mu  \quad E[\hat{\sigma}]=\sigma 
+\]</span></p>
+<span class="math display">\[\begin{aligned}
+E\left(u_{M L E}\right) &amp;=E\left(\frac{1}{N} \sum_{i=1}^{N} x_{i}\right)=\frac{1}{N} \sum_{i=1}^{N} E\left(x_{i}\right)=\frac{1}{N} \cdot N u=u \\E\left(\sigma_{M L t}^{2}\right) &amp;=E\left(\frac{1}{N} 
+
+\sum_{i=1}^{N}\left(x_{i}-u_{M L t}\right)^{2}\right) \\&amp;=E\left(\frac{1}{N} \sum_{i=1}^{N}\left(x_{i}^{2}-2 x_{i} u_{M L E}+u_{M L E}^{2}\right)\right) \\&amp;=E\left(\frac{1}{N} \sum_{i=1}^{N} x_{i}^{2}-2 u_{M L E}^{2}+u_{M L E}^{2}\right) \\&amp; E\left(\frac{1}{N} \sum_{i=1}^{N} x_{i}^{2}-u^{2}+u^{2}-u_{M L E}^{2}\right) \\&amp;=E\left(\frac{1}{N} \sum_{i=1}^{N} x_{i}^{2}-u^{2}\right)-E\left(\mu_{M L E}^{2}-u^{2}\right) \\&amp;=\sigma^{2}-\left(E\left(u_{M L E)}^{2}-u^{2}\right)\right.\\&amp;=\sigma^{2}-\left(E\left(u_{M L E)}^{2}-E^{2}\left(u_{M L E}\right)\right)\right.\\&amp;=\sigma^{2}-\operatorname{Var}\left(u_{M L E}\right) \\&amp;=\sigma^{2}-\operatorname{Var}\left(\frac{1}{N} \sum_{i=1}^{N} x_{i}\right) \\&amp;=\sigma^{2}-\frac{1}{N^{2}} \sum_{i=1}^{N} V_{a r}\left(x_{i}\right)=\frac{N-1}{N} \sigma^{2}
+\end{aligned}\]</span>
+<p><strong>So the <span class="math inline">\(\mu\)</span> is a unbiased estimator and <span class="math inline">\(\sigma\)</span> is an biased estimator</strong></p>
+<div id="remark-1" class="section level5">
+<h5>Remark</h5>
+<p>Maximum likelihood estimators (point estimators) are biased, with <span class="math inline">\(\sigma\)</span> being smaller for gaussian distributions</p>
+<p>Notice that the expectation of the sample mean is equal to the expectation of the population mean, not that the sample mean is equal to the population mean</p>
+</div>
+</div>
+</div>
+<div id="multidimensional-gaussian-distribution" class="section level3">
+<h3>Multidimensional Gaussian distribution</h3>
+<p><strong>pdf of the multidimensional Gaussian distribution</strong></p>
+<p><span class="math display">\[
+p(x|\mu,\Sigma)=\frac{1}{(2\pi)^{p/2}|\Sigma|^{1/2}}e^{-\frac{1}{2}(x-\mu)^{T}\Sigma^{-1}(x-\mu)}
+\]</span></p>
+<p><strong>Markov distance</strong></p>
+<p><span class="math display">\[
+\chi=\left(\begin{array}{c}x_{1} \\ x_{2} \\ \vdots \\ x_{p}\end{array}\right) \quad \mu=\left(\begin{array}{c}\mu_{1} \\ \mu_{2} \\ \vdots \\ \mu_{p}\end{array}\right) \\(x-\mu)^{T}\Sigma^{-1}(x-\mu): \text{markov distance（between x and $\mu$） }
+\\ \text{If $\Sigma=I$, then markov distance= Euclidean distance}
+\]</span></p>
+<p><strong>Covariance</strong></p>
+<p>covariance is the population error of two variables, variance is a special case of covariance when the two variables are the same.</p>
+<p><span class="math display">\[
+\operatorname{cov}\left(X_{1}, X_{2}\right)=E\left(X_{1}-\mu_{1}\right)\left(X_{2}-\mu_{2}\right)=E\left(X_{1} X_{2}\right)-\mu_{1} \mu_{2}
+\]</span></p>
+<p>If <span class="math inline">\(X_1\)</span> and <span class="math inline">\(X_2\)</span> are two independent random variables, their covariance is zero；The opposite is not true.</p>
+<p><strong>Covariance matrix（positive definite and symmetric）：</strong></p>
+<p><span class="math display">\[
+\sum=\left[\begin{array}{cccc}\operatorname{cov}\left(x_{1}, x_{1}\right) &amp; \operatorname{cov}\left(x_{1}, x_{2}\right) &amp; \ldots &amp; \operatorname{cov}\left(x_{1}, x_{n}\right) \\\operatorname{cov}\left(x_{2}, x_{1}\right) &amp; \operatorname{cov}\left(x_{2}, x_{2}\right) &amp; \ldots &amp; \operatorname{cov}\left(x_{2}, x_{n}\right) \\\vdots &amp; \vdots &amp; \ddots &amp; v d o t s \\\operatorname{cov}\left(x_{n}, x_{1}\right) &amp; \operatorname{cov}\left(x_{n}, x_{2}\right) &amp; \ldots &amp; \operatorname{cov}\left(x_{n}, x_{n}\right)\end{array}\right]
+\]</span></p>
+<p>The element in the ith row and the jth column represents the covariance of the ith and jth random variable</p>
+<p><strong>Positive definite</strong></p>
+<p>A real symmetric matrix M of n<span class="math inline">\(\times\)</span>n is positive defintie if and only if <span class="math inline">\(z^TMz&gt;0\)</span> for all non-zero real coefficient vectors</p>
+<p><strong>Symmetric</strong></p>
+<p>Since the covariance between the ith and the jth random variable is the same as the covariance between the jth and the ith</p>
+<p>random variable, it is on that this matrix is symmetric</p>
+<p><strong>For symmetric covariance matrix, eigenvalue decomposition can be performed</strong></p>
+<p>so <span class="math display">\[ \Sigma=U \Lambda U^{T}=\left(u_{1}, u_{2}, \cdots, u_{p}\right) \operatorname{diag}\left(\lambda_{i}\right)\left(u_{1}, u_{2}, \cdots, u_{p}\right)^{T}=\sum_{i=1}^{p} u_{i} \lambda_{i} u_{i}^{T} \]</span></p>
+<p>Let <span class="math display">\[ \\\Sigma^{-1}=\sum_{i=1}^{p} u_{i} \frac{1}{\lambda_{i}} u_{i}^{T} \\\Delta=(x-\mu)^{T} \Sigma^{-1}(x-\mu)=\sum_{i=1}^{p}(x-\mu)^{T} u_{i} \frac{1}{\lambda_{i}} u_{i}^{T}(x-\mu)=\sum_{i=1}^{p} \frac{y_{i}^{2}}{\lambda_{i}}\]</span></p>
+<p><span class="math inline">\(y_i\)</span> = <span class="math inline">\((x-\mu)^Tu_i\)</span>is the projection length of <span class="math inline">\(x-\mu\)</span> on the eigenvector <span class="math inline">\(u_i\)</span></p>
+<p>For the two dimensional Gaussian distribution, the top formula is the concentric ellipse with different values on the left <span class="math display">\[
+\frac{y_1}{\lambda_1^2}+\frac{y_2}{\lambda_2^2}=1
+\]</span></p>
+</div>
+</div>
+<div id="limitation-of-gaussian-distribution" class="section level2">
+<h2>Limitation of Gaussian distribution</h2>
+<p>There are two problems when applying the multidimensional Gaussian distribution model</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>the covariance matrix is too comlicated</strong></p>
+<p>since covariance matrix is a <u>symmetric matrix</u>, we can calculate</p>
+<p><u>the number of parameters in the matrix</u>:</p>
+<p><span class="math inline">\(\frac{p^2-p}{2}+p=\frac{p^2+p}{2}=O(p^2)\)</span></p>
+<p>Which causes the difficulty of calculation process.</p>
+<p>So we can simplify the covariance matrix.</p>
+<p>Assuming that the covariance matrix is a <u>diagonal matrix</u>（only parameters on the diagonal), we can get the simplified covariance matirx.</p>
+<p><span class="math display">\[
+\left(\begin{array}{lllll}
+\lambda_{1} &amp; &amp; &amp; \\
+&amp; \lambda_{2} &amp; &amp; \\
+&amp; &amp; \lambda_{3} &amp; \\
+&amp; &amp; &amp; \vdots &amp; \\
+&amp; &amp; &amp; &amp;\lambda_{p}
+\end{array}\right)
+\]</span></p>
+<p>In this case, there is no need to factor the covariance matrix，<span class="math inline">\(u_i=x_i\)</span>, then the direction of <span class="math inline">\(x_i\)</span> is the same as the direction of <span class="math inline">\(y_i\)</span>. Therefore, when the dimension is two, the figure becomes a positive ellipse.</p>
+<p>Moreover, If <span class="math inline">\(\lambda_1=\lambda_2=…=\lambda_p\)</span> ,the figure becomes a round, which is called <u>isotropic.</u></p></li>
+<li><p><strong>Only one Gaussian distribution may fail to show the model exactly</strong> when the statistics is complicated.</p></li>
+</ol>
+</div>
+<div id="the-edge-probability-and-conditional-probability" class="section level2">
+<h2>The edge probability and conditional probability</h2>
+<p>Divide the p-dimensional vector <span class="math inline">\(x\)</span> into two groups</p>
+<p>we have</p>
+<p><span class="math display">\[
+x=\left(\begin{array}{l}
+x_{a}  \\
+x _{b} \\
+\end{array}\right)
+\]</span></p>
+<p><span class="math inline">\(x_a\)</span> is a m-dimensional vector, <span class="math inline">\(x_b\)</span> is the <span class="math inline">\(n\)</span>-dimensional vector, <span class="math inline">\(m+n=p\)</span></p>
+<p><span class="math display">\[
+\mu=\left(\begin{array}{l}
+\mu_{a}  \\
+\mu _{b} \\
+\end{array}\right)
+\]</span></p>
+<p><span class="math display">\[
+\Sigma =\left(\begin{array}{2}
+\Sigma_{aa} &amp;\Sigma_{ab} \\
+\Sigma_{ba} &amp;\Sigma_{bb} \\
+\end{array}\right)
+\]</span></p>
+<p>Firstly, we introduce one theorem</p>
+<p><span class="math display">\[
+X\sim N(\mu,\Sigma)
+\\y=Ax+B
+\\y\sim N(A\mu+B, A\Sigma A^T)
+\]</span></p>
+<span class="math display">\[\begin{aligned}
+proof:\;&amp;E[y]=E[Ax+B]=AE[x]+B=A\mu+B
+\\&amp;Var[y]=Var[Ax+B]=Var[Ax]+Var[B]
+=AVar[x]A^T+0(B\;is\;a\;constant)
+=A\Sigma A^T 
+\end{aligned}\]</span>
+<p>Then, we can calculate</p>
+<p><span class="math display">\[{x_a\sim N(\mu,\Sigma_{aa})}\]</span> <span class="math display">\[x_a=\begin{pmatrix}\mathbb{I}_{m\times m}&amp;\mathbb{O}_{m\times n})\end{pmatrix}\begin{pmatrix}x_a \;x_b\end{pmatrix}\]</span></p>
+<p><span class="math display">\[ \mathbb{E}[x_a]=\begin{pmatrix}\mathbb{I}&amp;\mathbb{O}\end{pmatrix}\begin{pmatrix}\mu_a&amp;\mu_b\end{pmatrix}=\mu_a\]</span></p>
+<p><span class="math display">\[Var[x_a]=\begin{pmatrix}\mathbb{I}&amp;\mathbb{O}\end{pmatrix}\begin{pmatrix}\Sigma_{aa}&amp;\Sigma_{ab}\\\Sigma_{ba}&amp;\Sigma_{bb}\end{pmatrix}\begin{pmatrix}\mathbb{I}&amp;\mathbb{O}\end{pmatrix}=\Sigma_{aa}\]</span></p>
+<p>so <span class="math inline">\(x_a\sim N(\mu,\Sigma_{aa})\)</span></p>
+<p><span class="math display">\[{E\left[x_{b \cdot a}\right]=u_{b a}}\]</span></p>
+<p><span class="math display">\[{\operatorname{Var}\left[X_{b-a}\right]=\Sigma_{b b \cdot a}}\]</span></p>
+<p>There are three constructions after large calculation</p>
+<p><span class="math display">\[ x_{b\cdot a}=x_b-\Sigma_{ba}\Sigma_{aa}^{-1}x_a \\
+  \mu_{b a}=\mu_b-\Sigma_{ba}\Sigma_{aa}^{-1}\mu_a\\ 
+  \Sigma_{bb\cdot a}=\Sigma_{bb}-\Sigma_{ba}\Sigma_{aa}^{-1}\Sigma_{ab} ( \text{ the schur complementary})
+  \]</span></p>
+<p><span class="math display">\[
+x_{b \cdot a}=\left(-\Sigma_{b a} \Sigma_{a a}^{-1} \quad I\right)\left(\begin{array}{l}x_{a} \\ x_{b}\end{array}\right)
+\]</span></p>
+<p><span class="math display">\[
+E\left[x_{b \cdot a}\right]=\left(\begin{array}{ll}-\Sigma_{b a} \Sigma_{a c}^{-1} &amp; I\end{array}\right)\left(\begin{array}{l}u_{a} \\ u_{b}\end{array}\right)=\mu_{b}-\sum_{b a} \Sigma_{a c}^{-1} u_{a}=u_{b a}
+\]</span></p>
+<p><span class="math display">\[\begin{align}
+\operatorname{Var}\left[X_{b-a}\right]&amp;=\left(\begin{array}{ll}-\Sigma_{b a} \Sigma_{a c}^{-1} &amp; I)\end{array}\left(\begin{array}{cc}\Sigma_{c a} &amp; \Sigma_{a b} \\ \Sigma_{b a} &amp; \Sigma_{b b}\end{array}\right) \left(\begin{array}{c}-\Sigma_{a a}^{-1} \Sigma_{b a}^{\top} \\ I\end{array}\right)\\
+&amp;=\left(\begin{array}{cc}0 &amp; \Sigma_{b b}-\Sigma_{b a} \Sigma_{a a}^{-1} \Sigma_{a b}\end{array}\right)\left(\begin{array}{c}-\Sigma_{0 a}^{-1} \Sigma_{b a}^{\top} \\ I\end{array}\right)\\
+&amp;=\Sigma_{b b}-\Sigma_{b a} \Sigma_{a a}^{-1} \Sigma_{a b}\\
+&amp;=\Sigma_{b b \cdot a}
+\end{align}\]</span></p>
+<ol start="3" style="list-style-type: decimal">
+<li><p><span class="math inline">\(\pmb{x_{b} \mid x_{a} \sim N\left(u_{b a}+\Sigma_{b a} \Sigma_{a a^{-1}}+x_{a}, \Sigma_{b b a }\right)}\)</span></p>
+<p>Firstly, we introduce how to prove that two variables are independent</p>
+<p><span class="math inline">\(If \;x\sim N(\mu, \Sigma), \quad then \quad M x \perp N x \Leftrightarrow M \Sigma N^{\prime}=0\)</span></p>
+<p><span class="math inline">\(\begin{aligned} \because &amp; \because x \sim N(\mu, \Sigma) \\ \therefore &amp; M x \sim N\left(M \mu, M \Sigma M^{\top}\right) \\ &amp; N x \sim N\left(N \mu, N \Sigma N^{\top}\right) \\=&amp; \operatorname{Cov}(M x, N x) \\=&amp; E\left[(M x-M \mu)(N x-N \mu)^{\top}\right] \\=&amp; E\left[M(x+\mu) \cdot(x+\mu)^{\top} N\right] \\=&amp;\left.M \cdot E[x+1)(x+\mu)^{\top}\right] \cdot N \\=&amp; M \Sigma N^{\top} \end{aligned}\)</span></p>
+<p>Then, we prove <span class="math inline">\(x_a\)</span> and <span class="math inline">\(x_b\)</span> are independent</p></li>
+</ol>
+<span class="math display">\[\begin{aligned}
+   &amp;\Sigma=\left(\begin{array}{ll}
+   \Sigma_{a a} &amp; \Sigma_{a b} \\
+   \Sigma_{b a} &amp; \Sigma_{b b}
+   \end{array}\right)\\
+   &amp;x_{b_{a}}=x_{b}-\Sigma_{b a} \Sigma_{a+}^{-1} x_{a}\\
+   &amp;=\left(\Sigma_{b a} \Sigma_{a a}^{1}I\right)\left(\begin{array}{l}
+   x_{a} \\
+   x_{b}
+   \end{array}\right)=M x\\
+   &amp;x_{a}=\left(\begin{array}{ll}
+   I &amp; 0
+   \end{array}\right)\left(\begin{array}{l}
+   x_{a} \\
+   x_{b}
+   \end{array}\right)=N x\\
+   &amp;M \Sigma N^{\top}=\left(-I_{b a} \Sigma_{a a}^{-1} \quad I\right)\left(\begin{array}{ll}
+   \Sigma_{a a} &amp; \tau_{b b} \\
+   \Sigma_{b a} &amp; \tau_{b b}
+   \end{array}\right)\left(\begin{array}{c}
+   I \\
+   0
+   \end{array}\right)=0
+   \end{aligned}\]</span>
+<p>so <span class="math inline">\(x_a\)</span> and <span class="math inline">\(x_b\)</span> are independent</p>
+<p>since <span class="math inline">\(x_{b}=x_{b \cdot a}+\Sigma_{b a} \Sigma_{a a}^{-1} x_{a}\)</span></p>
+<p><span class="math display">\[ 
+  \mathbb{E}[x_b|x_a]=\mu_{b\cdot a}+\Sigma_{ba}\Sigma_{aa}^{-1}x_a 
+  \]</span></p>
+<p><span class="math inline">\(\operatorname{Var}\left[x_{b} \mid x_{a}\right]=\Sigma_{b b \cdot a}\)</span></p>
+<p>Therefore,</p>
+<p><span class="math display">\[x_{b} \mid x_{a} \sim N\left(u_{b a}+\Sigma_{b a} \Sigma_{a a^{-1}}+x_{a}, \Sigma_{b b a }\right)\]</span></p>
+</div>
+<div id="joint-probability" class="section level2">
+<h2>joint probability</h2>
+<p>$ p(x)=(, ^{-1}), p(y x)=(A x+b, L^{-1}) $</p>
+<p><span class="math inline">\(\Lambda^{-1}\)</span> is a precision matrix，which is the inverse matrix of covariance matrix</p>
+<p>Assume <span class="math inline">\(y=A x+b+\epsilon, \epsilon \sim \mathcal{N}\left(0, L^{-1}\right)\)</span>,</p>
+<p><span class="math display">\[
+   \mathbb{E}[y]=\mathbb{E}[A x+b+\epsilon]=A \mu+b, \quad \operatorname{Var}[y]=A \Lambda^{-1} A^{T}+L^{-1}
+   \]</span></p>
+<p>Therefore</p>
+<p><span class="math display">\[
+   y\sim\mathcal{N}\left(A \mu+b, L^{-1}+A \Lambda^{-1} A^{T}\right)
+   \]</span></p>
+<p>Let <span class="math inline">\(z=\left(\begin{array}{l}x \\ y\end{array}\right)\)</span>, we can get</p>
+<p><span class="math display">\[
+   \operatorname{Cov}[x, y]=\mathbb{E}\left[(x-\mathbb{E}[x])(y-\mathbb{E}[y])^{T}\right]
+   \]</span></p>
+<p><span class="math display">\[
+   \operatorname{Cov}(x, y)=\mathbb{E}\left[(x-\mu)(A x-A \mu+\epsilon)^{T}\right]=\mathbb{E}\left[(x-\mu)(x-\mu)^{T} A^{T}\right]=\operatorname{Var}[x] A^{T}=\Lambda^{-1} A^T
+   \]</span></p>
+<p>subsititute what we have calculated into the formula，we have</p>
+<p><span class="math display">\[
+\begin{gathered}
+\mathbb{E}[x \mid y]=\mu+\Lambda^{-1} A^{T}\left(L^{-1}+A \Lambda^{-1} A^{T}\right)^{-1}(y-A \mu-b) \\
+\operatorname{Var}[x \mid y]=\Lambda^{-1}-\Lambda^{-1} A^{T}\left(L^{-1}+A \Lambda^{-1} A^{T}\right)^{-1} A \Lambda^{-1}
+\end{gathered}
+\]</span></p>
+</div>
+</div>
+<div id="linear-regression" class="section level1">
+<h1>Linear Regression</h1>
+<div id="least-squre-method" class="section level2">
+<h2>Least Squre Method</h2>
+<p><img src="/Users/baoshanzi/Library/Application Support/typora-user-images/image-20220719204024765.png" alt="image-20220719204024765" style="zoom:33%;" /></p>
+<p><span class="math display">\[
+ f(x)=w^Tx+b
+\]</span></p>
+<div id="matrix-form" class="section level3">
+<h3><strong>Matrix form</strong></h3>
+<p>Assume the data above is</p>
+<p><span class="math display">\[D= {(x_1,y_1),(x_2,y_2),\cdots,(x_n,y_n)}\]</span></p>
+<p>Then we let</p>
+<p><span class="math display">\[
+X=(x_1,x_2,x_3,\cdots,x_n)^T
+\]</span> We assume that we can fit the data points into a function</p>
+<p><span class="math display">\[f(w)=w^Tx\]</span></p>
+<p>The loss function is</p>
+<p><span class="math display">\[L(w)=\sum_{i=1}^n||(w^Tx_i-y_i)||^2\]</span></p>
+<p>Expand the above equation to obtain</p>
+<p><span class="math display">\[\begin{align}
+L(w)&amp;=(w^Tx_1-y_1,...,(w^Tx_n-y_n))*(w^Tx_1-y_1,...,(w^Tx_n-y_n))^T\\
+&amp;=(w^TX^T-Y^T)*(Xw-Y)\\
+&amp;=w^TX^TXw-2w^TX^TY+Y^TY\\
+\end{align}\]</span></p>
+<p>To Minimize the w</p>
+<p><span class="math display">\[w=argminL(w)\]</span></p>
+<p><span class="math inline">\(\frac{\partial}{\partial w}L(w)=0\)</span></p>
+<p><span class="math display">\[2X^TXw-2X^TY=0\]</span></p>
+<p><span class="math display">\[w=(X^TX)^-1X^TY\]</span></p>
+<p>We call <span class="math inline">\((X^TX)^-1X^T\)</span> as the pseudo inverse</p>
+</div>
+<div id="in-a-geometric-sense" class="section level3">
+<h3>In a geometric sense</h3>
+<p>The first interpretation is to view the model as a straight line and find the sum of squares of the distances from each data point to the straight line</p>
+<p><img src="/Users/baoshanzi/Library/Application Support/typora-user-images/image-20220719204409323.png" alt="image-20220719204409323" style="zoom:33%;" /></p>
+<p>Assuming that our test sample spans a p-dimensional space (the case of full rank matrix) and the model can be written as some combination in the above linear space, the least square method means that the distance between Y and the model is as small as possible, so their difference should be perpendicular to the span space.</p>
+</div>
+<div id="regularization" class="section level3">
+<h3>Regularization</h3>
+<p>When the unit sample data is too much and the sample number is too small, it will cause overfitting</p>
+<p>In the case of matrices,<span class="math inline">\(X_{n*p}\)</span>,<span class="math inline">\(n\)</span> is the number of samples,<span class="math inline">\(x_i \in R^p\)</span></p>
+<p>when <span class="math inline">\(n\gg p\)</span>,this will result in overfitting, or in the mathematical sense, there is no inverse matrix.</p>
+<p>In order to prevent over-fitting, we can adopt the means of adding data, reducing dimension or regularization</p>
+<p>Regularization framework<strong>(frequentist)</strong>:</p>
+<p><span class="math display">\[
+\underset{w}{\operatorname{argmax}}[L(w)+ \lambda P(w)]
+\]</span></p>
+<p>L1 Lasso:<span class="math inline">\(P(w)=||w||\)</span></p>
+<p>L2 Ridge(岭回归)<span class="math inline">\(P(w)=||w||^2=w^Tw\)</span></p>
+<p>For Ridge Reggression</p>
+<p><span class="math display">\[
+\hat{w}= \underset{w}{\operatorname{argmax}}[L(w)+\lambda w^Tw]\\=\underset{w}{\operatorname{argmax}}[w^T(X^TX+\lambda I)w-2w^TX^TY+Y^TY
+\]</span></p>
+<p><span class="math display">\[
+\rightarrow \frac{\partial}{\partial w}L(w)+2\lambda w=0\\\rightarrow 2X^TX\hat w-2X^TY+2\lambda\hat w=0\\\rightarrow\hat w=(X^TX+\lambda I)^{-1}X^TY
+\]</span></p>
+<p>Regularization using 2 norm can not only select the smaller parameters of $w $, but also avoid the irreversible problem of <span class="math inline">\(X^TX\)</span>.</p>
+<p>From Bayes’ point of view:</p>
+<p><span class="math inline">\(w\)</span>~<span class="math inline">\(N(0,\sigma_0^2)\)</span></p>
+<p><span class="math display">\[
+P(w|y)=\frac {P(y|w)P(w)}{P(y)}
+\]</span></p>
+<p>MAP:</p>
+<p><span class="math display">\[
+\hat w =\underset{w}{\operatorname{argmax}}P(w|y)\\=\underset{w}{\operatorname{argmax}}P(y|w)P(w)\\=\underset{w}{\operatorname{argmax}}log[P(y|w)P(w)]
+\]</span></p>
+<p><span class="math display">\[
+\hat w =\underset{w}{\operatorname{argmax}}\sum^N_{i=1}(y_i-w^Tx_i)^2+\frac {\sigma^2}{\sigma^2_0}||w||^2_2
+\]</span></p>
+</div>
+<div id="remark-2" class="section level3">
+<h3>Remark</h3>
+<p>For linear models that do not fit data samples well, we have the following methods to help fit:</p>
+<p>After the linear equation, a nonlinear transformation is added, that is, a nonlinear activation function is introduced, typical of linear classification models such as perceptrons.</p>
+</div>
+<div id="summary" class="section level3">
+<h3>Summary</h3>
+<p>LSE(Least squares estimation)<span class="math inline">\(\Leftrightarrow\)</span>MLE(Maximum likelihood estimation) whose noise is Gaussian distribution</p>
+<p>Rugularized LSE <span class="math inline">\(\Leftrightarrow\)</span>MAP(Maximum a posteriori) whose noise is Gaussian distribution</p>
+</div>
+</div>
+</div>
+<div id="linear-classification" class="section level1">
+<h1>Linear Classification</h1>
+<div class="figure">
+<img src="/Users/baoshanzi/Library/Containers/com.tencent.xinWeChat/Data/Library/Application%20Support/com.tencent.xinWeChat/2.0b4.0.9/e30b40cd407727f4d32ae520fc29abaa/Message/MessageTemp/0d522068fe5b4b3ec01fadea62e2d316/Image/3761658235000_.pic.jpg" alt="" />
+<p class="caption">3761658235000_.pic</p>
+</div>
+<p>The linear regression model cannot complete the classification task, but we can add a layer of nonlinear activation function after the function of the linear model, and the inverse function of the activation function is called link function.</p>
+<p>We have two linear classification modes: hard classification and soft classification.</p>
+<div id="hard-classification" class="section level2">
+<h2>Hard Classification</h2>
+<div id="perceptron" class="section level3">
+<h3>Perceptron</h3>
+<p>Main idea: error driven</p>
+<p>Model: <span class="math inline">\(f(x)=sign(W^Tx),x\in R^P,W\in R^P\)</span></p>
+<p><span class="math display">\[sign(a)=\begin{cases}+1 &amp; \text{if } a &lt; 0,\\-1 &amp; \text{if } a &gt; 0.\end{cases}\]</span></p>
+<p>Define D:{the sample that have been misclassified}</p>
+<p>Define the loss function:</p>
+<p><span class="math display">\[L(w)=\sum_{i=1}^nI\left\{ W^Tx_iy_i\lt0\right\}\]</span></p>
+<p>Since the above function is discontinuous and non-differentiable, we convert the loss function to the following function</p>
+<p><span class="math display">\[L(w)=\underset{x_i\in D}\sum-W^Tx_iy_i\]</span></p>
+<p>The gradient with respect to w is zero:</p>
+<p><span class="math display">\[\nabla_wL=-y_ix_i\]</span></p>
+<p>Use <em>SGD</em> Random gradient descent method:</p>
+<p><span class="math inline">\(w^{t+1}\leftarrow w^t-\lambda\nabla_wL\)</span></p>
+<p>According to Taylor’s formula, w converges in the negative direction.The simultaneous use of a single observation update can also increase the uncertainty to a certain extent, thus reducing the possibility of falling into a local minimum.</p>
+</div>
+<div id="fisher-discriminant-analysislda-linear-discriminant-analysis" class="section level3">
+<h3>Fisher Discriminant Analysis(LDA Linear Discriminant Analysis)</h3>
+<p>The application of LDA requires the projection of experimental samples to meet the following two conditions:</p>
+<ol style="list-style-type: decimal">
+<li><p>The test samples within the same class are close to each other.</p></li>
+<li><p>The distance between different categories is large</p></li>
+</ol>
+<p>Projection:</p>
+<p>Let’s say the original data is x, so the projection along w is a scalar</p>
+<p><span class="math display">\[
+Z_i=W^Tx_i
+\]</span></p>
+<p><span class="math display">\[
+\overline{Z}=\frac{1}N\sum_{i=1}^NZ_i=\frac{1}N\sum_{i=1}^NW^Tx_i
+\]</span></p>
+<p>The number of tests of the two types of samples was denoted as N1 and N2. The variance matrix was used to represent the overall distribution within the class, and S was used to represent the covariance of the original data:</p>
+<p><span class="math display">\[
+S_Z=\frac{1}N\sum_{i=1}^N(Z_i-\overline Z)(Z_i-\overline Z)^T\\=\frac{1}N\sum_{i=1}^N(W^Tx_i-\overline Z)(W^Tx_i-\overline Z)^T
+\]</span></p>
+<p><span class="math display">\[
+Z_1=\frac{1}N_1\sum_{i=1}^{N_1}W^Tx_i
+\]</span></p>
+<p><span class="math display">\[
+Z_2=\frac{1}N_2\sum_{i=1}^{N_2}W^Tx_i
+\]</span></p>
+<p><span class="math display">\[
+S_1=\frac{1}{N_1}\sum_{i=1}^{N_1}(W^Tx_i-\overline Z_1)(W^Tx_i-\overline Z_1)^T
+\]</span></p>
+<p><span class="math display">\[
+ S_2=\frac{1}{N_2}\sum_{i=1}^{N_2}(W^Tx_i-\overline Z_2)(W^Tx_i-\overline Z_2)^T
+\]</span></p>
+<ul>
+<li><p>Between class:<span class="math inline">\((\overline Z_1 -\overline Z_2)^2\)</span></p></li>
+<li><p>In the class：<span class="math inline">\(S_1+S_2\)</span></p></li>
+</ul>
+<p>Using the above two distance calculations, and since the covariance is a matrix, we divide these two values to get our loss function and maximize it:</p>
+<p><span class="math display">\[
+J(w)=\frac{(\overline Z_1 -\overline Z_2)^2}{S_1+S_2}
+\]</span></p>
+<p><span class="math display">\[
+\hat{w}= \underset{w}{\operatorname{argmax}}J(w)\\=\underset{w}{\operatorname{argmax}}\frac{(\overline Z_1 -\overline Z_2)^2}{S_1+S_2}\\=\underset{w}{\operatorname{argmax}}\frac{W^TS_bW}{W^TS_wW}
+\]</span></p>
+<p><span class="math inline">\(S_b\)</span> stands for variance between classes</p>
+<p><span class="math inline">\(S_w\)</span> stands for variance within clusters</p>
+<p>So let’s take the partial of this loss function,And since we only need to figure out the direction of the projection, we only have to solve one equation to figure out the direction: <span class="math display">\[
+\frac{\partial}{\partial w}J(w)=2S_bW(W^TS_wW)^{-1}-2W^TS_bW(W^TS_wW)^{-2}S_wW=0\Rightarrow
+\]</span></p>
+<p><span class="math display">\[
+\Rightarrow S_bW(W^TS_wW)=(W^TS_bW)S_wW
+\]</span></p>
+<p><span class="math display">\[
+\Rightarrow w\propto S_w^{-1}S_bw=S_w^{-1}(\overline x_{c1}-\overline x_{c2})(\overline x_{c1}-\overline x_{c2})^T\propto S_w^{-1}(\overline x_{c1}-\overline x_{c2})
+\]</span></p>
+<p>Then, <span class="math inline">\(S_w^{-1}(\overline x_{c1}-\overline x_{c2})\)</span> is the direction we wanted</p>
+</div>
+</div>
+<div id="soft-classification" class="section level2">
+<h2>Soft Classification</h2>
+<div id="probabilistic-discriminant-model-logistic-regression" class="section level3">
+<h3>Probabilistic discriminant model-Logistic Regression</h3>
+<p>In order to output the interval [0,1] value through the function, we use the logistic regression to help.</p>
+<p><a href="Data:$\left\" class="uri">Data:$\left\</a>{ x_i,y_i}_{i=1}^N ,x_i R^P,y_i{0,1}$</p>
+<p><span class="math inline">\(\sigma(Z)=\frac{1}{1+e^{-x}}\)</span></p>
+<p>The above formula is called the Logistic Sigmoid function, and its parameter represents the logarithm of the ratio of the two types of joint probability. In the discriminant, we don’t care about the exact value of this parameter, and the model assumes that we apply a directly。</p>
+<p><span class="math inline">\(Z\rightarrow \infty\)</span>,<span class="math inline">\(lim\sigma(Z)=1\)</span></p>
+<p><span class="math inline">\(Z\rightarrow 0\)</span>,<span class="math inline">\(lim\sigma(Z)=0.5\)</span></p>
+<p><span class="math inline">\(Z\rightarrow -\infty\)</span>,<span class="math inline">\(lim\sigma(Z)=0\)</span></p>
+<p><span class="math inline">\(\sigma:R\rightarrow(0,1)\)</span></p>
+<p>The Logistic regression model assumes that:</p>
+<p><span class="math inline">\(w^Tx\rightarrow p\)</span></p>
+<p>Thus, the optimal model under this model hypothesis can be obtained by looking for the optimal value of w. Probabilistic discriminant models usually use MLEto determine the parameters. <span class="math display">\[
+p(y|x)=p_1^yp_0^{1-y}
+\]</span> The observed MLE for N times of independent homodistribution is: <span class="math display">\[
+\hat{w}= \underset{w}{\operatorname{argmax}}J(w)=\underset{w}{\operatorname{argmax}}\sum_{i=1}^N(y_ilogp_1+(1-y_i)logp_0)
+\]</span> Take the derivative of this function ,we notice that: <span class="math display">\[
+p_1&#39;=(\frac{1}{1+e^{-x}})’=p_1(1-p_1)
+\]</span></p>
+<p><span class="math display">\[
+J&#39;(w)=\sum_{i=1}^Ny_i(1-p_1)x_i-p_1x_i+y_ix_ip_1\\=\sum_{i=1}^N(y-p_1)x_i
+\]</span></p>
+<p>Because of the nonlinearity of the probability values, this formula cannot be solved directly when you put it in summation notation.</p>
+<p>As the same as perceptron, the stochastic gradient descent method is used to find the extreme value</p>
+</div>
+<div id="probabilistic-generation-model--gaussian-determinant-analysis-gda" class="section level3">
+<h3>Probabilistic generation model- Gaussian Determinant Analysis （GDA）</h3>
+<p>For dichotomies, we make the following assumptions:</p>
+<p>y~<span class="math inline">\(Bernoulli(\phi)\)</span></p>
+<p>x|y=1 ~ <span class="math inline">\(N(\mu_1,\xi)\)</span></p>
+<p>x|y=0 ~ <span class="math inline">\(N(\mu_2,\xi)\)</span></p>
+<p>Log-likelihood: <span class="math inline">\(L(\theta)=log\prod_{i=1}^Np(x_i,y_i)\)</span></p>
+<p><span class="math display">\[
+L(\theta)=log\prod_{i=1}^Np(x_i,y_i)\\=\sum _{i=1}^N[logN(\mu_1,\xi)^{y_i}+logN(\mu_2,\xi)^{1-y_i}+log\phi^{y_i}(1-\phi)^{1-y_i}]\\=\sum_{i=1}^Ny_ilogN(\mu_1,\xi)+\sum_{i=1}^N(1-y_i)logN(\mu_2,\xi)+\sum_{i=1}^Nlog\phi^{y_i}(1-\xi)^{1-y_i}
+\]</span></p>
+<p><span class="math display">\[
+\theta=(\mu_1,\mu_2,\xi,\phi)
+\]</span></p>
+<p>we take <span class="math inline">\(\sum_{i=1}^Ny_ilogN(\mu_1,\xi) \rightarrow 1^*\)</span></p>
+<p><span class="math display">\[
+\sum_{i=1}^N(1-y_i)logN(\mu_2,\xi)\rightarrow 2^*
+\]</span></p>
+<p>We want find <span class="math inline">\(\xi\)</span></p>
+<p><span class="math display">\[
+\xi=\underset{\xi}{\operatorname{argmax}}(1^*+2^*)
+\]</span></p>
+<p><span class="math display">\[
+1^*+2^*=\sum_{i=1}^Ny_ilogN(\mu_1,\xi)+\sum_{i=1}^N(1-y_i)logN(\mu_2,\xi)
+\]</span></p>
+<p>To calculate the equation, we can firstly find the characteristic of <span class="math display">\[
+\sum_{i=1}^NlogN(\mu,\xi)\\=\sum_{i=1}^Nlog\frac{1}{(2\pi)^{\frac{2}{p}}|\xi|^{\frac{1}{2}}}exp[-0.5(x-\mu)^T\xi(x-\mu)]
+\]</span> And just to simplify things, we take<span class="math inline">\(\sum_{i=1}^Nlog\frac{1}{2\pi^{\frac{p}{2}}}\)</span>as C</p>
+<p><span class="math display">\[
+ =\sum_{i=1}^NC-0.5log|\xi|-0.5\sum_{i=1}^N(x_i)^T\xi^{-1}(x_i-\mu)
+\]</span></p>
+<p>take. <span class="math inline">\(s=\frac{1}{N}\sum_{i=1}^N(x_i-\mu)(x_i-\mu)^T\)</span></p>
+<p><span class="math display">\[
+=-0.5Nlog|\xi|-0.5Ntr(s*\xi^-1)+C
+\]</span> We have the following properties <span class="math display">\[
+\frac{\partial}{\partial A}(|A|)=|A|A^{-1}\\\frac{\partial}{\partial A}Trace(AB)=B^T
+\]</span></p>
+<p>$$ [_{i=1}<sup>Ny_ilogN(<em>1,)+</em>{i=1}</sup>N(1-y_i)logN(_2,)]’\=</p>
+<pre><code>         -\frac{1}{2}(Nlog|\xi|+N_1tr(s_1\xi^-1)+N_2tr(s_2\xi^-1)+C
+            
+                
+            
+            
+                </code></pre>
+<p>$$</p>
+<p><span class="math display">\[
+N\xi^{-1}-N_1S_1^T\xi^{-2}-N_2S_2^T\xi^{-2}=0
+\]</span></p>
+<p><span class="math display">\[
+\rightarrow \xi=\frac{N_1S_1+N_2S_2}{N}
+\]</span></p>
+<p>We use maximum posteriori method to find all the parameters in the hypothesis of our model, and from the model, we can get the joint distribution, the conditional distribution for inference.</p>
+<div id="remark-3" class="section level5">
+<h5>Remark:</h5>
+<p>In Gauss Discriminant Analysis, the assumption of Gauss distribution is made on the distribution of the data set, and Bernoulli distribution is introduced as a priori, so as to obtain the parameters in these assumptions by using the maximum posteriori.</p>
+</div>
+</div>
+<div id="naive-bayes-classification" class="section level3">
+<h3>Naive Bayes Classification</h3>
+<p>Assumptions are made about the relationships between attributes of naive Bayes data,one of the simplest assumptions is the conditional independence hypothesis in the description of naive Bayes model. <span class="math display">\[
+p(x|y)=\prod p(x_i|y)
+\]</span> Or <span class="math display">\[
+x_i\perp x_j(i\neq j)
+\]</span> <strong>The purpose of the hypothesis: to simplify operations</strong></p>
+<p><span class="math display">\[
+\hat{y}= \underset{y}{\operatorname{argmax}}p(y|x)\\=\underset{y=\left\{0,1\right\}}{\operatorname{argmax}\frac{p(x,y)}{p(x)}}\\=\underset{y}{\operatorname{argmax}}p(y)p(x|y)
+\]</span></p>
+<p>We make the following further assumption</p>
+<ul>
+<li><p>0,1 y～Bernoulli</p></li>
+<li><p>In multi-class classification,y～ Categorial</p></li>
+<li><p>if x<sub>i</sub> is continues，<span class="math inline">\(p(x_i|y)=N(\mu_i,\sigma_i^2)\)</span></p></li>
+<li><p>if x<sub>i</sub> is discrete，x～Categorical</p></li>
+</ul>
+<p><strong>Remark：</strong></p>
+<p>The assumption of conditional independence greatly reduces the amount of data required</p>
+</div>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

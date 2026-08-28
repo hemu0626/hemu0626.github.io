@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Lecture 1 Some R Base Plotting</title>
+
+<script src="site_libs/header-attrs-2.8/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Final Year Project</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="fyp_outline.html">Final Year Project Outline</a>
+</li>
+<li>
+  <a href="adsm.html">Advanced Statistical Methods</a>
+</li>
+<li>
+  <a href="survival.html">Survival Analysis</a>
+</li>
+<li>
+  <a href="epidemiology.html">Epidemiology</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Lecture 1 Some R Base Plotting</h1>
+
+</div>
+
+
+<pre class="r"><code>#devtools::install_github(&quot;heike/extracat&quot;)
+library(&quot;ggthemes&quot;)
+library(&quot;GGally&quot;)</code></pre>
+<pre><code>## Loading required package: ggplot2</code></pre>
+<pre><code>## Registered S3 method overwritten by &#39;GGally&#39;:
+##   method from   
+##   +.gg   ggplot2</code></pre>
+<pre class="r"><code>library(&quot;extracat&quot;)
+library(hdrcde)</code></pre>
+<pre><code>## This is hdrcde 3.4</code></pre>
+<pre class="r"><code>library(KernSmooth)</code></pre>
+<pre><code>## KernSmooth 2.23 loaded
+## Copyright M. P. Wand 1997-2009</code></pre>
+<pre class="r"><code>library(&quot;ggplot2&quot;)
+library(&quot;gridExtra&quot;)
+library(&quot;vcd&quot;)</code></pre>
+<pre><code>## Loading required package: grid</code></pre>
+<pre class="r"><code># The Titanic data revisited
+Titanic1 &lt;- data.frame(Titanic)
+head(Titanic1)</code></pre>
+<pre><code>##   Class    Sex   Age Survived Freq
+## 1   1st   Male Child       No    0
+## 2   2nd   Male Child       No    0
+## 3   3rd   Male Child       No   35
+## 4  Crew   Male Child       No    0
+## 5   1st Female Child       No    0
+## 6   2nd Female Child       No    0</code></pre>
+<pre class="r"><code>str(Titanic1)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    32 obs. of  5 variables:
+##  $ Class   : Factor w/ 4 levels &quot;1st&quot;,&quot;2nd&quot;,&quot;3rd&quot;,..: 1 2 3 4 1 2 3 4 1 2 ...
+##  $ Sex     : Factor w/ 2 levels &quot;Male&quot;,&quot;Female&quot;: 1 1 1 1 2 2 2 2 1 1 ...
+##  $ Age     : Factor w/ 2 levels &quot;Child&quot;,&quot;Adult&quot;: 1 1 1 1 1 1 1 1 2 2 ...
+##  $ Survived: Factor w/ 2 levels &quot;No&quot;,&quot;Yes&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ Freq    : num  0 0 35 0 0 0 17 0 118 154 ...</code></pre>
+<pre class="r"><code>p &lt;- ggplot(Titanic1, aes(weight=Freq)) + ylab(&quot;&quot;) + ylim(0,2250)
+cs &lt;- p + aes(Class) + geom_bar(fill=&quot;blue&quot;)
+sx &lt;- p + aes(Sex) + geom_bar(fill=&quot;green&quot;)
+ag &lt;- p + aes(Age) + geom_bar(fill=&quot;tan2&quot;)
+su &lt;- p + aes(Survived) + geom_bar(fill=&quot;red&quot;)
+grid.arrange(cs, sx, ag, su, nrow=1, widths=c(3, 2, 2, 2))</code></pre>
+<p><img src="tt1_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<pre class="r"><code>doubledecker(Survived ~ Sex, data = Titanic, gp = gpar(fill = c(&quot;grey90&quot;, &quot;blue&quot;)))</code></pre>
+<p><img src="tt1_files/figure-html/unnamed-chunk-2-2.png" width="672" /></p>
+<pre class="r"><code>doubledecker(Survived ~ Sex, data = Titanic, gp = gpar(fill = c(&quot;grey90&quot;, &quot;blue&quot;)))</code></pre>
+<p><img src="tt1_files/figure-html/unnamed-chunk-2-3.png" width="672" /></p>
+<pre class="r"><code>doubledecker(Survived ~ Class, data = Titanic, gp = gpar(fill = c(&quot;grey90&quot;, &quot;blue&quot;)))</code></pre>
+<p><img src="tt1_files/figure-html/unnamed-chunk-2-4.png" width="672" /></p>
+<pre class="r"><code>doubledecker(Survived ~ Sex + Class, data = Titanic, gp = gpar(fill = c(&quot;grey90&quot;, &quot;blue&quot;)))</code></pre>
+<p><img src="tt1_files/figure-html/unnamed-chunk-2-5.png" width="672" /></p>
+<pre class="r"><code>doubledecker(Survived ~ Class + Age, data = Titanic, gp = gpar(fill = c(&quot;grey90&quot;, &quot;blue&quot;)))</code></pre>
+<p><img src="tt1_files/figure-html/unnamed-chunk-2-6.png" width="672" /></p>
+<pre class="r"><code>doubledecker(Survived ~ Sex + Class + Age, data = Titanic, gp = gpar(fill = c(&quot;grey90&quot;, &quot;blue&quot;)))</code></pre>
+<p><img src="tt1_files/figure-html/unnamed-chunk-2-7.png" width="672" /></p>
+<pre class="r"><code># Movies data
+#install.packages(&quot;ggplot2movies&quot;)
+library(ggplot2movies)
+data(movies)
+#?movies
+ggplot(movies, aes(length)) + geom_bar() + ylab(&quot;&quot;) + xlab(&quot;Movie length (minutes)&quot;)</code></pre>
+<p><img src="tt1_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(movies, aes(&quot;var&quot;, length)) + geom_boxplot() + xlab(&quot;&quot;) +
+       ylab(&quot;Movie length (minutes)&quot;)  + scale_x_discrete(breaks=NULL) + coord_flip()</code></pre>
+<p><img src="tt1_files/figure-html/unnamed-chunk-3-2.png" width="672" /></p>
+<pre class="r"><code>ggplot(movies, aes(length)) + ylab(&quot;&quot;) +  xlim(0,180) +
+       geom_histogram(binwidth=1)  +
+       xlab(&quot;Movie length (minutes)&quot;)</code></pre>
+<pre><code>## Warning: Removed 392 rows containing non-finite values (stat_bin).</code></pre>
+<pre><code>## Warning: Removed 2 rows containing missing values (geom_bar).</code></pre>
+<p><img src="tt1_files/figure-html/unnamed-chunk-3-3.png" width="672" /></p>
+<pre class="r"><code>ggplot(movies, aes(x = length)) +  xlim(0,240) +
+       geom_histogram(binwidth=1)  +
+       xlab(&quot;Movie length (minutes)&quot;) + ylab(&quot;&quot;)</code></pre>
+<pre><code>## Warning: Removed 114 rows containing non-finite values (stat_bin).
+
+## Warning: Removed 2 rows containing missing values (geom_bar).</code></pre>
+<p><img src="tt1_files/figure-html/unnamed-chunk-3-4.png" width="672" /></p>
+<pre class="r"><code>ggplot(movies, aes(x = length)) +  xlim(0,240) +
+       geom_histogram(aes(y=..density..),binwidth=1)  +
+       xlab(&quot;Movie length (minutes)&quot;) + ylab(&quot;&quot;) +geom_density(colour=&quot;blue&quot;)</code></pre>
+<pre><code>## Warning: Removed 114 rows containing non-finite values (stat_bin).</code></pre>
+<pre><code>## Warning: Removed 114 rows containing non-finite values (stat_density).</code></pre>
+<pre><code>## Warning: Removed 2 rows containing missing values (geom_bar).</code></pre>
+<p><img src="tt1_files/figure-html/unnamed-chunk-3-5.png" width="672" /></p>
+<pre class="r"><code>ggplot(movies, aes(votes, rating,alpha=0.005)) + geom_point(size=0.25) + ylim(1,10) + ylab(&quot;Rating&quot;) + xlab(&quot;Votes&quot;)</code></pre>
+<p><img src="tt1_files/figure-html/unnamed-chunk-3-6.png" width="672" /></p>
+<pre class="r"><code>foo&lt;-which(movies$votes&gt;10000)
+length(foo)</code></pre>
+<pre><code>## [1] 840</code></pre>
+<pre class="r"><code>ggplot(movies[foo,], aes(votes, rating)) + geom_point() + ylim(1,10) + ylab(&quot;Rating&quot;) + xlab(&quot;Votes&quot;)</code></pre>
+<p><img src="tt1_files/figure-html/unnamed-chunk-3-7.png" width="672" /></p>
+<pre class="r"><code>foo1&lt;-which(movies$rating[foo]==min(movies$rating[foo]))
+movies1&lt;-movies[foo,]
+movies1[foo1,]</code></pre>
+<pre><code>## # A tibble: 1 x 24
+##   title  year length   budget rating votes    r1    r2    r3    r4    r5    r6
+##   &lt;chr&gt; &lt;int&gt;  &lt;int&gt;    &lt;int&gt;  &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 Gigli  2003    121 54000000    2.3 11285  74.5   4.5   4.5   4.5   4.5   4.5
+## # ... with 12 more variables: r7 &lt;dbl&gt;, r8 &lt;dbl&gt;, r9 &lt;dbl&gt;, r10 &lt;dbl&gt;,
+## #   mpaa &lt;chr&gt;, Action &lt;int&gt;, Animation &lt;int&gt;, Comedy &lt;int&gt;, Drama &lt;int&gt;,
+## #   Documentary &lt;int&gt;, Romance &lt;int&gt;, Short &lt;int&gt;</code></pre>
+<pre class="r"><code>foo2&lt;-which(movies$rating[foo]==max(movies$rating[foo]))
+movies2&lt;-movies[foo,]
+movies2[foo2,]</code></pre>
+<pre><code>## # A tibble: 2 x 24
+##   title     year length budget rating  votes    r1    r2    r3    r4    r5    r6
+##   &lt;chr&gt;    &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;dbl&gt;  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 Godfath~  1972    175  6  e6    9.1 122755   4.5   4.5   4.5   4.5   4.5   4.5
+## 2 Shawsha~  1994    142  2.5e7    9.1 149494   4.5   4.5   4.5   4.5   4.5   4.5
+## # ... with 12 more variables: r7 &lt;dbl&gt;, r8 &lt;dbl&gt;, r9 &lt;dbl&gt;, r10 &lt;dbl&gt;,
+## #   mpaa &lt;chr&gt;, Action &lt;int&gt;, Animation &lt;int&gt;, Comedy &lt;int&gt;, Drama &lt;int&gt;,
+## #   Documentary &lt;int&gt;, Romance &lt;int&gt;, Short &lt;int&gt;</code></pre>
+<pre class="r"><code>temp&lt;-sort(movies2$rating,decreasing=TRUE,index.return=TRUE)
+temp$ix</code></pre>
+<pre><code>##   [1] 331 673 452 332 675 144 153 451 453 600 654 723 726   2 147 168 170 239
+##  [19] 491 557 604 610 795 262 341 401 431 541 566 599 665 738  30  35  54 122
+##  [37] 128 236 286 460 483 506 583 683 686 745 757 765 799  37  53 137 164 347
+##  [55] 423 468 473 495 511 515 545 554 603 607 618 661 701 732 772 779 805   5
+##  [73]  27  29  33  50 132 175 234 290 348 370 392 416 417 499 507 543 611 619
+##  [91] 647 677 685 736 828  44 111 145 190 251 277 282 296 308 345 406 448 474
+## [109] 555 569 580 598 663 689 748 822 829  21  68  93 100 166 189 208 215 291
+## [127] 314 329 338 349 354 394 442 590 727 734 774 780 793 835   6  31  32  76
+## [145]  92 101 133 222 229 231 247 312 327 352 396 458 465 498 510 527 585 679
+## [163] 681 695 707 714 759 778 813 837  19  83  91 119 173 227 269 273 365 400
+## [181] 420 429 447 497 519 588 605 622 636 650 672 697 712 750 766 773 785 794
+## [199] 834   7  23  86  87 107 154 199 200 216 217 245 276 301 321 328 336 340
+## [217] 362 391 403 445 461 464 500 525 537 548 559 612 616 630 680 699 703 756
+## [235] 776 812  24  60 104 113 115 116 121 130 135 136 176 179 205 212 249 281
+## [253] 284 294 307 356 357 359 367 459 469 513 529 551 552 591 625 644 666 783
+## [271] 784 818  25  36 108 120 129 134 146 151 156 161 180 201 203 210 211 226
+## [289] 233 253 259 265 311 315 369 377 381 476 536 539 606 638 649 676 684 704
+## [307] 722 741 817 826 827 830  15  49  55  65  77  95 124 131 162 169 283 319
+## [325] 320 386 405 430 434 437 479 501 517 549 579 582 592 597 601 602 648 662
+## [343] 669 769  16  58  66  67  79 143 163 178 192 198 206 250 266 268 295 299
+## [361] 302 303 330 351 366 379 389 411 463 471 480 508 528 564 584 595 617 623
+## [379] 653 655 693 711 758 767 820   8  14  94 125 126 155 165 188 209 230 255
+## [397] 261 274 289 306 313 333 343 361 382 385 387 390 397 409 444 446 455 472
+## [415] 487 509 560 581 587 594 614 717 746 753 761 775 777 833  74  98 152 196
+## [433] 238 246 280 298 309 310 342 363 395 398 413 518 524 530 533 575 577 637
+## [451] 754 755 771 802 804  56  89  96 114 149 150 185 194 240 256 257 271 278
+## [469] 285 339 371 443 467 481 538 558 628 640 682 708 715 739 744 747 781 792
+## [487] 810  43  51  62  69 123 138 204 220 224 252 264 270 317 326 384 424 486
+## [505] 490 544 562 563 629 635 658 691 698 713 725 733 743 751 782 803  40 402
+## [523] 407 433 438 523 694 716 735 749 763 764 797 806   9  11  38  41  59 109
+## [541] 172 219 293 304 305 318 323 325 335 346 350 360 415 462 477 492 567 568
+## [559] 571 631 656 702 809 811 825   1  70  75  78 102 140 177 191 223 235 368
+## [577] 436 454 484 553 570 586 633 642 671 692 706 729 760 832 839  46  71 103
+## [595] 110 158 181 228 243 287 292 399 414 421 488 504 531 532 546 596 608 613
+## [613] 667 737 752 801 815 821 823  47  63  82 106 184 197 275 288 422 441 449
+## [631] 489 512 521 593 609 627 643 690 720 740 770 789 790 819  20  52  72 127
+## [649] 142 186 187 195 221 373 425 428 435 478 516 522 540 561 705 724 728 768
+## [667] 816  22  39  42 183 207 244 439 440 482 574 578 624 664 700 719 730 814
+## [685] 831  17  61 118 167 171 232 248 358 376 388 494 502 576 620 641 718 742
+## [703] 836   3   4  73  90 105 112 139 157 218 258 272 300 316 380 393 475 520
+## [721] 565 572 670 791 838  28  48 174 297 410 419 470 485 496 550 556 668 731
+## [739]  10  12  88  99 214 225 237 353 645 659 687 786 787  34  85  97 159 260
+## [757] 267 344 355 375 418 526 547 615 634 721 788 800  57 141 182 202 263 279
+## [775] 322 337 378 404 505 535 626 646 696 412 493 534 589 621 688 798  26 148
+## [793] 213 450 456 514 651 674 762 807 840  13  81 193 408 427 432 573 639 660
+## [811] 796 808 117 254 372 383 632 657 710 241 426 542 160 374  18 503 457 242
+## [829] 364 466 334 652  45 824 678  80  64 709  84 324</code></pre>
+<pre class="r"><code>movies2[temp$ix,]</code></pre>
+<pre><code>## # A tibble: 840 x 24
+##    title    year length budget rating  votes    r1    r2    r3    r4    r5    r6
+##    &lt;chr&gt;   &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;dbl&gt;  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 Godfat~  1972    175  6  e6    9.1 122755   4.5   4.5   4.5   4.5   4.5   4.5
+##  2 Shawsh~  1994    142  2.5e7    9.1 149494   4.5   4.5   4.5   4.5   4.5   4.5
+##  3 Lord o~  2003    251  9.4e7    9   103631   4.5   4.5   4.5   4.5   4.5   4.5
+##  4 Godfat~  1974    200  1.3e7    8.9  71363   4.5   4.5   4.5   4.5   4.5   4.5
+##  5 Shichi~  1954    206  5  e5    8.9  32141   4.5   4.5   4.5   4.5   4.5   4.5
+##  6 Buono,~  1966    180  1.2e6    8.8  30224   4.5   4.5   4.5   4.5   4.5   4.5
+##  7 Casabl~  1942    102  9.5e5    8.8  66030   4.5   4.5   4.5   4.5   4.5   4.5
+##  8 Lord o~  2001    208  9.3e7    8.8 157608   4.5   4.5   4.5   4.5   4.5   4.5
+##  9 Lord o~  2002    223  9.4e7    8.8 114797   4.5   4.5   4.5   4.5   4.5   4.5
+## 10 Pulp F~  1994    168  8  e6    8.8 132745   4.5   4.5   4.5   4.5   4.5   4.5
+## # ... with 830 more rows, and 12 more variables: r7 &lt;dbl&gt;, r8 &lt;dbl&gt;, r9 &lt;dbl&gt;,
+## #   r10 &lt;dbl&gt;, mpaa &lt;chr&gt;, Action &lt;int&gt;, Animation &lt;int&gt;, Comedy &lt;int&gt;,
+## #   Drama &lt;int&gt;, Documentary &lt;int&gt;, Romance &lt;int&gt;, Short &lt;int&gt;</code></pre>
+<pre class="r"><code>movies2[temp$ix,1]</code></pre>
+<pre><code>## # A tibble: 840 x 1
+##    title                                             
+##    &lt;chr&gt;                                             
+##  1 Godfather, The                                    
+##  2 Shawshank Redemption, The                         
+##  3 Lord of the Rings: The Return of the King, The    
+##  4 Godfather: Part II, The                           
+##  5 Shichinin no samurai                              
+##  6 Buono, il brutto, il cattivo, Il                  
+##  7 Casablanca                                        
+##  8 Lord of the Rings: The Fellowship of the Ring, The
+##  9 Lord of the Rings: The Two Towers, The            
+## 10 Pulp Fiction                                      
+## # ... with 830 more rows</code></pre>
+<pre class="r"><code>summary(movies$year)</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##    1893    1958    1983    1976    1997    2005</code></pre>
+<pre class="r"><code>ggplot(movies, aes(length, rating)) + geom_point() + ylim(1,10) + ylab(&quot;Rating&quot;) + xlab(&quot;Length (minutes)&quot;)+  xlim(60,240)</code></pre>
+<pre><code>## Warning: Removed 10930 rows containing missing values (geom_point).</code></pre>
+<p><img src="tt1_files/figure-html/unnamed-chunk-3-8.png" width="672" /></p>
+<pre class="r"><code># Berkeley data
+ucba &lt;- as.data.frame(UCBAdmissions)
+a &lt;- ggplot(ucba, aes(Dept)) + geom_bar(aes(weight=Freq))
+b &lt;- ggplot(ucba, aes(Gender)) + geom_bar(aes(weight=Freq))
+c &lt;- ggplot(ucba, aes(Admit)) + geom_bar(aes(weight=Freq))
+grid.arrange(a, b, c, nrow=1, widths=c(7,3,3))</code></pre>
+<p><img src="tt1_files/figure-html/unnamed-chunk-3-9.png" width="672" /></p>
+<pre class="r"><code>ucba &lt;- within(ucba, Accept &lt;- factor(Admit, levels=c(&quot;Rejected&quot;, &quot;Admitted&quot;)))
+doubledecker(xtabs(Freq~ Dept + Gender + Accept, data = ucba), gp = gpar(fill = c(&quot;grey90&quot;, &quot;steelblue&quot;)))</code></pre>
+<p><img src="tt1_files/figure-html/unnamed-chunk-3-10.png" width="672" /></p>
+<pre class="r"><code>#Geyser Data
+library(hdrcde)
+data(geyser, package=&quot;MASS&quot;)
+ggplot(geyser, aes(duration, waiting)) + geom_point() + ylab(&quot;Waiting time (minutes)&quot;) + xlab(&quot;Duration (minutes)&quot;)</code></pre>
+<p><img src="tt1_files/figure-html/unnamed-chunk-3-11.png" width="672" /></p>
+<pre class="r"><code>ggplot(geyser, aes(duration, waiting)) + geom_point() + geom_density2d() + ylab(&quot;Waiting time (minutes)&quot;) + xlab(&quot;Duration (minutes)&quot;)</code></pre>
+<p><img src="tt1_files/figure-html/unnamed-chunk-3-12.png" width="672" /></p>
+<pre class="r"><code>data(father.son, package=&quot;UsingR&quot;)
+c2 &lt;- ggplot(father.son, aes(sheight)) + 
+             geom_histogram(aes(y = ..density..), binwidth=1) +
+             geom_density(colour=&quot;blue&quot;) + xlim(58, 80) + ylim(0, 0.16) +
+             xlab(&quot;Height (inches)&quot;) + ylab(&quot;&quot;) + ggtitle(&quot;Sons&quot;)
+p2 &lt;- ggplot(father.son, aes(fheight)) + 
+             geom_histogram(aes(y = ..density..), binwidth=1) +
+             geom_density(colour=&quot;blue&quot;) + xlim(58, 80) + ylim(0, 0.16) +
+             xlab(&quot;Height (inches)&quot;) + ylab(&quot;&quot;) +
+             ggtitle(&quot;Fathers&quot;)
+grid.arrange(c2, p2, nrow = 1)</code></pre>
+<pre><code>## Warning: Removed 2 rows containing missing values (geom_bar).
+
+## Warning: Removed 2 rows containing missing values (geom_bar).</code></pre>
+<p><img src="tt1_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<pre class="r"><code>qqnorm(father.son$sheight, main=&quot;Sons&quot;, xlab=&quot;&quot;,ylab=&quot;&quot;, pch=16, ylim=c(55,80))
+qqline(father.son$sheight)</code></pre>
+<p><img src="tt1_files/figure-html/unnamed-chunk-4-2.png" width="672" /></p>
+<pre class="r"><code>qqnorm(father.son$fheight, main=&quot;Fathers&quot;, xlab=&quot;&quot;,ylab=&quot;&quot;, pch=16, ylim=c(55,80))
+qqline(father.son$fheight)</code></pre>
+<p><img src="tt1_files/figure-html/unnamed-chunk-4-3.png" width="672" /></p>
+<pre class="r"><code>ggplot(father.son, aes(fheight, sheight)) + geom_point() +
+       geom_smooth(method=&quot;lm&quot;, colour=&quot;red&quot;, se=FALSE) +
+       geom_abline(slope=1, intercept=0) +xlab(&quot;Father&#39;s height (inches)&quot;)+ylab(&quot;Son&#39;s height (inches)&quot;)</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="tt1_files/figure-html/unnamed-chunk-4-4.png" width="672" /></p>
+<pre class="r"><code>ggplot(father.son, aes(fheight, sheight)) + geom_point() +
+       geom_smooth(method=&quot;lm&quot;, colour=&quot;red&quot;, se=TRUE) +
+       geom_abline(slope=1, intercept=0) +xlab(&quot;Father&#39;s height (inches)&quot;)+ylab(&quot;Son&#39;s height (inches)&quot;)</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="tt1_files/figure-html/unnamed-chunk-4-5.png" width="672" /></p>
+<pre class="r"><code>ggplot(father.son, aes(fheight, sheight)) + geom_point() +
+       geom_smooth(method=&quot;lm&quot;, colour=&quot;red&quot;, se=FALSE) +
+       stat_smooth() +xlab(&quot;Father&#39;s height (inches)&quot;)+ylab(&quot;Son&#39;s height (inches)&quot;)</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;gam&#39; and formula &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
+<p><img src="tt1_files/figure-html/unnamed-chunk-4-6.png" width="672" /></p>
+<pre class="r"><code># Iris data
+data(iris)
+ggpairs(iris, aes(colour=Species, alpha=0.4))           </code></pre>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="tt1_files/figure-html/unnamed-chunk-4-7.png" width="672" /></p>
+<pre class="r"><code>ggparcoord(iris, columns=1:4, groupColumn=&quot;Species&quot;)</code></pre>
+<p><img src="tt1_files/figure-html/unnamed-chunk-4-8.png" width="672" /></p>
+<pre class="r"><code>a &lt;- ggplot(iris, aes(&quot;Boxplot for all&quot;, Sepal.Width)) +
+            xlab(&quot;&quot;)  + geom_boxplot() +
+            scale_x_discrete(breaks=NULL) 
+b &lt;- ggplot(iris, aes(Species, Sepal.Width)) + 
+            geom_boxplot() +  xlab(&quot;&quot;)
+grid.arrange(a, b, nrow=1, widths=c(1,2))</code></pre>
+<p><img src="tt1_files/figure-html/unnamed-chunk-4-9.png" width="672" /></p>
+<pre class="r"><code>a &lt;- ggplot(iris, aes(&quot;Boxplot for all&quot;, Petal.Width)) +
+            xlab(&quot;&quot;)  + geom_boxplot() +
+            scale_x_discrete(breaks=NULL) 
+b &lt;- ggplot(iris, aes(Species, Petal.Width)) + 
+            geom_boxplot() +  xlab(&quot;&quot;)
+grid.arrange(a, b, nrow=1, widths=c(1,2))</code></pre>
+<p><img src="tt1_files/figure-html/unnamed-chunk-4-10.png" width="672" /></p>
+<pre class="r"><code># Body data
+data(body, package=&quot;gclus&quot;)
+body1 &lt;- body
+names(body1) &lt;- abbreviate(names(body), 2)
+names(body1)[c(4:5, 11:13, 19:21)] &lt;-  
+       c(&quot;CDp&quot;, &quot;CD&quot;, &quot;Ch&quot;, &quot;Ws&quot;, &quot;Ab&quot;, &quot;Cl&quot;, &quot;An&quot;, &quot;Wr&quot;)
+a1 &lt;- ggparcoord(body1, columns=1:24, alphaLines=0.1,groupColumn=&quot;Gn&quot;) + xlab(&quot;&quot;) + ylab(&quot;&quot;)
+a2 &lt;- ggparcoord(body1, columns=1:24, scale=&quot;uniminmax&quot;, alphaLines=0.1) + xlab(&quot;&quot;) + ylab(&quot;&quot;)
+a3 &lt;- ggparcoord(body1, columns=1:24, scale=&quot;globalminmax&quot;, alphaLines=0.1) + xlab(&quot;&quot;) + ylab(&quot;&quot;)
+a4 &lt;- ggparcoord(body1, columns=1:24, scale=&quot;center&quot;,scaleSummary=&quot;median&quot;, alphaLines=0.1) +xlab(&quot;&quot;) + ylab(&quot;&quot;)
+grid.arrange(a1, a2, a3, a4)</code></pre>
+<p><img src="tt1_files/figure-html/unnamed-chunk-4-11.png" width="672" /></p>
+<pre class="r"><code>a1 &lt;- ggparcoord(body1, columns=1:24, alphaLines=0.1,groupColumn=&quot;Gn&quot;) + xlab(&quot;&quot;) + ylab(&quot;&quot;)
+a1</code></pre>
+<p><img src="tt1_files/figure-html/unnamed-chunk-4-12.png" width="672" /></p>
+<pre class="r"><code>body1$Gn&lt;-as.factor(body1$Gn)
+a1 &lt;- ggparcoord(body1, columns=1:24, alphaLines=0.3,groupColumn=&quot;Gn&quot;) +xlab(&quot;&quot;) + ylab(&quot;&quot;)
+a1</code></pre>
+<p><img src="tt1_files/figure-html/unnamed-chunk-4-13.png" width="672" /></p>
+<pre class="r"><code>a1 &lt;- ggparcoord(body1, columns=1:24, alphaLines=0.1,groupColumn=&quot;Gn&quot;) + xlab(&quot;&quot;) + ylab(&quot;&quot;)
+a2 &lt;- ggparcoord(body1, columns=1:24, scale=&quot;uniminmax&quot;,groupColumn=&quot;Gn&quot;,alphaLines=0.1) + xlab(&quot;&quot;) + ylab(&quot;&quot;)
+a3 &lt;- ggparcoord(body1, columns=1:24,scale=&quot;globalminmax&quot;, alphaLines=0.1,groupColumn=&quot;Gn&quot;) + xlab(&quot;&quot;) + ylab(&quot;&quot;)
+a4 &lt;- ggparcoord(body1, columns=1:24, scale=&quot;center&quot;,scaleSummary=&quot;median&quot;, alphaLines=0.1,groupColumn=&quot;Gn&quot;) +xlab(&quot;&quot;) + ylab(&quot;&quot;)
+grid.arrange(a1, a2, a3, a4)</code></pre>
+<p><img src="tt1_files/figure-html/unnamed-chunk-4-14.png" width="672" /></p>
+<pre class="r"><code># Coffee data
+data(coffee, package=&quot;pgmm&quot;)
+coffee &lt;- within(coffee, Type &lt;- ifelse(Variety==1,&quot;Arabica&quot;, &quot;Robusta&quot;))
+names(coffee) &lt;- abbreviate(names(coffee), 8)
+ggpairs(coffee[,-c(1,2)], aes(colour=Type, alpha=0.4))           </code></pre>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="tt1_files/figure-html/unnamed-chunk-4-15.png" width="672" /></p>
+<pre class="r"><code>names(coffee)[6]&lt;-&quot;Ph&quot;
+ggpairs(coffee[,-c(1,2)], aes(colour=Type, alpha=0.4))           </code></pre>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="tt1_files/figure-html/unnamed-chunk-4-16.png" width="672" /></p>
+<pre class="r"><code>a &lt;- ggplot(coffee, aes(x=Type)) + geom_bar(aes(fill=Type)) +
+            scale_fill_manual(values = c(&quot;grey70&quot;, &quot;red&quot;)) +
+            guides(fill=FALSE) + ylab(&quot;&quot;)</code></pre>
+<pre><code>## Warning: `guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; =
+## &quot;none&quot;)` instead.</code></pre>
+<pre class="r"><code>b &lt;- ggplot(coffee, aes(x=Fat, y=Caffine, colour=Type)) +
+            geom_point(size=2) +
+            scale_colour_manual(values = c(&quot;grey70&quot;, &quot;red&quot;))
+c &lt;- ggparcoord(coffee[order(coffee$Type),], columns=3:14,
+                groupColumn=&quot;Type&quot;, scale=&quot;uniminmax&quot;) +
+                xlab(&quot;&quot;) +  ylab(&quot;&quot;) +
+                theme(legend.position = &quot;none&quot;) +
+                scale_colour_manual(values = c(&quot;grey&quot;,&quot;red&quot;)) +
+                theme(axis.ticks.y = element_blank(),
+                axis.text.y = element_blank())
+grid.arrange(arrangeGrob(a, b, ncol=2, widths=c(1,2)), c, nrow=2)</code></pre>
+<p><img src="tt1_files/figure-html/unnamed-chunk-4-17.png" width="672" /></p>
+<pre class="r"><code># Housing data
+library(vcd)    
+data(housing, package=&quot;MASS&quot;)
+?housing</code></pre>
+<pre><code>## starting httpd help server ...</code></pre>
+<pre><code>##  done</code></pre>
+<pre class="r"><code>mosaic(xtabs(Freq ~ Cont + Type + Infl + Sat, data = housing),
+       direction = c(&quot;h&quot;, &quot;v&quot;, &quot;v&quot;, &quot;h&quot;), 
+       gp = gpar(fill = c(&quot;grey&quot;, &quot;grey&quot;,&quot;blue&quot;)),
+       spacing = spacing_highlighting)</code></pre>
+<p><img src="tt1_files/figure-html/unnamed-chunk-4-18.png" width="672" /></p>
+<pre class="r"><code>par(mar=c(5, 4, 4, 2) + 0.1)
+rmb(formula = ~Type+Cont+Infl+Sat, data = housing, cat.ord = 3,
+    spine = TRUE, freq.trans = &quot;const&quot;)</code></pre>
+<p><img src="tt1_files/figure-html/unnamed-chunk-4-19.png" width="672" /></p>
+<pre class="r"><code># Crime data
+data(crime.us, package=&quot;VGAMdata&quot;)
+crime1&lt;-crime.us
+names(crime1)&lt;-gsub(&quot;*Rate&quot;,&quot;&quot;,names(crime1))
+names(crime1)[19:20]&lt;-c(&quot;Larceny&quot;,&quot;MVTheft&quot;)
+ggpairs(crime1[,c(13:16,18:20)],diag=list(continuous=&quot;densityDiag&quot;),axisLabels=&quot;none&quot;)           </code></pre>
+<p><img src="tt1_files/figure-html/unnamed-chunk-4-20.png" width="672" /></p>
+<pre class="r"><code># Boston data
+data(Boston, package=&quot;MASS&quot;)
+par(mar=c(1.1, 1.1, 1.1, 1.1))
+palette(rainbow(14, s = 0.6, v = 0.75))
+stars(Boston[1:12,], labels=NULL, draw.segments = TRUE)</code></pre>
+<p><img src="tt1_files/figure-html/unnamed-chunk-4-21.png" width="672" /></p>
+<pre class="r"><code>stars(Boston, labels=NULL, draw.segments = TRUE)</code></pre>
+<p><img src="tt1_files/figure-html/unnamed-chunk-4-22.png" width="672" /></p>
+<pre class="r"><code>par(mar=c(5, 4, 4, 2) + 0.1)</code></pre>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

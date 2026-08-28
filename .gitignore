@@ -31,3 +31,6 @@ gh-ops.js
 gh-list-repos.js
 .gh-token
 .gh-token.txt
+
+# Temporary consolidation clones
+.consolidate/

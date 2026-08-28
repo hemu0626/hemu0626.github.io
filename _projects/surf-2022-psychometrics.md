@@ -9,4 +9,11 @@ related_publications: false
 
 Summer Undergraduate Research Fellowship (SURF) project on recent developments in psychometrical methods.
 
-See the [project website](https://hemu0626.github.io/educ_stat/).
+The original project website has been consolidated into this repository:
+
+- [Project home](/assets/surf2022/index.html)
+- [Classical Test Theory](/assets/surf2022/ctt.html)
+- [Item Response Theory](/assets/surf2022/irt.html)
+- [Statistics](/assets/surf2022/stat.html)
+- [Cognitive Diagnostic Models](/assets/surf2022/cdms.html)
+- [Estimation](/assets/surf2022/estimation.html)

@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>cdms.knit</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Psychometrics and Educational Statistics</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="ctt.html">Literature Review</a>
+</li>
+<li>
+  <a href="irt.html">Item Response Theory</a>
+</li>
+<li>
+  <a href="cdms.html">Cognitive Diagnosis Models</a>
+</li>
+<li>
+  <a href="estimation.html">Corresponding Estimation</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+
+</div>
+
+
+<div id="cognitive-diagnosis-models" class="section level2">
+<h2>Cognitive Diagnosis Models</h2>
+<p>Cognitive diagnosis models (CDMs) are special types of restricted latent class model that have received a great deal of attention in the past several years.</p>
+<p>CDMs try to identify if an examinee has mastered specific skills required to solve an item.</p>
+<p>CDMs try to identify the strength and weakness in a sets of fine-grained skills(or attributtes) differs from the objective of traditional measurement models.</p>
+<p>In CDMs, a student is classified into dichotomous latent skill classes according to the corresponding response of a test and a given <em>Q matrix</em> which skills are required to master each item</p>
+<table>
+<thead>
+<tr class="header">
+<th>Q-matrix</th>
+<th>Add</th>
+<th>Sub</th>
+<th>Multiply</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(7+2\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(3+4-2\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\((5\times 2)+4\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\((3\times 2)-2\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Q-matrix</strong></p>
+<p><span class="math display">\[Q=\begin{bmatrix} q_{11} &amp; \cdots &amp; q_{1k} &amp;\cdots &amp;q_{1K}\\ \vdots &amp; &amp; \vdots &amp; &amp;\vdots\\
+q_{j1}&amp; \cdots &amp; q_{jk} &amp; \cdots &amp; q_{jK}\\
+\vdots &amp; &amp; \vdots &amp; &amp;\vdots\\
+q_{J1} &amp; \cdots &amp; q_{Jk} &amp; \cdots &amp; q_{JK}
+\end{bmatrix}\]</span></p>
+<p>where <span class="math inline">\(J\)</span> means the number of items and <span class="math inline">\(K\)</span> means the number of attributes.</p>
+<p>In our case,</p>
+<p><span class="math display">\[Q=\begin{bmatrix} 1 &amp; 0 &amp; 0\\ 1 &amp; 1 &amp; 0 \\ 1 &amp; 0 &amp; 1\\ 0 &amp; 1 &amp; 1\end{bmatrix}\]</span> In educational testing, the attributes required for responding correctly to an item might correspond to specific skills that are usually determined by experts.</p>
+<p>Q-matrix indicates whether test item requires that an examinee possess attribute to respond correctly to that item.</p>
+<p><strong>q-vector</strong> <span class="math display">\[q_1=\begin{bmatrix}1 &amp; 0 &amp; 0\end{bmatrix}, \quad q_2=\begin{bmatrix}1 &amp; 1 &amp; 0\end{bmatrix}, \quad \cdots\]</span></p>
+</div>
+<div id="dina-model" class="section level2">
+<h2>DINA Model</h2>
+<div id="basic-model" class="section level3">
+<h3>Basic Model</h3>
+<p>The DINA model (Deterministic Input, Noisy and Gate Model) is suitable for cognitive diagnosis of binary item tests and was originally proposed by Junker and Sijtsma. Here we use <span class="math inline">\(X_{ij}\)</span> to denote the response of the <span class="math inline">\(i^{th}\)</span> student to question <span class="math inline">\(j^{th}\)</span>, where i takes from 1 to I and j takes from 1 to J. <span class="math inline">\(X_{ij}=1\)</span> means that the student answered correctly, <span class="math inline">\(X_{ij}=0\)</span> indicates an incorrect response. Then, the <span class="math inline">\(Q\)</span> matrix is used to describe the cognitive attributes required to answer each question, which is a <span class="math inline">\(J \times K\)</span> matrix consisting of only 0 and 1. <span class="math inline">\(q_{jk}\)</span> indicates whether knowledge <span class="math inline">\(k\)</span> is required to answer question <span class="math inline">\(j^{th}\)</span> correctly, with <span class="math inline">\(q_{jk}=1\)</span> indicating that it is required and <span class="math inline">\(q_{jk}=0\)</span> indicating that it is not required. <span class="math inline">\(\alpha_i=\begin{Bmatrix} \alpha_{ik}\end{Bmatrix}=\begin{Bmatrix} \alpha_{i1},\alpha_{i2},....,\alpha_{ik} \end{Bmatrix}\)</span> denotes the vector of knowledge points possessed by the <span class="math inline">\(i^{th}\)</span> student, which can also be called the student’s attribute mastery mode, which <span class="math inline">\(k\)</span> can include skills, knowledge points or a process. When <span class="math inline">\(k^{th}\)</span> equals 1, i.e.<span class="math inline">\(\alpha_{ik}=1\)</span>, then the student has mastered the cognitive property <span class="math inline">\(k\)</span>; when <span class="math inline">\(k^{th}\)</span> equals 0, i.e.<span class="math inline">\(\alpha_{ik}=0\)</span>, then the student has not mastered the cognitive property <span class="math inline">\(k\)</span>.</p>
+<p>In the DINA model, subjects’ mastery patterns <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(Q\)</span> matrices yield a latent response rector <span class="math inline">\(\eta_{ij}= \begin{Bmatrix} \eta_{ij}\end{Bmatrix}\)</span>, <span class="math inline">\(\eta_{ij}\)</span> is a function of<span class="math inline">\(\begin{Bmatrix}\alpha_{ik}\end{Bmatrix}\)</span> and <span class="math inline">\(\begin{Bmatrix} q_{ik}\end{Bmatrix}\)</span>,<span class="math display">\[\eta_{ij}=\prod_{k = 1}^{k}\alpha_{ik}^{q_{ik}}\]</span> In this formula, if subject <span class="math inline">\(i\)</span> has mastered all the attributes assessed by item <span class="math inline">\(j\)</span>, i.e.<span class="math inline">\(\eta_{ij}=1\)</span>;if subject i has not mastered at least one of the assessment attributes for item <span class="math inline">\(j\)</span>, i.e.<span class="math inline">\(\eta_{ij}=0\)</span>. For ease of presentation, the symbolic descriptions are summarized in the table below.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="center">Symbols</th>
+<th align="center">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><span class="math inline">\(X\)</span></td>
+<td align="center">Student test score matrix</td>
+</tr>
+<tr class="even">
+<td align="center"><span class="math inline">\(X_{ij}\)</span></td>
+<td align="center">Student <span class="math inline">\(i&#39;s\)</span> score on test question j</td>
+</tr>
+<tr class="odd">
+<td align="center"><span class="math inline">\(Q\)</span></td>
+<td align="center">Matrix of knowledge examination</td>
+</tr>
+<tr class="even">
+<td align="center"><span class="math inline">\(q_{jk}\)</span></td>
+<td align="center">Examination of knowledge point <span class="math inline">\(k\)</span> in test <span class="math inline">\(j\)</span></td>
+</tr>
+<tr class="odd">
+<td align="center"><span class="math inline">\(\alpha_i\)</span></td>
+<td align="center">Student <span class="math inline">\(i&#39;s\)</span> knowledge acquisition</td>
+</tr>
+<tr class="even">
+<td align="center"><span class="math inline">\(\alpha_{ik}\)</span></td>
+<td align="center">Student <span class="math inline">\(i&#39;s\)</span> mastery of knowledge point <span class="math inline">\(k\)</span></td>
+</tr>
+<tr class="odd">
+<td align="center"><span class="math inline">\(\eta_{ij}\)</span></td>
+<td align="center">Student <span class="math inline">\(i&#39;s\)</span> potential response to test question <span class="math inline">\(j\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>If errors and randomness are excluded, the probability of a correct response to a question is either 0 or 1, and the subject’s response depends only on the interaction between <span class="math inline">\(\alpha\)</span> and this <span class="math inline">\(Q\)</span> matrix. However, there is certainly an element of guesswork in the potential response process, so this potential response vector represents only an ideal response pattern. The ‘noise’ mixed into this process is the ‘error’, referring to the parameters of ‘mistake’ and ‘guesses’, i.e. a subject who has mastered all the attributes required by a question may answer it incorrectly because of a mistake, while those who lacked at least one of the attributes required by a test question were likely to have answered the question correctly by guessing.</p>
+<p>In the DINA model, the mistake and guess parameters of trial <span class="math inline">\(j\)</span> are defined by <span class="math inline">\(s_j\)</span> and <span class="math inline">\(g_j\)</span>, respectively, <span class="math display">\[s_j=P(X_{ij}=0|\eta_{ij}=1)\]</span> <span class="math display">\[g_j=P(X_{ij}=1|\eta_{ij}=0)\]</span> Thus the probability that subject <span class="math inline">\(i\)</span> with mastery mode a answers test question <span class="math inline">\(j\)</span> correctly is <span class="math display">\[P(X_{ij}=1|\alpha_i)=(1-s_j)^{\eta_{ij}}g_i^{1-\eta_{ij}}\]</span>.</p>
+<p>Under the assumption of local independence of item response theory, the likelihood function of the DINA model is <span class="math display">\[L(s,g,\alpha)=\prod_{i = 1}^{I}\prod_{j = 1}^{J}p_j(\alpha_i)^{X_{ij}}[1-p_j(\alpha_i)]^{1-X_{ij}}\]</span></p>
+</div>
+<div id="model-features" class="section level3">
+<h3>Model Features</h3>
+<p>The DINA model is a stochastic conjunctive model, which is ‘stochastic’ because the correct answer is not determined solely by the attributes the subject has mastered, but also by the inclusion of <span class="math inline">\(s_j\)</span> and <span class="math inline">\(g_j\)</span>. This means that mastering all the attributes does not guarantee a correct answer, and not mastering the attributes does not guarantee a wrong answer. The ‘conjunctive’ here implies that all attributes are non-compensatory and that a subject’s lack of mastery of one attribute cannot be compensated for by other attributes, and that a lack of mastery of only one attribute is the same as a lack of mastery of all attributes.</p>
+<p>In addition, the DINA model does not require consideration of hierarchical attribute relationships, and instead of finding the subject’s mastery pattern by classification or discriminant methods, it is estimated by MCMC methods as the parameters to be estimated, which include the subject’s mastery pattern and <span class="math inline">\(s_j\)</span>,<span class="math inline">\(g_j\)</span>.It is worth noting here that the model should satisfy <span class="math inline">\(1-s_j&gt;g_j\)</span>; moreover it is required that <span class="math inline">\(x_j\)</span> and <span class="math inline">\(g_j\)</span> should not be too large, and the limit is generally not greater than 0.4. If it exceeds 0.4, it may indicate that the <span class="math inline">\(Q\)</span> matrix is poorly defined, or that the subjects are using other solution strategies, the model does not fit the data, etc.</p>
+</div>
+</div>
+<div id="reference" class="section level2">
+<h2>Reference</h2>
+<ul>
+<li>JunkerB W,&amp; SijtsmaK.Cognitive assessment models with few assumptions, and connections with nonparametric item response theory[J]. Applied Psychological Measurement, 2001,25(3):258-272</li>
+</ul>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

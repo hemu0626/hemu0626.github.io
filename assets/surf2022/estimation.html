@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>estimation.knit</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Psychometrics and Educational Statistics</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="ctt.html">Literature Review</a>
+</li>
+<li>
+  <a href="irt.html">Item Response Theory</a>
+</li>
+<li>
+  <a href="cdms.html">Cognitive Diagnosis Models</a>
+</li>
+<li>
+  <a href="estimation.html">Corresponding Estimation</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+
+</div>
+
+
+<div id="maximum-likelihood-estimators" class="section level2">
+<h2>Maximum Likelihood Estimators</h2>
+<p>After getting a sample from a population with pdf or pmf <span class="math inline">\(f(x|\theta)\)</span>, it is reasonable to obtain information of <span class="math inline">\(\theta\)</span>. Thus it is natural to find a good point estimator of <span class="math inline">\(\theta\)</span> with the sample, here MLE (Maximum Likelihood Estimators) as a method of point estimator is useful.</p>
+<div id="definition" class="section level3">
+<h3>Definition</h3>
+<p>Before introducing the definition of MLE, we need to know Point Estimator and Likelihood Function.</p>
+<div id="point-estimator" class="section level4">
+<h4>Point Estimator</h4>
+<p>According to Casella &amp; Berger(2002), the definition of point estimator is any function of a sample which means any statistic is a point estimator.</p>
+</div>
+<div id="likelihood-function" class="section level4">
+<h4>Likelihood Function</h4>
+<p>Suppose we have random sample <span class="math inline">\(X_1,X_2,...X_n\)</span> from a population with pmd or pdf <span class="math inline">\(p(x|\theta)\)</span>, then, given that X=x is observed, the function of <span class="math inline">\(\theta\)</span> defined by the joint pdf or pmf (<span class="math inline">\(L(\theta|x)=f(x|\theta)\)</span>) is called likelihood function.</p>
+<p>Casella &amp; Berger(2002) said that when considering pdf of pmf <span class="math inline">\(f(x|\theta)\)</span>, <span class="math inline">\(\theta\)</span> is fixed and x is the variable. When considering likelihood function <span class="math inline">\(L(\theta|x)\)</span>, <span class="math inline">\(\theta\)</span> is variable and x is the observed sample point. This is the distinction between joint pdf or pmf and likelihood function.</p>
+</div>
+<div id="definition-of-mle" class="section level4">
+<h4>Definition of MLE</h4>
+<p>Intuitively, an event A occurs and others do not show up just because A has the maximum likelihood. Therefore, the maximum point of likelihood function should be a good guess of the parameter <span class="math inline">\(\theta\)</span>. This estimate is called Maximum likelihood estimate.</p>
+</div>
+</div>
+<div id="process" class="section level3">
+<h3>Process</h3>
+<p>If <span class="math inline">\(X_1,X_2,...X_n\)</span> are an iid sample from a population with pdf or pmf p(x|<span class="math inline">\(\theta_1,\theta_2,...\theta_k\)</span>),Likelihood function is defined by</p>
+<p><span class="math display">\[L(\theta|x)=L(\theta_1,\theta_2,...\theta_k|x_1,x_2,...x_n)=\prod_{i=1}^{n}p(x_i|\theta_1,\theta_2,...\theta_k)\]</span></p>
+<p>To find the maximum point of likelihood function, it is equivalent to find tha maximum point of the log likelihood function <span class="math inline">\(l(\theta|x)=logL(\theta|x)\)</span>. We just need to solve equation <span class="math inline">\(l&#39;(\theta|x)=0\)</span>, the solution <span class="math inline">\(\theta_{mle}\)</span> is the maximum likelihood estimate of <span class="math inline">\(\theta\)</span>.</p>
+<p>Formula of MLE:</p>
+<p><span class="math display">\[\theta_{MLE}=\mathop{argmax}\limits _{\theta}\log{L(x|\theta)}\]</span></p>
+</div>
+<div id="evaluation" class="section level3">
+<h3>Evaluation</h3>
+<p>The advantage of MLE lies in its asymptotic consistency and efficiency.</p>
+<p>And there are two drawbacks of MLE. Firstly, how to find and verify that the global maximum has been found is one drawback (Casella &amp; Berger,2002). Though it is an easy problem in calculus, sometimes difficulties exist due to the densities.</p>
+<p>Secondly, we need to take the sensibility of estimate into consideration. This is a common problem in mathematical maximization process not just in this case. According to Casella &amp; Berger(2002), in MLE, it is unfortune that usually some small changes in sample will lead to vastly different estimates.</p>
+</div>
+</div>
+<div id="em-algorithm" class="section level2">
+<h2>EM algorithm</h2>
+<div id="introduction" class="section level3">
+<h3>Introduction</h3>
+<p>Given a set of observed data, <span class="math inline">\(X=[{x_i}]_{i=1}^N\)</span>, and model parameter <span class="math inline">\(\theta\)</span>. Assuming the corresponding unobserved data (latent variable) <span class="math inline">\(Z=[{z_i}]_{i=1}^N\)</span>, we call <span class="math inline">\((x_i,z_i)\)</span> as complete data. If we do not consider the unobserved data, MLE (Maximum Likelihood Estimation) can be directly used to estimate parameter.</p>
+<p>MLE: <span class="math display">\[P(X|\theta)\]</span></p>
+<p><span class="math display">\[\theta_{MLE}=\underset {\theta}{argmax} \log P(X|\theta) =\underset {\theta}{argmax} \sum_i^N \log P(x_i|\theta)  \]</span></p>
+<p>Because of unobserved data,</p>
+<p><span class="math display">\[P(X|\theta)=\int_Z P(X,Z|\theta)dZ  \]</span></p>
+<p>It is difficult to replace (2) to (1). Thus, EM is introduced. Iteration is used to get final answer. By EM, expectation step and maximization step are alternated, until convergence.</p>
+</div>
+<div id="em" class="section level3">
+<h3>EM</h3>
+<p><span class="math display">\[\theta^{t+1}=\underset {\theta}{argmax} \int_Z \log P(X,Z|\theta)\cdot P(Z|X,\theta^t)dZ
+=\underset {\theta}{argmax} E_{Z|X,\theta^t} \log P(X,Z|\theta)]\]</span></p>
+<p><strong>E-step:</strong></p>
+<p><span class="math display">\[P(Z|X,\theta^t) \rightarrow E_{Z|X,\theta^t} [\log P(X,Z|\theta)]\]</span></p>
+<p><strong>M-step:</strong></p>
+<p><span class="math display">\[\theta^{t+1}=\underset {\theta}{argmax} E_{Z|X,\theta^t} [\log P(X,Z|\theta)]\]</span></p>
+<p><strong>Prove</strong> procedure (use ELBO and KL Divergence):</p>
+<p><span class="math display">\[\log P(X|\theta)=\log P(X,Z|\theta)-\log P(Z|X,\theta) =\log\frac {P(X,Z|\theta)} {q(Z)}-\log\frac{P(Z|X,\theta)} {q(Z)}\]</span></p>
+<p>Integral with <span class="math inline">\(q(z)\)</span>:</p>
+<p><span class="math display">\[\begin{align}
+
+\text{left}&amp;=\int_Z q(Z)\cdot \log P(X|\theta)dZ\\
+
+&amp;=\log P(X|\theta)\int_Z q(Z)dZ\\
+
+&amp;=\log P(X|\theta)\\
+
+
+\text{right}&amp;=\int_Z q(Z)\cdot log\frac {P(X,Z|\theta)} {q(Z)}dZ-\int_Z q(Z)\cdot log\frac{P(Z|X,\theta)} {q(Z)}dZ\\
+
+\end{align}\]</span></p>
+<p>where</p>
+<p><span class="math display">\[\int_Z q(Z)\cdot \log\frac {P(X,Z|\theta)} {q(Z)}dZ\]</span></p>
+<p>is ELBO (evidence lower bound), and</p>
+<p><span class="math display">\[-\int_Z q(Z)\cdot \log\frac{P(Z|X,\theta)} {q(Z)}dZ=\int_Z q(Z)\cdot \log\frac {q(Z)}{P(Z|X,\theta)}dZ\]</span></p>
+<p>is <span class="math inline">\(KL(q(Z)||P(Z|X,\theta))\)</span>.</p>
+<p>Correspondingly,</p>
+<p><span class="math display">\[KL(q(Z)||P(Z|X,\theta)) \geq 0\]</span></p>
+<p>where 0 is gotten when <span class="math inline">\(q(Z)=P(Z|X,\theta)\)</span>.</p>
+<p>Thus,</p>
+<p><span class="math display">\[\log P(X|\theta)=ELBO+KL(q|P)\geq ELBO\]</span></p>
+<p><span class="math display">\[\begin{align}
+
+\hat \theta&amp;=\underset \theta {argmax} ELBO\\
+
+&amp;=\underset \theta {argmax}\int_Z q(Z)\cdot \log\frac {P(X,Z|\theta)} {q(Z)}dZ\\
+
+&amp; =\underset \theta {argmax}\int_Z P(Z|X,\theta)\cdot \log\frac {P(X,Z|\theta)} {P(Z|X,\theta))}dZ \quad \text{because KL=0 is gotten when $q(Z)=P(Z|X,\theta)$)}\\
+
+&amp;= \underset \theta {argmax}\int_Z P(Z|X,\theta)\cdot [\log P(X,Z|\theta)-\log P(Z|X,\theta)]dZ\\
+
+&amp;= \underset \theta {argmax}\int_Z P(Z|X,\theta)\cdot \log P(X,Z|\theta)dZ, \quad \text{because $\log P(Z|X,\theta)$ have nothing to do with $\theta$}
+
+\end{align}\]</span></p>
+</div>
+<div id="convergence" class="section level3">
+<h3>Convergence</h3>
+<p>We want to find, if <span class="math inline">\(\theta^t \rightarrow \theta^{t+1}\)</span>, when <span class="math display">\[\log P(X|\theta^t)\leq \log P(X|\theta^{t+1})\]</span></p>
+<p>i.e. will <span class="math inline">\(\theta\)</span> increase by EM</p>
+<p>Prove procedure:</p>
+<p><span class="math display">\[\log P(X|\theta)=\log P(X,Z|\theta)-\log P(Z|X,\theta)\]</span> Integral with z</p>
+<p><span class="math display">\[\begin{align}
+
+\text{left} &amp;=\int_Z P(Z|X,\theta^t)\cdot \log P(X|\theta)dZ\\
+
+&amp; =\log P(X|\theta)\int_Z P(Z|X,\theta^t)dZ\\
+ 
+&amp; = \log P(X|\theta)\\
+
+\text{right}&amp;= \int_Z P(Z|X,\theta^t)\cdot \log P(X,Z|\theta)dZ-\int_Z P(Z|X,\theta^t)\cdot \log P(Z|X,\theta)dZ\\
+
+\end{align}\]</span></p>
+<p>Denote</p>
+<p><span class="math display">\[\int_Z P(Z|X,\theta^t)\cdot \log P(X,Z|\theta)dZ =Q(\theta, \theta^t)\quad \text{and} \quad \int_Z P(Z|X,\theta^t)\cdot \log P(Z|X,\theta)dZ = H(\theta, \theta^t)\]</span></p>
+<p>As</p>
+<p><span class="math display">\[\theta^{t+1}=\underset {\theta}{argmax}Q(\theta, \theta^t)\]</span></p>
+<p>Then,</p>
+<p><span class="math display">\[Q(\theta^{t+1}, \theta^t)\geq Q(\theta, \theta^t)\]</span></p>
+<p><span class="math inline">\(\theta\)</span> is a parameter, let <span class="math inline">\(\theta=\theta^t\)</span></p>
+<p><span class="math inline">\(Q(\theta^{t+1}, \theta^t)\geq Q(\theta^t, \theta^t)\)</span></p>
+<p>Then, we have to prove <span class="math inline">\(H(\theta^{t+1}, \theta^t)\leq H(\theta^t, \theta^t)\)</span></p>
+<p><span class="math display">\[\begin{align}
+
+&amp;H(\theta^{t+1}, \theta^t)-H(\theta^t, \theta^t)\\
+
+=&amp;\int_Z P(Z|X,\theta^t)\cdot \log P(Z|X,\theta^{t+1})dZ-\int_Z P(Z|X,\theta^t)\cdot \log P(Z|X,\theta^t)dZ\\
+
+=&amp;\int_Z P(Z|X,\theta^t)\cdot \log\frac {P(Z|X,\theta^{t+1})}{P(Z|X,\theta^t)}dZ\\
+  
+\leq &amp; \log \int_Z P(Z|X,\theta^{t+1}) =\log 1= 0 \quad \text{(Because $E[log x]\leq logE[x]$ or use $=-KL(P(Z|X,\theta^t)||P(Z|X,\theta^{t+1})\leq 0)$}
+
+\end{align}\]</span></p>
+</div>
+</div>
+<div id="computerized-adaptive-testingcat" class="section level2">
+<h2>Computerized Adaptive Testing(CAT)</h2>
+<p>This section introduces the CAT method.</p>
+<div id="fisher-information" class="section level3">
+<h3>Fisher Information</h3>
+<p>The Fisher Information (MFI) method was introduced by Lord (Lord, 1980; Thissen &amp; Mislevy, 2000) and it was the most widespread ISS in the early days of CAT.</p>
+<p>Fisher information is a measurement of the amount of information about the unknown capacity <span class="math inline">\(\theta\)</span> generated by the response pattern(Davier et al., 2019).</p>
+<div id="definition-1" class="section level4">
+<h4>Definition</h4>
+<p>According to Davier et al. (2019), firstly, We give the definition of the first derivative of log likelihood function as Score function:</p>
+<p><span class="math display">\[S(X|\theta)=\sum_{i=1}^n\frac{d\log f(X_i;\theta)}{d\theta}\]</span></p>
+<p>where <span class="math inline">\(f(X_i;\theta)\)</span> refers to the likelihood function, θ is the underlying latent trait, and x represents the observed response pattern.</p>
+<p>Fisher information is second moment of this Score function:</p>
+<p><span class="math display">\[I(\theta)=E[S(X|\theta^2)]\]</span> where <span class="math inline">\(I(\theta)\)</span> is fisher information.</p>
+</div>
+<div id="mathematical-meanings" class="section level4">
+<h4>Mathematical meanings</h4>
+<p>According to Davier et al. (2019), it can estimate the variance of the MLE equation:</p>
+<p>As <span class="math inline">\(E[S(X;\theta)=0\)</span>,we can get that</p>
+<p><span class="math display">\[I(\theta)=E[S(X|\theta^2)]-E[S(X|\theta)]=Var[S(X|\theta)]\]</span></p>
+<p>It is the expectation of the negative second order derivative of log likelihood at the true value of the parameter</p>
+<p><span class="math display">\[I(\theta)=-E[f&#39;&#39;(x|\theta)]=-\int\frac{d^2\log f(x|\theta)f(x|\theta)}{d\theta^2} dx\]</span></p>
+<p><span class="math display">\[I(\theta)=-E\left[\frac  {\partial^2 \log f(x;\theta)}{\partial^2 \theta} \right]\]</span></p>
+<p>Fisher Information reflects the accuracy of our parameter estimates; the larger it is, the more accurate the parameter estimate, i.e. the more information it represents.</p>
+</div>
+<div id="application" class="section level4">
+<h4>Application</h4>
+<p>The item k’s Fisher information is given by <span class="math inline">\(I_k(\theta)=\frac {[P_k&#39;(\theta)]^2}{P_k(\theta)Q_k(\theta)}\)</span> according to Davier et al. (2019), where <span class="math inline">\(P_k(\theta)\)</span> is the item response function for item k which is specified by the selected IRT model, and <span class="math inline">\(Q_k(θ) = 1 − P_k(θ)\)</span>, and <span class="math inline">\(P_k&#39; (θ)\)</span> refers to the first derivative of the item response function in relation to <span class="math inline">\(\theta\)</span>.</p>
+<p>Assuming local independence the test information I(θ) is additive in item information, that means <span class="math inline">\(I(\theta)=\Sigma I_k(\theta)\)</span>.</p>
+<p>For the three-parameter logistic (3PL) model, <span class="math inline">\(P_j(θ)\)</span> is given by</p>
+<p><span class="math display">\[P_k(\theta)=c_k+(1-c_k)\frac{e^{a_k(\theta-b_k)}}{1+e^{a_k(\theta-b_k)}}\]</span></p>
+<p>where <span class="math inline">\(a_k\)</span>, <span class="math inline">\(b_k\)</span> and <span class="math inline">\(c_k\)</span> respectively refer to the discrimination, hardness, and guessing parameter for the kth item.</p>
+<p>If the MFI method is applied to item selection, under the current estimate of <span class="math inline">\(\theta\)</span> , an eligible item in the bank with the largest Fisher information will be selected as the next item to be managed.</p>
+<p>Since the asymptotic variance of <span class="math inline">\(\theta ^{ML}\)</span>,i.e. the maximum likelihood estimate of <span class="math inline">\(\theta\)</span>, is in inverse proportion to the test information, the MFI method is widely considered to be a method to minimize the asymptotic variance of the θ estimate, that is, to asymptotically maximize the measurement precision.</p>
+</div>
+<div id="drawbacks" class="section level4">
+<h4>Drawbacks</h4>
+<p>Firstly, Fisher information does not naturally apply to cognitive diagnosis as it is by definition on a continuous variable.In the early phases of CAT, capacity estimation may not yet be accurate. Maximizing information on the basis of an inaccurate and erratic estimate of <span class="math inline">\(\theta\)</span> can be described as “capitalization on chance”(van der Linden &amp; Glas, 2000). Thus, using the MFI in the early stages of a CAT program may not be ideal.</p>
+<p>Secondly, the MFI prefers to pick items with large distinguishing parameters, but uses few items with smaller discrimination parameters. This means that some of the items in the item pool may be underutilized. At the same time,, the excessive exposure of a small number of items with a high degree of distinction may be a critical threat to the security of the test(Chang, 2015; Chang &amp; Ying, 1999).</p>
+<p>In addition, the number of items from various content areas or sub-areas often need to be balanced in order to keep the CAT surface and content valid (Cheng, Chang, &amp; Yi, 2007; Yi &amp; Chang, 2003).</p>
+</div>
+<div id="improvement" class="section level4">
+<h4>Improvement</h4>
+<p>The global information method was put forward by Chang and Ying (1996), which use KL distance or information rather than Fisher information in item selection. They demonstrated that global information is more robust for addressing the problem of instability in capacity estimation in the early stage of CAT.</p>
+</div>
+</div>
+<div id="kl-algorithm" class="section level3">
+<h3>KL Algorithm</h3>
+<p>Chang &amp; Ying (1996) proposed the global information method which utilized the KL distance or information instead of Fisher information in item selection. Being more robust, global information could be used to combat the instability of ability estimation in the early stage of CAT.</p>
+<p>Fisher information is defined on a continuous variable, if involves discrete, KL Algorithm is preferred.</p>
+<p>The Kullback Leibler distance (KL-distance) is defined as a natural distance function from a “true” probability distribution, p, to a “target” probability distribution, q. It can be interpreted as the expected extra message-length per datum due to using a code based on the wrong (target) distribution compared to using a code based on the true distribution.</p>
+<div id="definition-2" class="section level4">
+<h4>Definition</h4>
+<p>For discrete (not necessarily finite) probability distributions, p={p1, …, pn} and q={q1, …, qn}, the KL-distance is defined to be</p>
+<p><span class="math display">\[D_{KL}(P||Q)=\sum_i P(i)\log\left(\frac {P(i)}{Q(i)}\right)\]</span></p>
+<p>For continuous probability densities,</p>
+<p><span class="math display">\[D_{KL}(P||Q)=\int_{-\infty}^{\infty} P(x)\log\left(\frac {P(x)}{Q(x)}\right)\]</span></p>
+<p>Xu et al.’s (2005) KL Algorithm:</p>
+<p>According to Cover &amp; Thomas(1991), KL information is a measure of “distance” between two probability distributions, which can be defined as:</p>
+<p><span class="math display">\[d[f,g]=E_f\left[\log \frac{f(x)}{g(x)}\right]\]</span> where <span class="math inline">\(f(x)\)</span> and <span class="math inline">\(g(x)\)</span> are two probability distributions.</p>
+<p>However, because the unsymmetrical of <span class="math inline">\(d[f, g]\)</span> and <span class="math inline">\(d[g, f]\)</span>, KL information is not a real distance measure. KL distance is still introduced due to the meaning of it, the larger d[f, g] is corresponding to the easier it is to single out between the two probability distributions <span class="math inline">\(f(x)\)</span> and <span class="math inline">\(g(x)\)</span> statistically (Henson &amp; Douglas, 2005).</p>
+</div>
+<div id="the-kl-algorithm-based-on-kullbackleibler-information-cheng-2009" class="section level4">
+<h4>The KL Algorithm Based on Kullback–Leibler Information (Cheng, 2009)</h4>
+<p>Suppose t items are selected, and the available items in the pool form a set R(t) at this stage. Consider item h in <span class="math inline">\(R^{(t)}\)</span>. In cognitive diagnosis, conditional distribution of person i’s item responses <span class="math inline">\(U_{ih}\)</span> given his or her latent state, or cognitive profile, <span class="math inline">\(\alpha_i\)</span> are what interested. According to the notation of McGlohen and Chang (2008), <span class="math inline">\(\alpha_{i}=(\alpha_{i1},\alpha_{i2},...,\alpha_{ik},...,\alpha_{iK})&#39;\)</span>.</p>
+<p>Here <span class="math inline">\(\alpha_{ik}\)</span> = 0 indicates that the <span class="math inline">\(i\)</span>th examinee not masters the kth attribute and <span class="math inline">\(\alpha_{ik} = 1\)</span> otherwise. An attribute is a task, cognitive process, or skill involved in answering an item.</p>
+<p>Due to the unknown true state, a global measure of discrimination can be constructed on the basis of the KL distance between the distribution of <span class="math inline">\(U_{ih}\)</span> given the current estimate of person <span class="math inline">\(i\)</span>’s latent cognitive state (i.e., <span class="math inline">\(f(U_{ih}|\hat \alpha_i^{(t)}\)</span>)) and the distribution of <span class="math inline">\(U_{ih}\)</span> given other states.</p>
+<p>The KL distance between <span class="math inline">\(f(U_{ih}|\hat \alpha_i^{(t)}\)</span>)) and the conditional distribution of <span class="math inline">\(U_{ih}\)</span> given another latent state <span class="math inline">\(\alpha_c\)</span>, i.e., <span class="math inline">\(f(U_{ih}|\alpha_c\)</span>)), can be computed as follows:</p>
+<p><span class="math display">\[D_h(\hat \alpha_i^{(t)}||\alpha_c)=\sum_{q=0}^1\log \left[\frac{P(U_{ih}=q|\hat \alpha_i^{(t)})}{P(U_{ih}=q|\alpha_c)}\right]P(U_{ih}=q|\hat \alpha_i^{(t)})\]</span></p>
+<p>Xu et al. (2003) stated using the straight sum of the KL distances between <span class="math inline">\(f(U_{ih}|\hat \alpha_i^{(t)}\)</span>)) and all the <span class="math inline">\(f(U_{ih}|\alpha_c\)</span>)), c = 1, 2,…, <span class="math inline">\(2^K\)</span> (when there are K attributes, there are <span class="math inline">\(2^K\)</span> possible latent cognitive states):</p>
+<p><span class="math display">\[KL_h(\hat \alpha_i^{(t)})=\sum _{c=1}^{2^K}D_h(\hat \alpha_i^{(t)}||\alpha_c)\]</span></p>
+<p>Then the <span class="math inline">\((t + 1)\)</span>th item for the <span class="math inline">\(i\)</span>th examinee is the item in <span class="math inline">\(R(t)\)</span> that maximizes <span class="math inline">\(KL_h(\hat \alpha_i^{(t)})\)</span>. This is referred to as the KL algorithm. The items selected using this algorithm are the most powerful ones on average in distinguishing the current latent class estimate from all other possible latent classes.</p>
+</div>
+<div id="use-of-kl-distance" class="section level4">
+<h4>Use of KL Distance</h4>
+<p>It is helpful to choose the optimal parameter. For instance, if p(x) is unknown, a <span class="math inline">\(q(x|\theta)\)</span> can be constructed to estimate p(x). In order to know <span class="math inline">\(\theta\)</span>, select N samples from p(x) and construct such function:</p>
+<p><span class="math display">\[D_{KL}(p||q)=\sum_{i=1}^Np(x_i)(\log p(x_i)-\log(q(x_i|\theta))\]</span></p>
+<p>Then use MLE to estimate <span class="math inline">\(\theta\)</span>.</p>
+</div>
+</div>
+<div id="shannon-entropy" class="section level3">
+<h3>Shannon entropy</h3>
+<p>It is necessary to know the uncertainty of a random variable and Shannon entropy is a good candidate to measure the uncertainty. Cheng(2009) listed an example about the Shannon entropy: a fair coin has entropy of one unit while an unfair coin has lower entropy because there is less uncertainty when guessing the outcome of one unfair coin.</p>
+<div id="definition-3" class="section level4">
+<h4>Definition</h4>
+<p>For a discrete random variable X which takes value among <span class="math inline">\(x_1,x_2,...x_n\)</span>, the Shannon entropy is defined as:</p>
+<p><span class="math display">\[H(X)=-\sum_{i=1}^np(x_i)\log_b(x_i)\]</span></p>
+<p>In the definition, <span class="math inline">\(p(x_i)\)</span> is the probability when X = <span class="math inline">\(x_i\)</span>. <span class="math inline">\(H(X)\)</span> can also be written as <span class="math inline">\(H(P)\)</span> or H(<span class="math inline">\(p_1,p_2,...p_n\)</span>). Owing to the formula, we can conclude that independent uncertainties are additive. <span class="math inline">\(b\)</span> is the base of logarithm, which takes value among 2,e and 10. The differences among choices of b are the unit of entropy. For <span class="math inline">\(b=2\)</span>, unit is bit; for <span class="math inline">\(b = e\)</span>, unit is nat; for $ b = 10$, unit is dit or digit.</p>
+</div>
+</div>
+<div id="properties" class="section level3">
+<h3>Properties</h3>
+<p>The choice of b does not influence the properties of Shannon entropy, so we do not need care the value of b in this part.</p>
+<div id="nonnegativity" class="section level4">
+<h4>Nonnegativity</h4>
+<p><span class="math display">\[H(p_1,p_2,...p_n)\ge0\]</span></p>
+<p>This equality holds only when the distribution is certain which means <span class="math inline">\(\exists\quad p_i=1\)</span>, and other <span class="math inline">\(p_j=0\)</span>, where <span class="math inline">\(i\neq j\)</span>.</p>
+</div>
+<div id="maximality" class="section level4">
+<h4>Maximality</h4>
+<p><span class="math inline">\(H(P)\)</span> reaches its maximum when all the events share same probability, which means <span class="math inline">\(p_1=p_2=p_n=\frac{1}{n}\)</span>. Moreover, if the events all share same probability, <span class="math inline">\(H(P)\)</span> increases with the number of events increasing. It means</p>
+<p><span class="math display">\[H(\frac{1}{n},\frac{1}{n},...)&lt;H(\frac{1}{n+1},\frac{1}{n+1}...)\]</span></p>
+</div>
+<div id="concavity" class="section level4">
+<h4>Concavity</h4>
+<p>Shannon entropy is a concave function of P.</p>
+</div>
+<div id="continuity" class="section level4">
+<h4>Continuity</h4>
+<p>Shannon entropy is a continuous function of P which means small changes on probability lead to small changes on entropy.</p>
+</div>
+<div id="symmetry" class="section level4">
+<h4>Symmetry</h4>
+<p><span class="math display">\[H(P_1)=H(P_2)\]</span> if <span class="math inline">\(P_1,P_2\)</span> are different permutations of one probability distribution.</p>
+</div>
+<div id="expansible" class="section level4">
+<h4>Expansible</h4>
+<p><span class="math display">\[H(p_1,p_2,...p_n)=H(p_1,p_2,...p_n,0)\]</span></p>
+</div>
+</div>
+<div id="difference-between-kl-divergence-and-shannon-entropy" class="section level3">
+<h3>Difference between KL-Divergence and Shannon Entropy</h3>
+<p>Shannon Entropy is used to measure the uncertainty of one probability distribution, while KL-Distance is used to measure the divergence between two probability distributions.So, in the use of Shannon Entropy, only one probability distribution will be involved with two involved in KL-Divergence.</p>
+</div>
+</div>
+<div id="reference" class="section level2">
+<h2>Reference</h2>
+<ul>
+<li><p>Casella,G.,&amp; Berger R.L.,(2002). Statistical Inference.USA.RR Donnelley</p></li>
+<li><p>Chang, H. H. (2015). {Psychometrics behind computerized adaptive testing}. Psychometrika, 80(1),1–20.</p></li>
+<li><p>Chang, H. H., &amp; Ying, Z. (1999). {a-Stratified multistage computerized adaptive testing. Applied Psychological Measurement}, 23(3), 211–222.</p></li>
+<li><p>Chang, H.-H., &amp; Ying, Z.(1996) ‘A Global Information Approach to Computerized Adaptive Testing’, , 20(3), pp. 213-229. <a href="doi:10.1177/014662169602000303" class="uri">doi:10.1177/014662169602000303</a></p></li>
+<li><p>Cheng, Y. (2009). Computerized adaptive testing for cognitive diagnosis. In D. J. Weiss (Ed.), Proceedings of the 2009 GMAC Conference on Computerized Adaptive Testing. Retrieved [5 Aug 2022] from www.psych.umn.edu/psylabs/CATCentral/</p></li>
+<li><p>Cheng, Y (2009) ‘When Cognitive Diagnose Meets Computerized Adaptive Testing:CD-CAT’, <em>Psychometrika</em>,VOL. 74, NO. 4, 619–632</p></li>
+<li><p>Cheng, Y., Chang, H. H., &amp; Yi, Q. (2007). {Two-phase item selection procedure for flexible content balancing in CAT}. Applied Psychological Measurement, 31(6), 467–482.</p></li>
+<li><p>Davier, M.V. et al. (2019). {Methodology of Educational Measurement and Assessment}. Available at: <a href="https://doi.org/10.1007/978-3-030-05584-4" class="uri">https://doi.org/10.1007/978-3-030-05584-4</a> (Downloaded: 18 July 2022)</p></li>
+<li><p>Henson, R. &amp; Douglas J. (2005). Test construction for cognitive diagnosis. <em>Applied Psychological Measurement</em>, 29, 262-277.</p></li>
+<li><p>Lord, F. M. (1980). . Hillsdale,NJ: Erlbaum.</p></li>
+<li><p>McGlohen, M.K., &amp; Chang, H. (2008). Combining computer adaptive testing technology with cognitively diagnostic assessment. <em>Behavioral Research Methods</em>, 40, 808–821.</p></li>
+<li><p>Thissen, D., &amp; Mislevy, R. J. (2000). {Testing algorithm. In H. Wainer &amp; N. J. Dorans (Eds.), Computerized adaptive testing: A primer}. Hillsdale, NJ: Erlbarm.</p></li>
+<li><p>Van der Linden, W. J., &amp; Glas, C. A. W. (2000). {Capitalization on item calibration error in adaptive testing}. Applied Measurement in Education, 13(1), 35–53.</p></li>
+<li><p>Xu, X., Chang, H., &amp; Douglas, J. (2005). Computerized adaptive testing strategies for cognitive diagnosis. Paper presented at the annual meeting of National Council on Measurement in Education, Montreal, Canada.</p></li>
+<li><p>Yi, Q., &amp; Chang, H. H. (2003). {a-Stratified CAT design with content blocking}. British Journal of Mathematical and Statistical Psychology, 56(2), 359–378.</p></li>
+</ul>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
