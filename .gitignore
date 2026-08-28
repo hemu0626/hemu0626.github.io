@@ -37,3 +37,7 @@ gh-list-repos.js
 gh-poll.js
 gh-logs.js
 
+check-*.js
+fetch-crossref.js
+crossref-authors.json
+
