@@ -1,8 +1,8 @@
 ---
 layout: page
 title: Psychometrical Methods (SURF 2022)
-description: Summer Undergraduate Research Fellowship 2022.
-importance: 4
+description: Summer Undergraduate Research Fellowship 2022. Team of 8 (6 members + 2 volunteers).
+importance: 6
 category: work
 related_publications: false
 ---

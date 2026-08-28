@@ -9,11 +9,10 @@ last_name: He
 contact_note: >
   Email is the best way to reach me.
 description: > # the ">" symbol means to ignore newlines until "footer_text:"
-  Academic homepage of Mu He, Assistant Professor in the School of Mathematics and Physics at
-  Xi'an Jiaotong-Liverpool University (XJTLU). Research interests: biostatistics, reliability,
-  and data-driven applications in statistics and public health.
+  Academic homepage of Mu He, Assistant Professor at Xi'an Jiaotong-Liverpool University (XJTLU).
+  Research interests: statistics, survival analysis, and One Health.
 footer_text: >
-  © 2026 Mu He · School of Mathematics and Physics, Xi'an Jiaotong-Liverpool University.
+  © 2026 Mu He · Xi'an Jiaotong-Liverpool University.
   Powered by <a href="https://jekyllrb.com/" target="_blank">Jekyll</a> with the <a href="https://github.com/alshedivat/al-folio">al-folio</a> theme.
 keywords: Mu He, statistics, biostatistics, reliability, XJTLU, academic homepage # add your own keywords or leave empty
 lang: en # the language of your site (for example: en, fr, cn, ru, etc.)

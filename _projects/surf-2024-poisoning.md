@@ -1,8 +1,8 @@
 ---
 layout: page
 title: Survival Analysis in Poisoning (SURF 2024)
-description: Summer Undergraduate Research Fellowship 2024.
-importance: 2
+description: Summer Undergraduate Research Fellowship 2024. Team of 9 (6 members + 3 volunteers).
+importance: 4
 category: work
 related_publications: false
 ---
