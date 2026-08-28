@@ -15,7 +15,7 @@ nav_order: 5
 | Yiliang Zhou | Principal Supervisor | Mar 2024 – Present |
 | Jiahao Zhao | Principal Supervisor | Dec 2023 – Present |
 
-## Master's Students
+## Master Students
 
 | Year | MSc Data Science | MSc Actuarial Science | MSc Financial Mathematics |
 | --- | --- | --- | --- |
