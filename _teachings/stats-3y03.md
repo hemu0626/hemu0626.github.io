@@ -8,4 +8,4 @@ term: Spring/Summer
 course_id: stats-3y03
 ---
 
-Probability and statistics for engineering, covering probability models, common distributions, estimation, hypothesis testing, and regression.
+<!-- TODO: add the course introduction here (paste from the official module page) -->
