@@ -26,7 +26,3 @@ latest_posts:
 I am an Assistant Professor at Xi'an Jiaotong-Liverpool University (XJTLU), Suzhou, China. My research interests include statistics, survival analysis, and One Health.
 
 I am always seeking motivated and interested undergraduate and graduate students to join my research team. We are currently looking for data analysts and research assistants to help us process and understand vast amounts of information. Skills in R (ggplot2, survival analysis, etc.) are essential for these positions. This is an excellent opportunity for individuals interested in health research who wish to gain valuable experience in data analysis and scientific inquiry. See the announcements below or email me directly.
-
-## Research Map
-
-![Research map](/assets/img/research-map.png)
