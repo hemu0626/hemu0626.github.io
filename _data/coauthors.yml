@@ -1,0 +1,4 @@
+# Optional: coauthor name variants for jekyll-scholar `coauthor` tags.
+# The entries in _bibliography/papers.bib do not use coauthor tags yet,
+# so this file can stay minimal.
+{}
