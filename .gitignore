@@ -41,3 +41,6 @@ check-*.js
 fetch-crossref.js
 crossref-authors.json
 
+read-gem.js
+*.gem
+

@@ -2,6 +2,7 @@
 layout: page
 title: Final Year Project Supervision
 description: Statistics-based individual research projects for final-year undergraduates.
+img: assets/img/projects-fyp.svg
 importance: 1
 category: work
 related_publications: false

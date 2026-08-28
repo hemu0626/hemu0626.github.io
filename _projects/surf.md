@@ -2,6 +2,7 @@
 layout: page
 title: Summer Undergraduate Research Fellowship (SURF)
 description: Undergraduate summer research projects, 2022 – present.
+img: assets/img/projects-surf.svg
 importance: 2
 category: work
 related_publications: false

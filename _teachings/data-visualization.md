@@ -3,8 +3,7 @@ layout: course
 title: Data Visualization (Teaching Resources)
 description: Data visualization teaching materials, migrated from the standalone course website.
 instructor: Mu He
-year: 2024
-term: Fall
+year: Resources
 course_id: data-visualization
 ---
 
