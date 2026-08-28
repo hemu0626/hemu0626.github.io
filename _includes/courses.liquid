@@ -1,15 +1,17 @@
 {% if site.teachings %}
   <div class="courses">
     {% assign courses_by_year = site.teachings | sort: 'year' | reverse | group_by: 'year' %}
+    {% assign year_groups = courses_by_year | where_exp: 'g', 'g.name != "Resources"' %}
+    {% assign resources_group = courses_by_year | where: 'name', 'Resources' | first %}
 
-    {% for year_group in courses_by_year %}
+    {% for year_group in year_groups %}
       <h2 class="year">{{ year_group.name }}</h2>
       <div class="course-list">
         {% assign year_courses = year_group.items | sort: 'term' | reverse %}
         {% for course in year_courses %}
           <div class="course-item">
             <h3 class="course-title">
-              <a href="{{ course.url | relative_url }}">{{ course.title }}</a>
+              {{ course.title }}
             </h3>
 
             <div class="course-meta">
@@ -31,6 +33,36 @@
         {% endfor %}
       </div>
     {% endfor %}
+
+    {% if resources_group %}
+      <h2 class="year">{{ resources_group.name }}</h2>
+      <div class="course-list">
+        {% assign year_courses = resources_group.items | sort: 'term' | reverse %}
+        {% for course in year_courses %}
+          <div class="course-item">
+            <h3 class="course-title">
+              {{ course.title }}
+            </h3>
+
+            <div class="course-meta">
+              {% if course.term %}
+                <span class="course-term">{{ course.term }}</span>
+              {% endif %}
+
+              {% if course.instructor %}
+                <span class="course-instructor">{{ course.instructor }}</span>
+              {% endif %}
+            </div>
+
+            {% if course.description %}
+              <div class="course-description">
+                {{ course.description | markdownify }}
+              </div>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
   </div>
 {% else %}
   <p>No courses available yet.</p>
