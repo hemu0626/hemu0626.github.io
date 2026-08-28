@@ -45,11 +45,11 @@ horizontal: false
 {% assign surf_cards = sorted_projects | shift %}
 
 <div style="max-width: 1150px; margin-inline: auto;">
-  <div class="row row-cols-1 row-cols-md-2">
+  <div class="row row-cols-2 row-cols-md-4">
     {% assign project = fyp_card %}
     {% include projects.liquid %}
   </div>
-  <div class="row row-cols-1 row-cols-md-2">
+  <div class="row row-cols-2 row-cols-md-4">
     {% for project in surf_cards %}
       {% include projects.liquid %}
     {% endfor %}
