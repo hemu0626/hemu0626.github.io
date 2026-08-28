@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450" role="img" aria-label="FYP">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1e3a5f"/>
+      <stop offset="100%" stop-color="#3b6ea5"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#bg)"/>
+  <g opacity="0.14" stroke="#ffffff" stroke-width="2">
+    <path d="M0 150 H800 M0 300 H800 M200 0 V450 M400 0 V450 M600 0 V450"/>
+  </g>
+  <g transform="translate(120 240)">
+    <rect x="0" y="70" width="40" height="80" rx="4" fill="#9fc5e8"/>
+    <rect x="60" y="20" width="40" height="130" rx="4" fill="#cfe2f3"/>
+    <rect x="120" y="100" width="40" height="50" rx="4" fill="#9fc5e8"/>
+    <path d="M0 60 C 60 40, 90 110, 170 30" fill="none" stroke="#ffd966" stroke-width="6" stroke-linecap="round"/>
+  </g>
+  <text x="120" y="130" font-family="Arial, Helvetica, sans-serif" font-size="72" font-weight="bold" fill="#ffffff">FYP</text>
+  <text x="122" y="172" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#dce9f7">Final Year Project</text>
+  <text x="120" y="404" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#b8cfe8">Statistics-based topics · finance, biostatistics &amp; medicine</text>
+</svg>
