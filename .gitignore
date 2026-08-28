@@ -44,3 +44,5 @@ crossref-authors.json
 read-gem.js
 *.gem
 
+wait-*.js
+
