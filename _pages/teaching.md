@@ -1,7 +1,7 @@
 ---
 layout: page
 permalink: /teaching/
-title: teaching
+title: Teaching
 description: Modules taught and moderation activities at XJTLU.
 nav: true
 nav_order: 4

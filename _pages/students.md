@@ -1,6 +1,6 @@
 ---
 layout: page
-title: students
+title: Students
 permalink: /students/
 description: Current and past graduate students.
 nav: true
