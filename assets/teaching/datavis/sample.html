@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Sample Questions</title>
+
+<script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Data Visualization</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="import.html">Import Data</a>
+</li>
+<li>
+  <a href="datavis.html">Ploting with examples</a>
+</li>
+<li>
+  <a href="Reg.html">Linear Regression with R</a>
+</li>
+<li>
+  <a href="sample.html">Sample Question</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Sample Questions</h1>
+
+</div>
+
+
+<div id="question-1-10-marks" class="section level4">
+<h4>Question 1 (10 marks)</h4>
+<p>Check the R code and results and answer the questions below.</p>
+<pre class="r"><code>library(ggplot2)
+str(diamonds)</code></pre>
+<pre><code>## tibble [53,940 × 10] (S3: tbl_df/tbl/data.frame)
+##  $ carat  : num [1:53940] 0.23 0.21 0.23 0.29 0.31 0.24 0.24 0.26 0.22 0.23 ...
+##  $ cut    : Ord.factor w/ 5 levels &quot;Fair&quot;&lt;&quot;Good&quot;&lt;..: 5 4 2 4 2 3 3 3 1 3 ...
+##  $ color  : Ord.factor w/ 7 levels &quot;D&quot;&lt;&quot;E&quot;&lt;&quot;F&quot;&lt;&quot;G&quot;&lt;..: 2 2 2 6 7 7 6 5 2 5 ...
+##  $ clarity: Ord.factor w/ 8 levels &quot;I1&quot;&lt;&quot;SI2&quot;&lt;&quot;SI1&quot;&lt;..: 2 3 5 4 2 6 7 3 4 5 ...
+##  $ depth  : num [1:53940] 61.5 59.8 56.9 62.4 63.3 62.8 62.3 61.9 65.1 59.4 ...
+##  $ table  : num [1:53940] 55 61 65 58 58 57 57 55 61 61 ...
+##  $ price  : int [1:53940] 326 326 327 334 335 336 336 337 337 338 ...
+##  $ x      : num [1:53940] 3.95 3.89 4.05 4.2 4.34 3.94 3.95 4.07 3.87 4 ...
+##  $ y      : num [1:53940] 3.98 3.84 4.07 4.23 4.35 3.96 3.98 4.11 3.78 4.05 ...
+##  $ z      : num [1:53940] 2.43 2.31 2.31 2.63 2.75 2.48 2.47 2.53 2.49 2.39 ...</code></pre>
+<ol style="list-style-type: lower-alpha">
+<li>How many kinds `cut’ of diamonds in this data set, and how many
+observations collected in total? How many variables(attributes) are
+listed in the dataset? (3 marks)</li>
+</ol>
+<p>Answer: 5 kinds (1 mark), 53940 observations in the data set (1
+mark), 10 variables (1 mark).</p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>What is the name of the package we load below, and what is the name
+of the plot? Hint: Scatter plot or density plot or histogram? (3
+marks)</li>
+</ol>
+<pre class="r"><code>library(ggplot2) #load the package
+ggplot(diamonds[1:100,], aes(x=carat, y=price, shape=cut)) + geom_point(size=2)</code></pre>
+<pre><code>## Warning: Using shapes for an ordinal variable is not advised</code></pre>
+<p><img src="sample_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>Answer: package name: ggplot2 (1 mark), scatter plot (2 marks).</p>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>Based on the boxplot below,</li>
+</ol>
+<pre class="r"><code>library(ggplot2)
+ggplot(diamonds[1:10000,], aes(x=cut, y=price, fill=cut)) + geom_boxplot()</code></pre>
+<p><img src="sample_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>Compare the medians of price among different cut, give comments on
+the boxplot, large difference in price or not based on cut? (4
+marks)</p>
+<p>Answer: The medians are barely same, there is not large
+difference.</p>
+</div>
+<div id="question-2-15-marks" class="section level4">
+<h4>Question 2 (15 marks)</h4>
+<p>Suppose we are modeling a simple linear regression, y is the
+independent variable and x is the dependent variable.</p>
+<pre class="r"><code>x&lt;-c(1,3,4,7,13)
+y&lt;-c(12,11,7,5,4)
+cbind(x,y)</code></pre>
+<pre><code>##       x  y
+## [1,]  1 12
+## [2,]  3 11
+## [3,]  4  7
+## [4,]  7  5
+## [5,] 13  4</code></pre>
+<ol style="list-style-type: lower-alpha">
+<li>Write down the true model. (2 marks)</li>
+</ol>
+<p>Answer: <span
+class="math inline">\(y=\beta_0+\beta_1x+\epsilon\)</span> (2 marks)</p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Write down the estimated model. (2 marks)</li>
+</ol>
+<p>Answer: <span
+class="math inline">\(\hat{y}=\hat{\beta}_0+\hat{\beta}_1x\)</span> or
+<span class="math inline">\(\hat{y}=b_0+b_1x\)</span> (2 marks)</p>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>Write down the residual. (2 marks)</li>
+</ol>
+<p>Answer: <span class="math inline">\(e=y-\hat{y}\)</span> or (<span
+class="math inline">\(\hat{\epsilon}=y-\hat{y}\)</span> ) (2 marks)</p>
+<ol start="4" style="list-style-type: lower-alpha">
+<li>What is the assumption of the residual <span
+class="math inline">\(\epsilon\)</span> (Hint: What is the
+distribution)? (2 marks)</li>
+</ol>
+<p>Answer:</p>
+<ol style="list-style-type: decimal">
+<li>We assume the <span class="math inline">\(\epsilon\)</span> follows
+normal distribution with mean 0 and a constant standard deviation. (1
+mark)</li>
+<li>The error terms are independent. (1 mark)</li>
+</ol>
+<ol start="5" style="list-style-type: lower-alpha">
+<li>Find the sample correlation coefficient <span
+class="math inline">\(r\)</span> between <span
+class="math inline">\(x\)</span> and <span
+class="math inline">\(y\)</span>, by the formula. (4 marks)</li>
+</ol>
+<p><span
+class="math display">\[r=\frac{\sum(x-\bar{x})(y-\bar{y})}{\sqrt{\sum(x-\bar{x})^2\sum(y-\bar{y})^2}}=\frac{\sum(x-\bar{x})(y-\bar{y})}{(n-1)s_xs_y}\]</span>
+(given <span
+class="math inline">\(\sum(x-\bar{x})(y-\bar{y})\)</span>)</p>
+<p>Answer:</p>
+<pre class="r"><code>top&lt;-sum((x-mean(x))*(y-mean(y)))
+sd(x)</code></pre>
+<pre><code>## [1] 4.669047</code></pre>
+<pre class="r"><code>sd(y)</code></pre>
+<pre><code>## [1] 3.563706</code></pre>
+<pre class="r"><code>bot&lt;-4*sd(x)*sd(y)
+top/bot</code></pre>
+<pre><code>## [1] -0.8774507</code></pre>
+<pre class="r"><code>cor(x,y)</code></pre>
+<pre><code>## [1] -0.8774507</code></pre>
+<ol start="6" style="list-style-type: lower-alpha">
+<li>Find the least square estimators <span
+class="math inline">\(\hat{\beta}_0\)</span> and <span
+class="math inline">\(\hat{\beta}_1\)</span>, by the formula. (3
+marks)</li>
+</ol>
+<p><span class="math display">\[\hat{\beta}_1=b_1=r\frac{s_y}{s_x} ,
+\quad \hat{\beta}_0=b_0=\bar{y}-b_1\bar{x}\]</span> Answer:</p>
+<pre class="r"><code>summary(lm(y~x))</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = y ~ x)
+## 
+## Residuals:
+##      1      2      3      4      5 
+##  1.119  1.459 -1.872 -1.862  1.156 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)   
+## (Intercept)  11.5505     1.4766   7.822  0.00435 **
+## x            -0.6697     0.2114  -3.168  0.05054 . 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.974 on 3 degrees of freedom
+## Multiple R-squared:  0.7699, Adjusted R-squared:  0.6932 
+## F-statistic: 10.04 on 1 and 3 DF,  p-value: 0.05054</code></pre>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

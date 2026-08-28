@@ -1,0 +1,1496 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Simple Linear Regression by R</title>
+
+<script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Data Visualization</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="import.html">Import Data</a>
+</li>
+<li>
+  <a href="datavis.html">Ploting with examples</a>
+</li>
+<li>
+  <a href="Reg.html">Linear Regression with R</a>
+</li>
+<li>
+  <a href="sample.html">Sample Question</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Simple Linear Regression by R</h1>
+
+</div>
+
+
+<div id="import-data" class="section level3">
+<h3>Import data</h3>
+<pre class="r"><code>library(tidyverse)
+library(GGally)
+library(knitr)</code></pre>
+<p>Data set and code source:</p>
+<ul>
+<li><a
+href="https://www.andrew.cmu.edu/user/achoulde/94842/lectures/lecture10/lecture10-94842-2020.html">Lecture
+10 by Prof. Alexandra Chouldechova</a></li>
+</ul>
+<p>Most code of the this page are directly copied and I only add some
+basic math for explaining the simple linear regression.</p>
+<pre class="r"><code>crime &lt;- read_delim(&quot;http://www.andrew.cmu.edu/user/achoulde/94842/data/crime_simple.txt&quot;, delim = &quot;\t&quot;)</code></pre>
+<pre class="r"><code>### Rename the data set by code from Prof. Chouldechova
+crime &lt;- crime %&gt;%
+  rename(crime.per.million = R,
+         young.males = Age,
+         is.south = S,
+         average.ed = Ed,
+         exp.per.cap.1960 = Ex0,
+         exp.per.cap.1959 = Ex1,
+         labour.part = LF,
+         male.per.fem = M,
+         population = N,
+         nonwhite = NW,
+         unemp.youth = U1,
+         unemp.adult = U2,
+         median.assets = W,
+         num.low.salary = X) %&gt;%
+  mutate(is.south = as.factor(is.south),
+         average.ed = average.ed / 10,
+         median.assets = median.assets / 100)
+# print summary of the data
+summary(crime)</code></pre>
+<pre><code>##  crime.per.million  young.males    is.south   average.ed    exp.per.cap.1960
+##  Min.   : 34.20    Min.   :119.0   0:31     Min.   : 8.70   Min.   : 45.0   
+##  1st Qu.: 65.85    1st Qu.:130.0   1:16     1st Qu.: 9.75   1st Qu.: 62.5   
+##  Median : 83.10    Median :136.0            Median :10.80   Median : 78.0   
+##  Mean   : 90.51    Mean   :138.6            Mean   :10.56   Mean   : 85.0   
+##  3rd Qu.:105.75    3rd Qu.:146.0            3rd Qu.:11.45   3rd Qu.:104.5   
+##  Max.   :199.30    Max.   :177.0            Max.   :12.20   Max.   :166.0   
+##  exp.per.cap.1959  labour.part     male.per.fem      population    
+##  Min.   : 41.00   Min.   :480.0   Min.   : 934.0   Min.   :  3.00  
+##  1st Qu.: 58.50   1st Qu.:530.5   1st Qu.: 964.5   1st Qu.: 10.00  
+##  Median : 73.00   Median :560.0   Median : 977.0   Median : 25.00  
+##  Mean   : 80.23   Mean   :561.2   Mean   : 983.0   Mean   : 36.62  
+##  3rd Qu.: 97.00   3rd Qu.:593.0   3rd Qu.: 992.0   3rd Qu.: 41.50  
+##  Max.   :157.00   Max.   :641.0   Max.   :1071.0   Max.   :168.00  
+##     nonwhite      unemp.youth      unemp.adult    median.assets  
+##  Min.   :  2.0   Min.   : 70.00   Min.   :20.00   Min.   :2.880  
+##  1st Qu.: 24.0   1st Qu.: 80.50   1st Qu.:27.50   1st Qu.:4.595  
+##  Median : 76.0   Median : 92.00   Median :34.00   Median :5.370  
+##  Mean   :101.1   Mean   : 95.47   Mean   :33.98   Mean   :5.254  
+##  3rd Qu.:132.5   3rd Qu.:104.00   3rd Qu.:38.50   3rd Qu.:5.915  
+##  Max.   :423.0   Max.   :142.00   Max.   :58.00   Max.   :6.890  
+##  num.low.salary 
+##  Min.   :126.0  
+##  1st Qu.:165.5  
+##  Median :176.0  
+##  Mean   :194.0  
+##  3rd Qu.:227.5  
+##  Max.   :276.0</code></pre>
+<pre class="r"><code>str(crime)</code></pre>
+<pre><code>## tibble [47 × 14] (S3: tbl_df/tbl/data.frame)
+##  $ crime.per.million: num [1:47] 79.1 163.5 57.8 196.9 123.4 ...
+##  $ young.males      : num [1:47] 151 143 142 136 141 121 127 131 157 140 ...
+##  $ is.south         : Factor w/ 2 levels &quot;0&quot;,&quot;1&quot;: 2 1 2 1 1 1 2 2 2 1 ...
+##  $ average.ed       : num [1:47] 9.1 11.3 8.9 12.1 12.1 11 11.1 10.9 9 11.8 ...
+##  $ exp.per.cap.1960 : num [1:47] 58 103 45 149 109 118 82 115 65 71 ...
+##  $ exp.per.cap.1959 : num [1:47] 56 95 44 141 101 115 79 109 62 68 ...
+##  $ labour.part      : num [1:47] 510 583 533 577 591 547 519 542 553 632 ...
+##  $ male.per.fem     : num [1:47] 950 1012 969 994 985 ...
+##  $ population       : num [1:47] 33 13 18 157 18 25 4 50 39 7 ...
+##  $ nonwhite         : num [1:47] 301 102 219 80 30 44 139 179 286 15 ...
+##  $ unemp.youth      : num [1:47] 108 96 94 102 91 84 97 79 81 100 ...
+##  $ unemp.adult      : num [1:47] 41 36 33 39 20 29 38 35 28 24 ...
+##  $ median.assets    : num [1:47] 3.94 5.57 3.18 6.73 5.78 6.89 6.2 4.72 4.21 5.26 ...
+##  $ num.low.salary   : num [1:47] 261 194 250 167 174 126 168 206 239 174 ...</code></pre>
+</div>
+<div id="visualization" class="section level3">
+<h3>Visualization</h3>
+<p>You can start by feeding everything into a regression, but it’s often
+a better idea to construct some simple plots (e.g., scatterplots and
+boxplots) and summary statistics to get some sense of how the data
+behaves.</p>
+<pre class="r"><code># Scatter plot of outcome (crime.per.million) against average.ed
+qplot(average.ed, crime.per.million, data = crime)</code></pre>
+<pre><code>## Warning: `qplot()` was deprecated in ggplot2 3.4.0.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+## generated.</code></pre>
+<p><img src="Reg_files/figure-html/unnamed-chunk-4-1.png" width="480" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># correlation between education and crime
+with(crime, cor(average.ed, crime.per.million))</code></pre>
+<pre><code>## [1] 0.3228349</code></pre>
+<p>This seems to suggest that higher levels of average education are
+associated with higher crime rates. <em>Can you come up with an
+explanation for this phenomenon?</em></p>
+<pre class="r"><code># Scatter plot of outcome (crime.per.million) against median.assets
+qplot(median.assets, crime.per.million, data = crime)</code></pre>
+<p><img src="Reg_files/figure-html/unnamed-chunk-5-1.png" width="480" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># correlation between education and crime
+with(crime, cor(median.assets, crime.per.million))</code></pre>
+<pre><code>## [1] 0.4413199</code></pre>
+<p>There also appears to be a positive association between median assets
+and crime rates.</p>
+<pre class="r"><code># Boxplots showing crime rate broken down by southern vs non-southern state
+qplot(is.south, crime.per.million, geom = &quot;boxplot&quot;, data = crime)</code></pre>
+<p><img src="Reg_files/figure-html/unnamed-chunk-6-1.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+<div id="theory-behind-simple-linear-regression-model"
+class="section level3">
+<h3>Theory behind simple linear regression model</h3>
+<p>Suppose we are modeling a simple linear regression, y is the
+independent variable and x is the dependent variable.</p>
+<pre class="r"><code>x&lt;-c(1,3,4,7,8)
+y&lt;-c(12,11,7,5,3)
+cbind(x,y)</code></pre>
+<pre><code>##      x  y
+## [1,] 1 12
+## [2,] 3 11
+## [3,] 4  7
+## [4,] 7  5
+## [5,] 8  3</code></pre>
+<div id="true-model" class="section level4">
+<h4>True model</h4>
+<p><span class="math inline">\(y=\beta_0+\beta_1x+\epsilon\)</span></p>
+</div>
+<div id="estimated-model" class="section level4">
+<h4>Estimated model</h4>
+<p><span
+class="math inline">\(\hat{y}=\hat{\beta}_0+\hat{\beta}_1x\)</span> or
+<span class="math inline">\(\hat{y}=b_0+b_1x\)</span></p>
+</div>
+<div id="residual" class="section level4">
+<h4>Residual</h4>
+<p><span class="math inline">\(e=y-\hat{y}\)</span> or (<span
+class="math inline">\(\hat{\epsilon}=y-\hat{y}\)</span> )</p>
+</div>
+<div id="assumption-of-the-residual-epsilon." class="section level4">
+<h4>Assumption of the residual <span
+class="math inline">\(\epsilon\)</span>.</h4>
+<ul>
+<li>The <span class="math inline">\(\epsilon\)</span> follows normal
+distribution with mean 0 and a constant standard deviation.</li>
+<li>The error terms are independent.</li>
+</ul>
+<p>We have other further details in the assumption, we will learn to
+check later.</p>
+</div>
+<div id="sample-correlation-coefficient-r-between-x-and-y"
+class="section level4">
+<h4>Sample correlation coefficient <span
+class="math inline">\(r\)</span> between <span
+class="math inline">\(x\)</span> and <span
+class="math inline">\(y\)</span></h4>
+<p><span
+class="math display">\[r=\frac{\sum(x-\bar{x})(y-\bar{y})}{\sqrt{\sum(x-\bar{x})^2\sum(y-\bar{y})^2}}=\frac{\sum(x-\bar{x})(y-\bar{y})}{(n-1)s_xs_y}\]</span>
+(given <span class="math inline">\(\sum(x-\bar{x})(y-\bar{y})=
+-42.8\)</span>, <span class="math inline">\(s_x=2.88\)</span>, <span
+class="math inline">\(s_y=3.85\)</span>)</p>
+<pre class="r"><code>cor(x,y)</code></pre>
+<pre><code>## [1] -0.9654146</code></pre>
+</div>
+<div id="least-square-estimators-hatbeta_0-and-hatbeta_1"
+class="section level4">
+<h4>Least square estimators <span
+class="math inline">\(\hat{\beta}_0\)</span> and <span
+class="math inline">\(\hat{\beta}_1\)</span></h4>
+<p><span class="math display">\[\hat{\beta}_1=b_1=r\frac{s_y}{s_x} ,
+\quad \hat{\beta}_0=b_0=\bar{y}-b_1\bar{x}\]</span></p>
+<pre class="r"><code>summary(lm(y~x))</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = y ~ x)
+## 
+## Residuals:
+##       1       2       3       4       5 
+## -0.2410  1.3373 -1.3735  0.4940 -0.2169 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)   
+## (Intercept)   13.530      1.060  12.767  0.00104 **
+## x             -1.289      0.201  -6.414  0.00768 **
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.158 on 3 degrees of freedom
+## Multiple R-squared:  0.932,  Adjusted R-squared:  0.9094 
+## F-statistic: 41.13 on 1 and 3 DF,  p-value: 0.007681</code></pre>
+</div>
+</div>
+<div id="constructing-a-regression-model-by-data-crime"
+class="section level3">
+<h3>Constructing a regression model by data ‘crime’</h3>
+<p>To construct a linear regression model in R, we use the
+<code>lm()</code> function. You can specify the regression model in
+various ways. The simplest is often to use the formula
+specification.</p>
+<p>The first model we fit is a regression of the outcome
+(<code>crimes.per.million</code>) against all the other variables in the
+data set. You can either write out all the variable names. or use the
+shorthand <code>y ~ .</code> to specify that you want to include all the
+variables in your regression.</p>
+<pre class="r"><code>crime.lm &lt;- lm(crime.per.million ~ ., data = crime)
+# Summary of the linear regression model
+crime.lm</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = crime.per.million ~ ., data = crime)
+## 
+## Coefficients:
+##      (Intercept)       young.males         is.south1        average.ed  
+##       -6.918e+02         1.040e+00        -8.308e+00         1.802e+01  
+## exp.per.cap.1960  exp.per.cap.1959       labour.part      male.per.fem  
+##        1.608e+00        -6.673e-01        -4.103e-02         1.648e-01  
+##       population          nonwhite       unemp.youth       unemp.adult  
+##       -4.128e-02         7.175e-03        -6.017e-01         1.792e+00  
+##    median.assets    num.low.salary  
+##        1.374e+01         7.929e-01</code></pre>
+<pre class="r"><code>summary(crime.lm)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = crime.per.million ~ ., data = crime)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -34.884 -11.923  -1.135  13.495  50.560 
+## 
+## Coefficients:
+##                    Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)      -6.918e+02  1.559e+02  -4.438 9.56e-05 ***
+## young.males       1.040e+00  4.227e-01   2.460  0.01931 *  
+## is.south1        -8.308e+00  1.491e+01  -0.557  0.58117    
+## average.ed        1.802e+01  6.497e+00   2.773  0.00906 ** 
+## exp.per.cap.1960  1.608e+00  1.059e+00   1.519  0.13836    
+## exp.per.cap.1959 -6.673e-01  1.149e+00  -0.581  0.56529    
+## labour.part      -4.103e-02  1.535e-01  -0.267  0.79087    
+## male.per.fem      1.648e-01  2.099e-01   0.785  0.43806    
+## population       -4.128e-02  1.295e-01  -0.319  0.75196    
+## nonwhite          7.175e-03  6.387e-02   0.112  0.91124    
+## unemp.youth      -6.017e-01  4.372e-01  -1.376  0.17798    
+## unemp.adult       1.792e+00  8.561e-01   2.093  0.04407 *  
+## median.assets     1.374e+01  1.058e+01   1.298  0.20332    
+## num.low.salary    7.929e-01  2.351e-01   3.373  0.00191 ** 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 21.94 on 33 degrees of freedom
+## Multiple R-squared:  0.7692, Adjusted R-squared:  0.6783 
+## F-statistic: 8.462 on 13 and 33 DF,  p-value: 3.686e-07</code></pre>
+<p>R’s default is to output values in scientific notation. This can make
+it hard to interpret the numbers. Here’s some code that can be used to
+force full printout of numbers.</p>
+<pre class="r"><code>options(scipen=4)  # Set scipen = 0 to get back to default</code></pre>
+<pre class="r"><code>summary(crime.lm)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = crime.per.million ~ ., data = crime)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -34.884 -11.923  -1.135  13.495  50.560 
+## 
+## Coefficients:
+##                     Estimate  Std. Error t value  Pr(&gt;|t|)    
+## (Intercept)      -691.837588  155.887918  -4.438 0.0000956 ***
+## young.males         1.039810    0.422708   2.460   0.01931 *  
+## is.south1          -8.308313   14.911588  -0.557   0.58117    
+## average.ed         18.016011    6.496504   2.773   0.00906 ** 
+## exp.per.cap.1960    1.607818    1.058667   1.519   0.13836    
+## exp.per.cap.1959   -0.667258    1.148773  -0.581   0.56529    
+## labour.part        -0.041031    0.153477  -0.267   0.79087    
+## male.per.fem        0.164795    0.209932   0.785   0.43806    
+## population         -0.041277    0.129516  -0.319   0.75196    
+## nonwhite            0.007175    0.063867   0.112   0.91124    
+## unemp.youth        -0.601675    0.437154  -1.376   0.17798    
+## unemp.adult         1.792263    0.856111   2.093   0.04407 *  
+## median.assets      13.735847   10.583028   1.298   0.20332    
+## num.low.salary      0.792933    0.235085   3.373   0.00191 ** 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 21.94 on 33 degrees of freedom
+## Multiple R-squared:  0.7692, Adjusted R-squared:  0.6783 
+## F-statistic: 8.462 on 13 and 33 DF,  p-value: 0.0000003686</code></pre>
+<p>Looking at the p-values, it looks like <code>num.low.salary</code>
+(number of families per 1000 earning below 1/2 the median income),
+<code>unemp.adult</code> (Unemployment rate of urban males per 1000 of
+age 35-39), <code>average.ed</code> (Mean # of years of schooling 25 or
+older), and <code>young.males</code> (number of males of age 14-24 per
+1000 population) are all statistically significant predictors of crime
+rate.</p>
+<p>The coefficients for these predictors are all positive, so crime
+rates are positively associated with wealth inequality, adult
+unemployment rates, average education levels, and high rates of young
+males in the population.</p>
+<div id="exploring-the-lm-object" class="section level5">
+<h5>Exploring the lm object</h5>
+<p>What kind of output do we get when we run a linear model
+(<code>lm</code>) in R?</p>
+<pre class="r"><code># List all attributes of the linear model
+attributes(crime.lm)</code></pre>
+<pre><code>## $names
+##  [1] &quot;coefficients&quot;  &quot;residuals&quot;     &quot;effects&quot;       &quot;rank&quot;         
+##  [5] &quot;fitted.values&quot; &quot;assign&quot;        &quot;qr&quot;            &quot;df.residual&quot;  
+##  [9] &quot;contrasts&quot;     &quot;xlevels&quot;       &quot;call&quot;          &quot;terms&quot;        
+## [13] &quot;model&quot;        
+## 
+## $class
+## [1] &quot;lm&quot;</code></pre>
+<pre class="r"><code># coefficients
+crime.lm$coef</code></pre>
+<pre><code>##      (Intercept)      young.males        is.south1       average.ed 
+##   -691.837587905      1.039809653     -8.308312889     18.016010601 
+## exp.per.cap.1960 exp.per.cap.1959      labour.part     male.per.fem 
+##      1.607818377     -0.667258285     -0.041031047      0.164794968 
+##       population         nonwhite      unemp.youth      unemp.adult 
+##     -0.041276887      0.007174688     -0.601675298      1.792262901 
+##    median.assets   num.low.salary 
+##     13.735847285      0.792932786</code></pre>
+<p>None of the attributes seem to give you p-values. Here’s what you can
+do to get a table that allows you to extract p-values.</p>
+<pre class="r"><code># Pull coefficients element from summary(lm) object
+round(summary(crime.lm)$coef, 3)</code></pre>
+<pre><code>##                  Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept)      -691.838    155.888  -4.438    0.000
+## young.males         1.040      0.423   2.460    0.019
+## is.south1          -8.308     14.912  -0.557    0.581
+## average.ed         18.016      6.497   2.773    0.009
+## exp.per.cap.1960    1.608      1.059   1.519    0.138
+## exp.per.cap.1959   -0.667      1.149  -0.581    0.565
+## labour.part        -0.041      0.153  -0.267    0.791
+## male.per.fem        0.165      0.210   0.785    0.438
+## population         -0.041      0.130  -0.319    0.752
+## nonwhite            0.007      0.064   0.112    0.911
+## unemp.youth        -0.602      0.437  -1.376    0.178
+## unemp.adult         1.792      0.856   2.093    0.044
+## median.assets      13.736     10.583   1.298    0.203
+## num.low.salary      0.793      0.235   3.373    0.002</code></pre>
+<p>If you want a particular p-value, you can get it by doing the
+following</p>
+<pre class="r"><code># Pull the coefficients table from summary(lm)
+crime.lm.coef &lt;- round(summary(crime.lm)$coef, 3)
+# See what this gives
+class(crime.lm.coef)</code></pre>
+<pre><code>## [1] &quot;matrix&quot; &quot;array&quot;</code></pre>
+<pre class="r"><code>attributes(crime.lm.coef)</code></pre>
+<pre><code>## $dim
+## [1] 14  4
+## 
+## $dimnames
+## $dimnames[[1]]
+##  [1] &quot;(Intercept)&quot;      &quot;young.males&quot;      &quot;is.south1&quot;        &quot;average.ed&quot;      
+##  [5] &quot;exp.per.cap.1960&quot; &quot;exp.per.cap.1959&quot; &quot;labour.part&quot;      &quot;male.per.fem&quot;    
+##  [9] &quot;population&quot;       &quot;nonwhite&quot;         &quot;unemp.youth&quot;      &quot;unemp.adult&quot;     
+## [13] &quot;median.assets&quot;    &quot;num.low.salary&quot;  
+## 
+## $dimnames[[2]]
+## [1] &quot;Estimate&quot;   &quot;Std. Error&quot; &quot;t value&quot;    &quot;Pr(&gt;|t|)&quot;</code></pre>
+<pre class="r"><code>crime.lm.coef[&quot;average.ed&quot;, &quot;Pr(&gt;|t|)&quot;]</code></pre>
+<pre><code>## [1] 0.009</code></pre>
+<p>The coefficients table is a matrix with named rows and columns. You
+can therefore access particular cells either by numeric index, or by
+name (as in the example above).</p>
+</div>
+<div id="plotting-the-lm-object" class="section level5">
+<h5>Plotting the lm object</h5>
+<pre class="r"><code>plot(crime.lm)</code></pre>
+<p><img src="Reg_files/figure-html/unnamed-chunk-16-1.png" width="576" style="display: block; margin: auto;" /><img src="Reg_files/figure-html/unnamed-chunk-16-2.png" width="576" style="display: block; margin: auto;" /><img src="Reg_files/figure-html/unnamed-chunk-16-3.png" width="576" style="display: block; margin: auto;" /><img src="Reg_files/figure-html/unnamed-chunk-16-4.png" width="576" style="display: block; margin: auto;" /></p>
+<p>These four plots are important diagnostic tools in assessing whether
+the linear model is appropriate. The first two plots are the most
+important, but the last two can also help with identifying outliers and
+non-linearities.</p>
+<p><strong>Residuals vs. Fitted</strong> When a linear model is
+appropriate, we expect</p>
+<ol style="list-style-type: decimal">
+<li><p>the residuals will have constant variance when plotted against
+fitted values; and</p></li>
+<li><p>the residuals and fitted values will be uncorrelated.</p></li>
+</ol>
+<p>If there are clear trends in the residual plot, or the plot looks
+like a funnel, these are clear indicators that the given linear model is
+inappropriate.</p>
+<p><strong>Normal QQ plot</strong> You can use a linear model for
+prediction even if the underlying normality assumptions don’t hold.
+However, in order for the p-values to be believable, the residuals from
+the regression must look approximately normally distributed.</p>
+<p><strong>Scale-location plot</strong> This is another version of the
+residuals vs fitted plot. There should be no discernible trends in this
+plot.</p>
+<p><strong>Residuals vs Leverage</strong>. Leverage is a measure of how
+much an observation influenced the model fit. It’s a one-number summary
+of how different the model fit would be if the given observation was
+excluded, compared to the model fit where the observation is included.
+Points with <em>high residual</em> (poorly described by the model) and
+<em>high leverage</em> (high influence on model fit) are outliers.
+They’re skewing the model fit away from the rest of the data, and don’t
+really seem to fit with the rest of the data.</p>
+<blockquote>
+<p>The residual vs fitted and scale-location diagnostic plots for the
+crime data aren’t especially insightful, largely due to the very small
+sample size. Below we look at the <code>diamonds</code> data to see what
+a more typical anaylsis of linear model diagnostic plots might
+reveal.</p>
+</blockquote>
+</div>
+<div id="diagnostic-plots-for-diamonds-data." class="section level5">
+<h5>Diagnostic plots for diamonds data.</h5>
+<pre class="r"><code>diamonds.lm &lt;- lm(price ~ carat + cut + clarity + color, data = diamonds)
+
+plot(diamonds.lm)</code></pre>
+<p><img src="Reg_files/figure-html/unnamed-chunk-17-1.png" width="672" /><img src="Reg_files/figure-html/unnamed-chunk-17-2.png" width="672" /><img src="Reg_files/figure-html/unnamed-chunk-17-3.png" width="672" /><img src="Reg_files/figure-html/unnamed-chunk-17-4.png" width="672" /></p>
+<p><strong>Residuals vs. Fitted</strong></p>
+<p>There is a clear indication of non-linearity present in this plot.
+Furthermore, we see that the variance appears to be increasing in fitted
+value.</p>
+<p><strong>Normal QQ plot</strong> The residuals appear highly
+non-normal. Both the lower tail and upper tail are heavier than we would
+expect under normality. This may be due to the non-constant variance
+issue we observed in the Residuals vs. Fitted plot.</p>
+<p><strong>Scale-location plot</strong> We see a clear increasing trend
+in residual variance that runs through most of the plot. This is
+indicated by the upward slope of the red line, which we can interpret as
+the standard deviation of the residuals at the given level of fitted
+value.</p>
+<p><strong>Residuals vs Leverage</strong>. None of the points appear to
+be outliers.</p>
+<blockquote>
+<p>Here’s what happens if we log-transform both the price and carat
+variables.</p>
+</blockquote>
+<pre class="r"><code>diamonds.lm2 &lt;- lm(log(price) ~ I(log(carat)) + cut + clarity + color, data = diamonds)
+
+plot(diamonds.lm2)</code></pre>
+<p><img src="Reg_files/figure-html/unnamed-chunk-18-1.png" width="672" /><img src="Reg_files/figure-html/unnamed-chunk-18-2.png" width="672" /><img src="Reg_files/figure-html/unnamed-chunk-18-3.png" width="672" /><img src="Reg_files/figure-html/unnamed-chunk-18-4.png" width="672" /></p>
+<p>While there remains a very slight indication of non-linearity in the
+Residual vs Fitted plot, the non-constant variance issue appears to have
+been addressed by the variable transformations. The Normal QQ plot
+indicates that the residuals have a heavier tailed distribution, but
+since we have a very large sample size this should not cause problems
+for inference. There do not appear to be any clear outliers in the
+data.</p>
+</div>
+<div id="collinearity-and-pairs-plots" class="section level5">
+<h5>Collinearity and pairs plots</h5>
+<p>In your regression class you probably learned that
+<strong>collinearity</strong> can throw off the coefficient estimates.
+To diagnose collinearity, we can do a plot matrix. In base graphics,
+this can be accomplished via the <code>pairs</code> function.</p>
+<p>As a demo, let’s look at some of the economic indicators in our data
+set.</p>
+<pre class="r"><code>economic.var.names &lt;- c(&quot;exp.per.cap.1959&quot;, &quot;exp.per.cap.1960&quot;, &quot;unemp.adult&quot;, &quot;unemp.youth&quot;, &quot;labour.part&quot;, &quot;median.assets&quot;)
+pairs(crime[,economic.var.names])</code></pre>
+<p><img src="Reg_files/figure-html/unnamed-chunk-19-1.png" width="960" /></p>
+<pre class="r"><code>round(cor(crime[,economic.var.names]), 3)</code></pre>
+<pre><code>##                  exp.per.cap.1959 exp.per.cap.1960 unemp.adult unemp.youth
+## exp.per.cap.1959            1.000            0.994       0.169      -0.052
+## exp.per.cap.1960            0.994            1.000       0.185      -0.044
+## unemp.adult                 0.169            0.185       1.000       0.746
+## unemp.youth                -0.052           -0.044       0.746       1.000
+## labour.part                 0.106            0.121      -0.421      -0.229
+## median.assets               0.794            0.787       0.092       0.045
+##                  labour.part median.assets
+## exp.per.cap.1959       0.106         0.794
+## exp.per.cap.1960       0.121         0.787
+## unemp.adult           -0.421         0.092
+## unemp.youth           -0.229         0.045
+## labour.part            1.000         0.295
+## median.assets          0.295         1.000</code></pre>
+<p>Since the above-diagonal and below-diagonal plots contain essentially
+the same information, it’s often more useful to display some other
+values in one of the spaces. In the example below, we use the panel.cor
+function from the <code>pairs()</code> documentation to add text below
+the diagonal.</p>
+<pre class="r"><code># Function taken from ?pairs Example section.  
+panel.cor &lt;- function(x, y, digits = 2, prefix = &quot;&quot;, cex.cor, ...)
+{
+    usr &lt;- par(&quot;usr&quot;); on.exit(par(usr))
+    par(usr = c(0, 1, 0, 1))
+    r &lt;- abs(cor(x, y))
+    txt &lt;- format(c(r, 0.123456789), digits = digits)[1]
+    txt &lt;- paste0(prefix, txt)
+    if(missing(cex.cor)) cex.cor &lt;- 0.8/strwidth(txt)
+    text(0.5, 0.5, txt, cex = pmax(1, cex.cor * r))
+}
+
+# Use panel.cor to display correlations in lower panel.
+pairs(crime[,economic.var.names], lower.panel = panel.cor)</code></pre>
+<pre><code>## Warning in par(usr): argument 1 does not name a graphical parameter
+## Warning in par(usr): argument 1 does not name a graphical parameter
+## Warning in par(usr): argument 1 does not name a graphical parameter
+## Warning in par(usr): argument 1 does not name a graphical parameter
+## Warning in par(usr): argument 1 does not name a graphical parameter
+## Warning in par(usr): argument 1 does not name a graphical parameter
+## Warning in par(usr): argument 1 does not name a graphical parameter
+## Warning in par(usr): argument 1 does not name a graphical parameter
+## Warning in par(usr): argument 1 does not name a graphical parameter
+## Warning in par(usr): argument 1 does not name a graphical parameter
+## Warning in par(usr): argument 1 does not name a graphical parameter
+## Warning in par(usr): argument 1 does not name a graphical parameter
+## Warning in par(usr): argument 1 does not name a graphical parameter
+## Warning in par(usr): argument 1 does not name a graphical parameter
+## Warning in par(usr): argument 1 does not name a graphical parameter</code></pre>
+<p><img src="Reg_files/figure-html/unnamed-chunk-20-1.png" width="960" /></p>
+<pre class="r"><code># ggpairs from GGally library
+# Unlike pairs(), ggpairs() works with non-numeric
+# predictors in addition to numeric ones.
+# Consider ggpairs() for your final project
+ggpairs(crime[,c(economic.var.names, &quot;is.south&quot;)], axisLabels = &quot;internal&quot;)</code></pre>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="Reg_files/figure-html/unnamed-chunk-21-1.png" width="960" /></p>
+<p>Looking at the plot, we see that many of the variables are very
+strongly correlated. In particular, police expenditures are pretty much
+identical in 1959 and 1960. This is an extreme case of collinearity.
+Also, unsurprisingly, youth unemployment and adult unemployment are also
+highly correlated.</p>
+<p>Let’s just include the 1960 police expenditure variable, and also
+drop the youth unemployment variable. We’ll do this using the
+<code>update()</code> function. Here’s what happens.</p>
+<pre class="r"><code>crime.lm.2 &lt;- update(crime.lm, . ~ . - exp.per.cap.1959 - unemp.youth)
+summary(crime.lm.2)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = crime.per.million ~ young.males + is.south + average.ed + 
+##     exp.per.cap.1960 + labour.part + male.per.fem + population + 
+##     nonwhite + unemp.adult + median.assets + num.low.salary, 
+##     data = crime)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -35.82 -11.57  -1.51  10.63  55.02 
+## 
+## Coefficients:
+##                     Estimate  Std. Error t value  Pr(&gt;|t|)    
+## (Intercept)      -633.438828  145.470340  -4.354  0.000111 ***
+## young.males         1.126883    0.418791   2.691  0.010853 *  
+## is.south1          -0.556600   13.883248  -0.040  0.968248    
+## average.ed         15.328028    6.202516   2.471  0.018476 *  
+## exp.per.cap.1960    1.138299    0.226977   5.015 0.0000153 ***
+## labour.part         0.068716    0.133540   0.515  0.610087    
+## male.per.fem        0.003021    0.173041   0.017  0.986172    
+## population         -0.064477    0.128278  -0.503  0.618367    
+## nonwhite           -0.013794    0.061901  -0.223  0.824960    
+## unemp.adult         0.931498    0.541803   1.719  0.094402 .  
+## median.assets      15.158975   10.524458   1.440  0.158653    
+## num.low.salary      0.825936    0.234189   3.527  0.001197 ** 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 21.98 on 35 degrees of freedom
+## Multiple R-squared:  0.7543, Adjusted R-squared:  0.6771 
+## F-statistic: 9.769 on 11 and 35 DF,  p-value: 0.00000009378</code></pre>
+<pre class="r"><code>crime.lm.summary.2 &lt;- summary(crime.lm.2)</code></pre>
+<p>When outputting regression results, it’s always good to use the
+<code>kable()</code> function to make things look a little nicer.</p>
+<pre class="r"><code>kable(crime.lm.summary.2$coef, 
+      digits = c(3, 3, 3, 4), format = &#39;markdown&#39;)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">Estimate</th>
+<th align="right">Std. Error</th>
+<th align="right">t value</th>
+<th align="right">Pr(&gt;|t|)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">-633.439</td>
+<td align="right">145.470</td>
+<td align="right">-4.354</td>
+<td align="right">0.0001</td>
+</tr>
+<tr class="even">
+<td align="left">young.males</td>
+<td align="right">1.127</td>
+<td align="right">0.419</td>
+<td align="right">2.691</td>
+<td align="right">0.0109</td>
+</tr>
+<tr class="odd">
+<td align="left">is.south1</td>
+<td align="right">-0.557</td>
+<td align="right">13.883</td>
+<td align="right">-0.040</td>
+<td align="right">0.9682</td>
+</tr>
+<tr class="even">
+<td align="left">average.ed</td>
+<td align="right">15.328</td>
+<td align="right">6.203</td>
+<td align="right">2.471</td>
+<td align="right">0.0185</td>
+</tr>
+<tr class="odd">
+<td align="left">exp.per.cap.1960</td>
+<td align="right">1.138</td>
+<td align="right">0.227</td>
+<td align="right">5.015</td>
+<td align="right">0.0000</td>
+</tr>
+<tr class="even">
+<td align="left">labour.part</td>
+<td align="right">0.069</td>
+<td align="right">0.134</td>
+<td align="right">0.515</td>
+<td align="right">0.6101</td>
+</tr>
+<tr class="odd">
+<td align="left">male.per.fem</td>
+<td align="right">0.003</td>
+<td align="right">0.173</td>
+<td align="right">0.017</td>
+<td align="right">0.9862</td>
+</tr>
+<tr class="even">
+<td align="left">population</td>
+<td align="right">-0.064</td>
+<td align="right">0.128</td>
+<td align="right">-0.503</td>
+<td align="right">0.6184</td>
+</tr>
+<tr class="odd">
+<td align="left">nonwhite</td>
+<td align="right">-0.014</td>
+<td align="right">0.062</td>
+<td align="right">-0.223</td>
+<td align="right">0.8250</td>
+</tr>
+<tr class="even">
+<td align="left">unemp.adult</td>
+<td align="right">0.931</td>
+<td align="right">0.542</td>
+<td align="right">1.719</td>
+<td align="right">0.0944</td>
+</tr>
+<tr class="odd">
+<td align="left">median.assets</td>
+<td align="right">15.159</td>
+<td align="right">10.524</td>
+<td align="right">1.440</td>
+<td align="right">0.1587</td>
+</tr>
+<tr class="even">
+<td align="left">num.low.salary</td>
+<td align="right">0.826</td>
+<td align="right">0.234</td>
+<td align="right">3.527</td>
+<td align="right">0.0012</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="thinking-more-critically-about-linear-regression"
+class="section level3">
+<h3>Thinking more critically about linear regression</h3>
+<p>So far we have seen how to run a linear regression using the
+<code>lm()</code> function and how to use the <code>plot()</code> and
+<code>pairs()</code> commands to diagnose common problems such as
+non-constant variance, outliers, and collinearity among predictors. In
+this section we’ll delve deeper into linear regression to better
+understand how to interpret the output. Our discussion will focus on
+interpreting factors (categorical variables) and interaction terms.</p>
+<p>Let’s pick up where we just left off. At the last stage, we had a
+regression with a couple of variable removed to address collinearity
+issues.</p>
+<pre class="r"><code>crime.lm &lt;- lm(crime.per.million ~ ., data = crime)
+
+# Remove 1959 expenditure and youth unemployment
+crime.lm2 &lt;- update(crime.lm, . ~ . - exp.per.cap.1959 - unemp.youth)</code></pre>
+<p>Here’s a comparison of the regression models (with and without the
+collinearity problem).</p>
+<pre class="r"><code>kable(summary(crime.lm)$coef, 
+      digits = c(3, 3, 3, 4), format = &#39;markdown&#39;)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">Estimate</th>
+<th align="right">Std. Error</th>
+<th align="right">t value</th>
+<th align="right">Pr(&gt;|t|)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">-691.838</td>
+<td align="right">155.888</td>
+<td align="right">-4.438</td>
+<td align="right">0.0001</td>
+</tr>
+<tr class="even">
+<td align="left">young.males</td>
+<td align="right">1.040</td>
+<td align="right">0.423</td>
+<td align="right">2.460</td>
+<td align="right">0.0193</td>
+</tr>
+<tr class="odd">
+<td align="left">is.south1</td>
+<td align="right">-8.308</td>
+<td align="right">14.912</td>
+<td align="right">-0.557</td>
+<td align="right">0.5812</td>
+</tr>
+<tr class="even">
+<td align="left">average.ed</td>
+<td align="right">18.016</td>
+<td align="right">6.497</td>
+<td align="right">2.773</td>
+<td align="right">0.0091</td>
+</tr>
+<tr class="odd">
+<td align="left">exp.per.cap.1960</td>
+<td align="right">1.608</td>
+<td align="right">1.059</td>
+<td align="right">1.519</td>
+<td align="right">0.1384</td>
+</tr>
+<tr class="even">
+<td align="left">exp.per.cap.1959</td>
+<td align="right">-0.667</td>
+<td align="right">1.149</td>
+<td align="right">-0.581</td>
+<td align="right">0.5653</td>
+</tr>
+<tr class="odd">
+<td align="left">labour.part</td>
+<td align="right">-0.041</td>
+<td align="right">0.153</td>
+<td align="right">-0.267</td>
+<td align="right">0.7909</td>
+</tr>
+<tr class="even">
+<td align="left">male.per.fem</td>
+<td align="right">0.165</td>
+<td align="right">0.210</td>
+<td align="right">0.785</td>
+<td align="right">0.4381</td>
+</tr>
+<tr class="odd">
+<td align="left">population</td>
+<td align="right">-0.041</td>
+<td align="right">0.130</td>
+<td align="right">-0.319</td>
+<td align="right">0.7520</td>
+</tr>
+<tr class="even">
+<td align="left">nonwhite</td>
+<td align="right">0.007</td>
+<td align="right">0.064</td>
+<td align="right">0.112</td>
+<td align="right">0.9112</td>
+</tr>
+<tr class="odd">
+<td align="left">unemp.youth</td>
+<td align="right">-0.602</td>
+<td align="right">0.437</td>
+<td align="right">-1.376</td>
+<td align="right">0.1780</td>
+</tr>
+<tr class="even">
+<td align="left">unemp.adult</td>
+<td align="right">1.792</td>
+<td align="right">0.856</td>
+<td align="right">2.093</td>
+<td align="right">0.0441</td>
+</tr>
+<tr class="odd">
+<td align="left">median.assets</td>
+<td align="right">13.736</td>
+<td align="right">10.583</td>
+<td align="right">1.298</td>
+<td align="right">0.2033</td>
+</tr>
+<tr class="even">
+<td align="left">num.low.salary</td>
+<td align="right">0.793</td>
+<td align="right">0.235</td>
+<td align="right">3.373</td>
+<td align="right">0.0019</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>crime.lm.summary2 &lt;- summary(crime.lm2)
+kable(crime.lm.summary2$coef, 
+      digits = c(3, 3, 3, 4), format = &#39;markdown&#39;)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">Estimate</th>
+<th align="right">Std. Error</th>
+<th align="right">t value</th>
+<th align="right">Pr(&gt;|t|)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">-633.439</td>
+<td align="right">145.470</td>
+<td align="right">-4.354</td>
+<td align="right">0.0001</td>
+</tr>
+<tr class="even">
+<td align="left">young.males</td>
+<td align="right">1.127</td>
+<td align="right">0.419</td>
+<td align="right">2.691</td>
+<td align="right">0.0109</td>
+</tr>
+<tr class="odd">
+<td align="left">is.south1</td>
+<td align="right">-0.557</td>
+<td align="right">13.883</td>
+<td align="right">-0.040</td>
+<td align="right">0.9682</td>
+</tr>
+<tr class="even">
+<td align="left">average.ed</td>
+<td align="right">15.328</td>
+<td align="right">6.203</td>
+<td align="right">2.471</td>
+<td align="right">0.0185</td>
+</tr>
+<tr class="odd">
+<td align="left">exp.per.cap.1960</td>
+<td align="right">1.138</td>
+<td align="right">0.227</td>
+<td align="right">5.015</td>
+<td align="right">0.0000</td>
+</tr>
+<tr class="even">
+<td align="left">labour.part</td>
+<td align="right">0.069</td>
+<td align="right">0.134</td>
+<td align="right">0.515</td>
+<td align="right">0.6101</td>
+</tr>
+<tr class="odd">
+<td align="left">male.per.fem</td>
+<td align="right">0.003</td>
+<td align="right">0.173</td>
+<td align="right">0.017</td>
+<td align="right">0.9862</td>
+</tr>
+<tr class="even">
+<td align="left">population</td>
+<td align="right">-0.064</td>
+<td align="right">0.128</td>
+<td align="right">-0.503</td>
+<td align="right">0.6184</td>
+</tr>
+<tr class="odd">
+<td align="left">nonwhite</td>
+<td align="right">-0.014</td>
+<td align="right">0.062</td>
+<td align="right">-0.223</td>
+<td align="right">0.8250</td>
+</tr>
+<tr class="even">
+<td align="left">unemp.adult</td>
+<td align="right">0.931</td>
+<td align="right">0.542</td>
+<td align="right">1.719</td>
+<td align="right">0.0944</td>
+</tr>
+<tr class="odd">
+<td align="left">median.assets</td>
+<td align="right">15.159</td>
+<td align="right">10.524</td>
+<td align="right">1.440</td>
+<td align="right">0.1587</td>
+</tr>
+<tr class="even">
+<td align="left">num.low.salary</td>
+<td align="right">0.826</td>
+<td align="right">0.234</td>
+<td align="right">3.527</td>
+<td align="right">0.0012</td>
+</tr>
+</tbody>
+</table>
+<p>Observe that the coefficient of 1960 expenditure went from being
+non-signficant to significant (p-value is now very small).</p>
+<div
+id="what-does-it-mean-for-a-coefficient-to-be-statistically-significant"
+class="section level4">
+<h4>What does it mean for a coefficient to be statistically
+significant?</h4>
+<p>Let’s look at the coefficient of <code>average.ed</code> in the
+<code>crime.lm2</code> model. This coefficient is 15.3280278. We might
+interpret it by saying that:</p>
+<blockquote>
+<p>All else being equal between two states, a 1-year increase in average
+education appears to be associated with a 15.3 increase in crime rates
+per million.</p>
+</blockquote>
+<p>In addition to the coefficient estimate, we also have a standard
+error estimate and a p-value. The standard error tells us how uncertain
+our estimate of the coefficient of <code>average.ed</code> actually is.
+In this case, our estimate is 15.3, but the standard error is 6.203.
+Using the “2 standard error rule” of thumb, we could refine our earlier
+statement to say:</p>
+<blockquote>
+<p>Based on the data, we estimate a 1-year increase in average education
+is associated with a 15.3 +/- 12.4 increase in crimes per million
+population</p>
+</blockquote>
+<p>In other words, our estimate is quite uncertain (has a large standard
+error).</p>
+<p>The “2 standard error rule” is a nice quick way of putting together
+approximate 95% confidence intervals for regression coefficients. Here’s
+a more principled approach, which works for any desired confidence
+level. This approach uses the <code>confint</code> command.</p>
+<pre class="r"><code># all 95% confidence intervals
+confint(crime.lm2)</code></pre>
+<pre><code>##                         2.5 %       97.5 %
+## (Intercept)      -928.7593182 -338.1183387
+## young.males         0.2766914    1.9770739
+## is.south1         -28.7410920   27.6278928
+## average.ed          2.7362499   27.9198056
+## exp.per.cap.1960    0.6775118    1.5990864
+## labour.part        -0.2023846    0.3398163
+## male.per.fem       -0.3482706    0.3543119
+## population         -0.3248958    0.1959409
+## nonwhite           -0.1394591    0.1118719
+## unemp.adult        -0.1684209    2.0314168
+## median.assets      -6.2068096   36.5247604
+## num.low.salary      0.3505063    1.3013656</code></pre>
+<pre class="r"><code># Just for education
+confint(crime.lm2, parm = &quot;average.ed&quot;)</code></pre>
+<pre><code>##              2.5 %   97.5 %
+## average.ed 2.73625 27.91981</code></pre>
+<pre class="r"><code># 75% confidence interval
+confint(crime.lm2, parm = &quot;average.ed&quot;, level = 0.75)</code></pre>
+<pre><code>##              12.5 %   87.5 %
+## average.ed 8.072542 22.58351</code></pre>
+<pre class="r"><code># How does 2 SE rule compare to confint output?
+#  lower endpoint
+coef(crime.lm2)[&quot;average.ed&quot;] - 2* summary(crime.lm2)$coef[&quot;average.ed&quot;, &quot;Std. Error&quot;]</code></pre>
+<pre><code>## average.ed 
+##   2.922995</code></pre>
+<pre class="r"><code># upper endpoint
+coef(crime.lm2)[&quot;average.ed&quot;] + 2* summary(crime.lm2)$coef[&quot;average.ed&quot;, &quot;Std. Error&quot;]</code></pre>
+<pre><code>## average.ed 
+##   27.73306</code></pre>
+<p>The p-value of 0.0184764 is less than 0.05, so this tells us that the
+coefficient estimate is statistically significantly different from 0.
+What does this mean? It means that the data suggests the actual
+association between average education and crime rates is non-zero. i.e.,
+the data shows evidence that the coefficient is non-zero.</p>
+<p>One of the exercises on Homework 5 will walk you through running a
+simulation experiment to better understand what signficance means in a
+regression setting.</p>
+<p>Here’s a preview. The red line is the true regression line. The grey
+points show a random realization of the data. The various black curves
+show 100 estimates of the regression line based on repeated random
+realizations of the data.</p>
+<div class="float">
+<img src="./slope_plot.png" alt="Estimated regression lines" />
+<div class="figcaption">Estimated regression lines</div>
+</div>
+</div>
+<div id="what-happens-when-we-have-collinearity" class="section level4">
+<h4>What happens when we have collinearity?</h4>
+<p>Here’s an extreme example of perfectly collinear data.</p>
+<pre class="r"><code>my.data &lt;- data.frame(y =  c(12, 13, 10, 5, 7, 12, 15),
+                      x1 = c(6, 6.5, 5, 2.5, 3.5, 6, 7.5),
+                      x2 = c(6, 6.5, 5, 2.5, 3.5, 6, 7.5))
+my.data</code></pre>
+<pre><code>##    y  x1  x2
+## 1 12 6.0 6.0
+## 2 13 6.5 6.5
+## 3 10 5.0 5.0
+## 4  5 2.5 2.5
+## 5  7 3.5 3.5
+## 6 12 6.0 6.0
+## 7 15 7.5 7.5</code></pre>
+<p>What do you notice?</p>
+<p>By construction, <code>x1</code> and <code>x2</code> are exactly the
+same variable, and the outcome <code>y</code> is perfectly modelled as
+<span class="math inline">\(y = x_1 + x_2\)</span>.</p>
+<p>But there’s a problem… because the following are also true</p>
+<p><span class="math inline">\(y = 2 x_1\)</span></p>
+<p><span class="math inline">\(y = 3 x_1 - x_2\)</span></p>
+<p><span class="math inline">\(y = -400x_1 + 402 x_2\)</span></p>
+<p>In other words, based on the data, there’s no way of figuring out
+which of these models is “right”. However, if we drop one of the
+variables from the model, we know exactly what the coefficient of the
+other should be.</p>
+<p>Colinearity amongst predictors causes problems for regression
+precisely because the model is unable to accurately distinguish between
+many nearly equally plausible linear combinations of colinear variables.
+This can lead to large standard errors on coefficients, and even
+coefficient signs that don’t make sense.</p>
+</div>
+<div id="practical-considerations-in-linear-regression"
+class="section level4">
+<h4>Practical considerations in linear regression</h4>
+<p>After dealing with the colinearity issue by removing the 1959
+expenditure variable, we see that <code>exp.per.cap.1960</code> is now
+highly significant.</p>
+<pre class="r"><code>crime.lm.summary2$coef[&quot;exp.per.cap.1960&quot;,]</code></pre>
+<pre><code>##      Estimate    Std. Error       t value      Pr(&gt;|t|) 
+## 1.13829907170 0.22697675756 5.01504684417 0.00001532994</code></pre>
+<p>This is interesting. It’s essentially saying that, all else being
+equal, every dollar per capita increase in police expenditure is on
+average associated with an increase in crime of 1.13 per million
+population.</p>
+<pre class="r"><code>crime.lm.summary2$coef[&quot;average.ed&quot;,]</code></pre>
+<pre><code>##    Estimate  Std. Error     t value    Pr(&gt;|t|) 
+## 15.32802778  6.20251646  2.47125951  0.01847635</code></pre>
+<p>Also, for every unit increase in average education, we find that the
+number of reported crimes increases by about 15.3 per million.</p>
+<p>One of my main reasons for selecting this data set is that it
+illustrates some of the more common pitfalls in interpreting regression
+models.</p>
+<p><strong>Just because a coefficient is significant, doesn’t mean your
+covariate causes your response</strong></p>
+<ul>
+<li>This is the old adage that correlation does not imply causation. In
+this example, we have strong evidence that higher police expenditures
+are positively associated with crime rates. This doesn’t mean that
+decreasing police expenditure will lower crime rate. The relationship is
+not causal – at least not in that direction. A more reasonable
+explanation is that higher crime rates promt policy makers to increase
+police expenditure.</li>
+</ul>
+<p><strong>There’s a difference between practical significance and
+statistical significance</strong></p>
+<ul>
+<li>Both <code>average.ed</code> and <code>exp.per.cap.1960</code> are
+statistically significant. <code>exp.per.cap.1960</code> has a much more
+significant p-value, but also a much smaller coefficient. When looking
+at your regression model, you shouldn’t just look at the p-value column.
+The really interesting covariates are the ones that are significant, but
+also have the largest effect.</li>
+</ul>
+<p>Note also that the units of measurement should be taken into account
+when thinking about coefficient estimates and effect sizes. Suppose, for
+example, that we regressed income (measured in $) on height and got a
+coefficient estimate of 100, with a standard error of 20. Is 100 a large
+effect? <em>The answer depends on the units of measurement.</em> If
+height had been measured in metres, we would be saying that every 1m
+increase in height is associated on average with a $100 increase in
+income. That’s too small an effect for us to care about. Now what if
+height was measured in mm? Then we’d be saying that every 1mm increase
+in height is associated on average with a $100 increase in income. Since
+1inch = 25.4mm, this means that every 1inch difference in height is on
+average associated with a $2540 difference in income. This would be a
+tremendously large effect. <strong>Moral of the story</strong>: Whether
+an effect is ‘practically significant’ depends a lot on the unit of
+measurement.</p>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
