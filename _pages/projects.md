@@ -9,6 +9,10 @@ display_categories: []
 horizontal: false
 ---
 
+## Research Map
+
+![Research map](/assets/img/research-map.png){: width="586px"}
+
 <!-- pages/projects.md -->
 <div class="projects">
 {% if site.enable_project_categories and page.display_categories %}
