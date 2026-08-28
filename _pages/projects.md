@@ -11,7 +11,7 @@ horizontal: false
 
 ## Research Map
 
-![Research map](/assets/img/research-map.png){: width="586px"}
+![Research map](/assets/img/research-map.png){: width="1055px" style="max-width:100%;"}
 
 <!-- pages/projects.md -->
 <div class="projects">
