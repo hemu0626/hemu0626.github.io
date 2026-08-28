@@ -34,3 +34,6 @@ gh-list-repos.js
 
 # Temporary consolidation clones
 .consolidate/
+gh-poll.js
+gh-logs.js
+
