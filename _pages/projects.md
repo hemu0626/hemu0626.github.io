@@ -9,6 +9,15 @@ display_categories: []
 horizontal: false
 ---
 
+<style>
+  .projects .row { display: flex; flex-wrap: wrap; gap: 1rem; }
+  .projects .row > .col { flex: 0 0 calc(25% - 0.75rem); width: calc(25% - 0.75rem); box-sizing: border-box; }
+  @media (max-width: 767px) {
+    .projects .row > .col { flex: 0 0 calc(50% - 0.5rem); width: calc(50% - 0.5rem); }
+  }
+  .projects .card-title { font-size: 1.15rem; line-height: 1.35; margin-bottom: 0.5rem; }
+</style>
+
 <!-- pages/projects.md -->
 <div class="projects">
 {% if site.enable_project_categories and page.display_categories %}
