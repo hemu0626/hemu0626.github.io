@@ -74,11 +74,4 @@ See the [teaching page](/teaching/) for a full list of modules, roles, and moder
 
 ## Professional & Administrative Service
 
-- Internal Ethics Reviewer, School of Mathematics and Physics (2022 – Present)
-- Working Group Member, Department of Financial and Actuarial Mathematics (2025–2026): MTH066 AI module design and lecture notes (led by Dr. Lu Zong)
-- Fixed Assets Coordinator, Department of Financial and Actuarial Mathematics (2025–2026)
-- Working Group Member, SMP AI Module Design (2024–2025): MTH129 AI module (led by Dr. Keqin Liu)
-- Working Group Member, B.Sc. Applied Statistics Program (2023–2024): program design update (led by Dr. Xiaojun Zhu)
 - Math Year 1 Coordinator, SMP School Learning and Teaching Committee (2021–2025)
-- Academic Supervisor, Math Club (2021–2025)
-- Committee Member, Teaching Centre Committee (2021)
