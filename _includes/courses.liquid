@@ -11,7 +11,7 @@
         {% for course in year_courses %}
           <div class="course-item">
             <h3 class="course-title">
-              {{ course.title }}
+              {% if course.linkable %}<a href="{{ course.url | relative_url }}">{{ course.title }}</a>{% else %}{{ course.title }}{% endif %}
             </h3>
 
             <div class="course-meta">
@@ -41,7 +41,7 @@
         {% for course in year_courses %}
           <div class="course-item">
             <h3 class="course-title">
-              {{ course.title }}
+              {% if course.linkable %}<a href="{{ course.url | relative_url }}">{{ course.title }}</a>{% else %}{{ course.title }}{% endif %}
             </h3>
 
             <div class="course-meta">
