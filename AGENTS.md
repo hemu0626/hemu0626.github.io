@@ -72,6 +72,8 @@
   ```
 - 分组自动按学年倒序；组内 Semester 2 在前（`_includes/courses.liquid` 里控制）。
 - 课程标题在列表页**不可点击**（有意为之）；简介填在第二个 `---` 之后（可留空）。
+- **例外**：front matter 加 `linkable: true` 的课程标题会变成链接指向课程页（先例：MTH303）。课程页正文可放补充材料链接（见下）。
+- 课程补充材料（学生自学的成品，如渲染好的 HTML/PDF）放在 `assets/teaching/<course>-<topic>/`，在课程页正文用相对链接引用（先例：`assets/teaching/mth303-cross-validation/`，MTH303 页链接 Cross-Validation 的 HTML 和 PDF）。
 - `year: Resources` 的条目（Data Visualization 教学资源）固定排在最后。
 
 ### 3.3 添加新一年 SURF
