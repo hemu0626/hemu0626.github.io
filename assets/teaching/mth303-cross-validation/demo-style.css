@@ -1,0 +1,71 @@
+/* MTH303 — R for MLR demo stylesheet
+   让中文和代码在渲染出来的 HTML 里都好读 */
+
+body {
+  font-family: -apple-system, "Segoe UI", "Microsoft YaHei", "PingFang SC",
+               "Hiragino Sans GB", "Source Han Sans SC", sans-serif;
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+h1, h2, h3, h4 {
+  font-family: inherit;
+  font-weight: 600;
+}
+
+/* 中文正文段落之间留一点气口 */
+p, li {
+  line-height: 1.8;
+}
+
+/* 代码块用等宽字体，行高紧一点，放得下更多行 */
+pre, code, kbd, samp {
+  font-family: "Cascadia Mono", "Consolas", "JetBrains Mono",
+               "Sarasa Mono SC", "Microsoft YaHei Mono", monospace;
+  font-size: 13.5px;
+}
+
+pre.sourceCode {
+  line-height: 1.5;
+  border-left: 3px solid #4a7fb5;
+  background-color: #f7f9fc;
+}
+
+pre:not(.sourceCode) {
+  line-height: 1.45;
+  background-color: #f5f5f5;
+  border-left: 3px solid #999;
+}
+
+/* 引用块：本课用来放"重点提醒"，加大对比度 */
+blockquote {
+  border-left: 4px solid #e8a33d;
+  background-color: #fffaf0;
+  padding: 0.6em 1em;
+  margin: 1.1em 0;
+  font-size: 0.97em;
+}
+
+blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* 表格 */
+table {
+  font-size: 0.93em;
+}
+
+table thead th {
+  background-color: #eef3f9;
+}
+
+/* 目录稍微收窄一点 */
+#TOC {
+  font-size: 0.93em;
+}
+
+/* 让长公式不要溢出 */
+mjx-container {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
