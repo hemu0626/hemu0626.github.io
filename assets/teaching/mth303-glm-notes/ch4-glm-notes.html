@@ -7,55 +7,73 @@
   <title>Chapter 4: GLM Proofs</title>
   
   <style>
-  :root { --ink:#1a1a1a; --muted:#555; --rule:#d8d8d8;
-          --blue:#194478; --green:#166040; --red:#962020; --gray:#484848; }
-  html { -webkit-text-size-adjust: 100%; }
+  :root { --ink:#1a1a1a; --rule:#d8d8d8; --blue:#194478; --green:#166040; --red:#962020; --gray:#484848; }
+  html { -webkit-text-size-adjust:100%; scroll-behavior:smooth; }
   body { margin:0; padding:0; background:#fafafa; color:var(--ink);
-         font-family: "Latin Modern Roman", Georgia, "Noto Serif CJK SC", "Source Han Serif SC", "Songti SC", "Microsoft YaHei", serif;
-         font-size: 16.5px; line-height: 1.78; }
-  .page { max-width: 900px; margin: 0 auto; background:#fff; padding: 36px 44px 64px;
-          box-shadow: 0 1px 4px rgba(0,0,0,.08); }
-  a { color: var(--blue); }
-  .back { display:inline-block; margin-bottom: 18px; font-size: 14px; text-decoration: none;
-          border:1px solid var(--blue); border-radius: 999px; padding: 3px 12px; }
-  .back:hover { background: var(--blue); color:#fff; }
-  h1 { font-size: 1.55em; color: var(--blue); border-bottom: 1px solid var(--rule);
-       padding-bottom: .25em; margin: 1.6em 0 .6em; line-height:1.35; }
-  h2 { font-size: 1.22em; color: #1c4d80; margin: 1.4em 0 .45em; }
-  h3 { font-size: 1.06em; color: #2a5f96; margin: 1.15em 0 .35em; }
-  h1.title { font-size: 1.75em; border-bottom:none; margin: 0 0 .2em; }
-  p { margin: .55em 0; }
-  ul, ol { margin: .5em 0 .7em; padding-left: 1.6em; }
-  li { margin: .22em 0; }
-  code { font-family: Consolas, "Cascadia Mono", monospace; font-size: .9em;
-         background:#f2f2f2; border-radius:4px; padding: .08em .35em; }
-  table { border-collapse: collapse; margin: .9em auto; font-size: .95em; max-width: 100%; }
-  th, td { padding: .3em .8em; border-bottom: 1px solid var(--rule); }
-  thead th { border-top: 1.6px solid #999; border-bottom: 1px solid #999; text-align: left; }
-  tbody tr:last-child td { border-bottom: 1.6px solid #999; }
-  .center { text-align: center; }
-  .math.display, .math.display math, span.math.display { display:block; text-align:center;
-       margin: .75em 0; overflow-x: auto; }
-  math { font-size: 1.05em; }
+         font-family:"Latin Modern Roman", Georgia, "Noto Serif CJK SC", "Source Han Serif SC", "Songti SC", "Microsoft YaHei", serif;
+         font-size:16.5px; line-height:1.78; }
+  .layout { display:flex; align-items:flex-start; gap:32px; max-width:1320px; margin:0 auto; padding:24px 20px 60px; }
+  .toc { flex:0 0 250px; width:250px; position:sticky; top:24px; max-height:calc(100vh - 48px); overflow-y:auto;
+         font-family:system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif; font-size:13.5px; line-height:1.5;
+         border-right:1px solid var(--rule); padding-right:14px; }
+  .toc .toc-title { font-weight:600; color:var(--blue); margin-bottom:10px; letter-spacing:.02em; }
+  .toc ul { list-style:none; margin:0; padding:0; }
+  .toc li { margin:2px 0; }
+  .toc a { color:#34506b; text-decoration:none; display:block; padding:2px 6px; border-radius:4px; }
+  .toc a:hover { background:#eef3f8; color:var(--blue); }
+  .toc .toc-h1 a { font-weight:600; color:#1c3a57; margin-top:8px; }
+  .toc .toc-h2 a { padding-left:16px; }
+  .toc .toc-h3 a { padding-left:30px; font-size:12.8px; color:#4a6278; }
+  .page { flex:1 1 auto; min-width:0; max-width:900px; background:#fff; padding:36px 44px 64px; box-shadow:0 1px 4px rgba(0,0,0,.08); border-radius:2px; }
+  .back { display:inline-block; margin:0 0 14px; font-size:13.5px; text-decoration:none; border:1px solid var(--blue);
+          border-radius:999px; padding:3px 12px; color:var(--blue); font-family:system-ui, sans-serif; }
+  .back:hover { background:var(--blue); color:#fff; }
+  h1 { font-size:1.55em; color:var(--blue); border-bottom:1px solid var(--rule); padding-bottom:.25em;
+       margin:1.6em 0 .6em; line-height:1.35; scroll-margin-top:16px; }
+  h2 { font-size:1.22em; color:#1c4d80; margin:1.4em 0 .45em; scroll-margin-top:16px; }
+  h3 { font-size:1.06em; color:#2a5f96; margin:1.15em 0 .35em; scroll-margin-top:16px; }
+  h4 { font-size:1em; color:#2a5f96; margin:1em 0 .3em; }
+  h1.title { font-size:1.75em; border-bottom:none; margin:0 0 .2em; }
+  .subtitle, .author, .date { color:#555; font-weight:normal; }
+  p { margin:.55em 0; }
+  ul, ol { margin:.5em 0 .7em; padding-left:1.6em; }
+  li { margin:.22em 0; }
+  a { color:var(--blue); }
+  code { font-family:Consolas,"Cascadia Mono",monospace; font-size:.9em; background:#f2f2f2; border-radius:4px; padding:.08em .35em; }
+  pre { background:#f7f7f7; border:1px solid #e3e3e3; border-radius:6px; padding:10px 12px; overflow-x:auto; font-size:.9em; }
+  table { border-collapse:collapse; margin:.9em auto; font-size:.95em; max-width:100%; }
+  th, td { padding:.3em .8em; border-bottom:1px solid var(--rule); }
+  thead th { border-top:1.6px solid #999; border-bottom:1px solid #999; text-align:left; }
+  blockquote { border-left:4px solid #ddd; margin:1em 0; padding:.2em 1em; color:#444; background:#fafafa; }
+  .math.display, span.math.display, .math.display math, math[display="block"] { display:block; text-align:center; margin:.75em 0; overflow-x:auto; }
+  math { font-size:1.05em; }
   hr { border:none; border-top:1px solid var(--rule); margin:2em 0; }
-
-  /* coloured panels: pandoc turned LaTeX tcolorbox envs into divs; first <p> is the title */
-  .stepbox, .keybox, .warnbox, .boardbox { border: 1px solid; border-radius: 7px;
-       margin: 1em 0; padding: 0 14px 10px; background: #fff; overflow: hidden; }
-  .stepbox > p:first-child, .keybox > p:first-child,
-  .warnbox > p:first-child, .boardbox > p:first-child {
-       margin: 0 -14px 8px; padding: 6px 14px; color: #fff; font-weight: 600; font-size: .96em; }
-  .stepbox { border-color: var(--blue); }  .stepbox > p:first-child { background: var(--blue); }
-  .keybox { border-color: var(--green); } .keybox > p:first-child { background: var(--green); }
-  .warnbox { border-color: var(--red); }  .warnbox > p:first-child { background: var(--red); }
-  .boardbox { border-color: var(--gray); } .boardbox > p:first-child { background: var(--gray); }
-
-  @media (max-width: 640px) { .page { padding: 20px 16px 40px; } body { font-size: 15.5px; } }
+  .stepbox, .keybox, .warnbox, .boardbox { border:1px solid; border-radius:7px; margin:1em 0; padding:0 14px 10px; background:#fff; overflow:hidden; }
+  .stepbox > p:first-child, .keybox > p:first-child, .warnbox > p:first-child, .boardbox > p:first-child {
+       margin:0 -14px 8px; padding:6px 14px; color:#fff; font-weight:600; font-size:.96em; }
+  .stepbox { border-color:var(--blue); }  .stepbox > p:first-child { background:var(--blue); }
+  .keybox { border-color:var(--green); }  .keybox > p:first-child { background:var(--green); }
+  .warnbox { border-color:var(--red); }   .warnbox > p:first-child { background:var(--red); }
+  .boardbox { border-color:var(--gray); } .boardbox > p:first-child { background:var(--gray); }
+  .container-fluid, .main-container { max-width:none !important; padding:0 !important; margin:0 !important; }
+  .row { display:block !important; margin:0 !important; }
+  [class*="col-"] { float:none !important; width:100% !important; max-width:100% !important; padding:0 !important; }
+  #TOC, .tocify { display:none !important; }
+  .toc-content { width:100% !important; max-width:100% !important; }
+  .header-section-number, .number { color:#888; }
+  .ai-note { margin-top:2.6em; padding-top:.9em; border-top:1px solid var(--rule); font-size:.85em; color:#666; font-style:italic; }
+  @media (max-width:1100px) { .toc { display:none; } .layout { display:block; padding:16px 12px 40px; } .page { max-width:none; } }
+  @media (max-width:640px) { .page { padding:20px 16px 40px; } body { font-size:15.5px; } }
 </style>
 </head>
 <body>
-<div class="page">
+<div class="layout">
+<nav class="toc">
 <a class="back" href="/teachings/mth303/">&#8592; MTH303</a>
+<div class="toc-title">Contents</div>
+<ul id="toc-list"></ul>
+</nav>
+<div class="page">
 <header id="title-block-header">
 <h1 class="title">Chapter 4: GLM Proofs</h1>
 </header>
@@ -3991,6 +4009,32 @@ IRLS</h1>
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ϕ</mi><annotation encoding="application/x-tex">\phi</annotation></semantics></math>
 用的是偏差</strong>——两件事分开做，这也是 GLM
 与正态线性模型在计算上最大的结构差别。</p>
+<div class="ai-note"><p>This note was generated by DeepSeek 4.1 Flash as supplementary self-study material.</p><p>本讲义由 DeepSeek 4.1 Flash 自动生成，供课外自学使用。</p></div>
 </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var page = document.querySelector('.page');
+  var list = document.getElementById('toc-list');
+  if (!page || !list) return;
+  var heads = page.querySelectorAll('h1,h2,h3');
+  heads.forEach(function (h) {
+    if (h.classList.contains('title') || h.classList.contains('toc-ignore')) return;
+    var text = (h.textContent || '').trim();
+    if (!text) return;
+    var id = h.id;
+    if (!id) { id = text.replace(/\s+/g, '-'); h.id = id; }
+    var li = document.createElement('li');
+    li.className = 'toc-h' + h.tagName.charAt(1);
+    var a = document.createElement('a');
+    a.href = '#' + id;
+    a.textContent = text;
+    li.appendChild(a);
+    list.appendChild(li);
+  });
+});
+</script>
+
 </body>
 </html>
