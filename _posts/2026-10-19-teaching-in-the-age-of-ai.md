@@ -75,6 +75,22 @@ tags: [teaching, ai]
 
 韩愈在一千二百年前就写清楚了：弟子不必不如师，师不必贤于弟子。所以我想，未来的课堂大概会变小：我讲的时间变短，坐在学生旁边的时间变长——他们自学，我答疑、纠偏。这才是我愿意守住的这份工作。
 
+### 老师会更多，还是更少
+
+写完上面这些，我还是绕不开一个更基本的问题：AI 时代，还需要老师吗？
+
+我的答案是：需要，而且会比以前更需要——只是门槛更高了。
+
+我总想起影像科医生。2016 年 Hinton 说过一句很有名的话：现在就该停止培养放射科医生了，五年之内机器会读得比人好。十年过去，Jensen Huang 拿同一件事当反例：放射科医生没有被取代，人比过去任何时候都多。原因并不神秘——AI 让每个医生读片更快，读片变便宜了，要做影像检查的人就变多了。省下来的时间没有变成失业，变成了更多的活。
+
+教书大概也是同一个形状。课件、讲义、习题、批改，都可以被压到接近零成本。但压到零之后剩下的不是“不需要老师”，而是“老师得做点值这个教室的事”。
+
+也正因为这样，我总觉得有些东西我们讲得太晚了。线性代数尤其是：里面算的部分真的只有加减乘除，难的是抽象——而抽象恰恰是小孩最不怕的东西。为什么非等到大学？
+
+闲下来的时候，我喜欢在 B 站刷清华求真书院的课：丘先生讲数学史，一讲两个小时，没有 PPT 动画，也没有互动题。那是我向往的数学课的样子——真正懂的人，讲给真正想听的人，中间没有任何装饰。
+
+再往下说一层：我从小把“为往圣继绝学”当成一件值得向往的事，也一直照着做。我未必是最投入的研究者，但一直是个认真的老师，AI 来了之后，这一点我反而更确信，而不是更动摇。能被自动化的是“讲清楚”，不能被自动化的是“还想学”——后者只能来自一个人。
+
 ### 一个开放的问题
 
 我不知道“讲课”这件事会不会消失，也不知道上面这些写得对不对。我只知道，这学期我教得和上学期不一样，下学期还会不一样。
@@ -148,6 +164,22 @@ Some colleagues worry that students who see me generate material with AI will co
 And if it does mean "unprofessional", perhaps that is fair. All I have over the model is a few more years, a fuller map, and the memory of what it felt like not to understand. The model has never had that.
 
 Han Yu wrote it in the ninth century: the student need not be inferior to the teacher, and the teacher is not necessarily wiser than the student. So I expect the classroom to get smaller — less time with me talking, more time beside students who are teaching themselves, answering questions and correcting direction. That is the version of this job I want to keep.
+
+### Fewer teachers, or more?
+
+After all of the above, there is a more basic question I keep circling back to: in the age of AI, are teachers still needed?
+
+My answer is yes — and more of them, not fewer. But the bar goes up.
+
+I keep thinking about radiologists. In 2016 Geoffrey Hinton said, more or less, that we should stop training radiologists, because within five years a machine would read scans better than a person. A decade later, Jensen Huang used the same story as a counter-example: radiologists were not replaced. There are more of them than ever. The reason is not mysterious. AI made each scan faster to read, reading became cheaper, and demand for imaging grew. The hours saved did not turn into unemployment; they turned into more work.
+
+Teaching will probably take the same shape. Slides, notes, problem sets, marking — all of it can be pushed towards zero cost. But what is left when it is pushed there is not "no teacher". It is "a teacher who has to do something worth the room".
+
+Which is also why I think we teach some of this far too late. Linear algebra especially: the arithmetic in it is only addition, subtraction, multiplication and division. What is hard is the abstraction — and abstraction is the thing children are least afraid of. Why wait until university?
+
+When I have an idle hour, I watch the Tsinghua Qiuzhen College lectures on Bilibili: Professor Yau on the history of mathematics, two hours at a stretch, no slide animations, no interactive quizzes. That is what I want a mathematics class to look like — someone who genuinely knows, talking to people who genuinely want to know, with nothing in between.
+
+Underneath all of it: since I was a boy I have wanted a part in what Zhang Zai called 为往圣继绝学, "continuing the lost scholarship of the sages" — one line of a four-line vow that Chinese schoolchildren still learn by heart. I may not be the most devoted researcher, but I have always been a serious teacher, and AI has made me more sure of that rather than less. What can be automated is the explaining. What cannot is someone still wanting to learn; that has to come from a person.
 
 ### An open question
 
