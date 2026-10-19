@@ -81,13 +81,13 @@ tags: [teaching, ai]
 
 我的答案是：需要，而且会比以前更需要——只是门槛更高了。
 
-我总想起影像科医生。2016 年 Hinton 说过一句很有名的话：现在就该停止培养放射科医生了，五年之内机器会读得比人好。十年过去，Jensen Huang 拿同一件事当反例：放射科医生没有被取代，人比过去任何时候都多。原因并不神秘——AI 让每个医生读片更快，读片变便宜了，要做影像检查的人就变多了。省下来的时间没有变成失业，变成了更多的活。
+我总想起放射科医生。2016 年 Hinton 说过一句很有名的话：现在就该停止培养放射科医生了，五年之内机器会读得比人好。十年过去，Jensen Huang 拿同一件事当反例：放射科医生没有被取代，人比过去任何时候都多。原因并不神秘——AI 让每个医生读片更快，读片变便宜了，要做影像检查的人就变多了。省下来的时间没有变成失业，变成了更多的活。
 
 教书大概也是同一个形状。课件、讲义、习题、批改，都可以被压到接近零成本。但压到零之后剩下的不是“不需要老师”，而是“老师得做点值这个教室的事”。
 
 也正因为这样，我总觉得有些东西我们讲得太晚了。线性代数尤其是：里面算的部分真的只有加减乘除，难的是抽象——而抽象恰恰是小孩最不怕的东西。为什么非等到大学？
 
-闲下来的时候，我喜欢在 B 站刷清华求真书院的课：丘先生讲数学史，一讲两个小时，没有 PPT 动画，也没有互动题。那是我向往的数学课的样子——真正懂的人，讲给真正想听的人，中间没有任何装饰。
+闲下来的时候，我喜欢在 B 站刷清华求真书院的课——那些讲给小孩子听的课。一讲两个小时，没有 PPT 动画，也没有互动题。那是我向往的数学课的样子：真正懂的人，讲给真正想听的人，中间没有任何装饰。
 
 再往下说一层：我从小把“为往圣继绝学”当成一件值得向往的事，也一直照着做。我未必是最投入的研究者，但一直是个认真的老师，AI 来了之后，这一点我反而更确信，而不是更动摇。能被自动化的是“讲清楚”，不能被自动化的是“还想学”——后者只能来自一个人。
 
@@ -95,7 +95,7 @@ tags: [teaching, ai]
 
 我不知道“讲课”这件事会不会消失，也不知道上面这些写得对不对。我只知道，这学期我教得和上学期不一样，下学期还会不一样。
 
-如果你是学生：这些资料随便用，怎么用由你决定。如果你是同行：告诉我你在做什么，因为这件事没人想明白。
+如果你是学生：这些资料随便用，怎么用由你决定。
 
 过去我以为那是教学的那部分，已经被自动化了。剩下的仍然是教学——我只是得诚实地说清楚，哪部分是哪个。
 
@@ -177,7 +177,7 @@ Teaching will probably take the same shape. Slides, notes, problem sets, marking
 
 Which is also why I think we teach some of this far too late. Linear algebra especially: the arithmetic in it is only addition, subtraction, multiplication and division. What is hard is the abstraction — and abstraction is the thing children are least afraid of. Why wait until university?
 
-When I have an idle hour, I watch the Tsinghua Qiuzhen College lectures on Bilibili: Professor Yau on the history of mathematics, two hours at a stretch, no slide animations, no interactive quizzes. That is what I want a mathematics class to look like — someone who genuinely knows, talking to people who genuinely want to know, with nothing in between.
+When I have an idle hour, I watch the lectures that Tsinghua's Qiuzhen College puts on Bilibili — the ones they make for children. Two hours at a stretch, no slide animations, no interactive quizzes. That is what I want a mathematics class to look like: someone who genuinely knows, talking to people who genuinely want to know, with nothing in between.
 
 Underneath all of it: since I was a boy I have wanted a part in what Zhang Zai called 为往圣继绝学, "continuing the lost scholarship of the sages" — one line of a four-line vow that Chinese schoolchildren still learn by heart. I may not be the most devoted researcher, but I have always been a serious teacher, and AI has made me more sure of that rather than less. What can be automated is the explaining. What cannot is someone still wanting to learn; that has to come from a person.
 
@@ -185,7 +185,7 @@ Underneath all of it: since I was a boy I have wanted a part in what Zhang Zai c
 
 I do not know whether the lecture survives, or whether any of this is right. I know that I teach differently this semester than last, and will teach differently again next.
 
-If you are a student: the material is yours, and so is the decision about how to use it. If you are a colleague: tell me what you are doing, because nobody has this figured out.
+If you are a student: the material is yours, and so is the decision about how to use it.
 
 The part I used to think was teaching has been automated. What is left is still teaching — I just have to be honest about which is which.
 
