@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "我不再自己编辑了 / I no longer edit my own work"
-date: 2026-10-19 20:00:00+0800
+date: 2026-10-19 09:00:00+0800
 description: Notes on teaching in the age of AI, and why I now publish my prep materials.
 tags: [teaching, ai]
 ---
