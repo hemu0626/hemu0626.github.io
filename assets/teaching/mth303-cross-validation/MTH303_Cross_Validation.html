@@ -1258,7 +1258,7 @@ if (window.hljs) {
   .toc { flex:0 0 250px; width:250px; position:sticky; top:24px; max-height:calc(100vh - 48px); overflow-y:auto;
          font-family:system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif; font-size:13.5px; line-height:1.5;
          border-right:1px solid var(--rule); padding-right:14px; }
-  .toc .toc-title { font-weight:600; color:var(--blue); margin-bottom:10px; letter-spacing:.02em; }
+  .toc .toc-title { font-weight:600; color:var(--blue); margin-bottom:10px; }
   .toc ul { list-style:none; margin:0; padding:0; }
   .toc li { margin:2px 0; }
   .toc a { color:#34506b; text-decoration:none; display:block; padding:2px 6px; border-radius:4px; }
@@ -1286,7 +1286,10 @@ if (window.hljs) {
   table { border-collapse:collapse; margin:.9em auto; font-size:.95em; max-width:100%; }
   th, td { padding:.3em .8em; border-bottom:1px solid var(--rule); }
   thead th { border-top:1.6px solid #999; border-bottom:1px solid #999; text-align:left; }
-  blockquote { border-left:4px solid #ddd; margin:1em 0; padding:.2em 1em; color:#444; background:#fafafa; }
+  /* quotes become soft green panels, matching the GLM notes' key boxes */
+  blockquote { border:1px solid var(--green); border-left:5px solid var(--green); background:#f5fbf7;
+               border-radius:7px; margin:1.1em 0; padding:.55em 1em .55em 1.1em; color:#173a29; }
+  blockquote strong { color:#123b26; }
   .math.display, span.math.display, .math.display math, math[display="block"] { display:block; text-align:center; margin:.75em 0; overflow-x:auto; }
   math { font-size:1.05em; }
   hr { border:none; border-top:1px solid var(--rule); margin:2em 0; }
