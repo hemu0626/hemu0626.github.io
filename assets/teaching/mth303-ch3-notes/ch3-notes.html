@@ -82,6 +82,9 @@
   .ai-note { margin-top:2.6em; padding-top:.9em; border-top:1px solid var(--rule); font-size:.85em; color:#666; font-style:italic; }
   @media (max-width:1100px) { .toc { display:none; } .layout { display:block; padding:16px 12px 40px; } .page { max-width:none; } }
   @media (max-width:640px) { .page { padding:20px 16px 40px; } body { font-size:15.5px; } }
+
+  .xref { color:#5a7189; font-size:.92em; }
+  .uni-math { font-style:italic; }
 </style>
 </head>
 <body>
@@ -142,16 +145,9 @@ displayed, and the two are compared side by side. The companion script
 automatically and reports <code>MATCH</code> or <code>DIFFERENT</code>
 for each quantity.</p></li>
 </ol>
-<p>The intended classroom sequence is: derive on the board (§<a
-href="#sec:derivations" data-reference-type="ref"
-data-reference="sec:derivations">[sec:derivations]</a>), compute by hand
-in groups (§<a href="#sec:example" data-reference-type="ref"
-data-reference="sec:example">[sec:example]</a>), then run the R script
-live and watch the two columns agree (§<a href="#sec:rverify"
-data-reference-type="ref"
-data-reference="sec:rverify">[sec:rverify]</a>–§<a href="#sec:rscript"
-data-reference-type="ref"
-data-reference="sec:rscript">[sec:rscript]</a>).</p><p>The Chapter 3
+<p>The intended classroom sequence is: derive on the board (§<span class="xref">（见「ANOVA 表推导」）</span>), compute by hand
+in groups (§<span class="xref">（见「手工计算例题」）</span>), then run the R script
+live and watch the two columns agree (§<span class="xref">（见「R 验证」）</span>–§<span class="xref">（见「教学安排与 R 脚本」）</span>).</p><p>The Chapter 3
 notes introduce
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝑯</mi><mo>=</mo><mi mathvariant="bold-italic">𝑿</mi><mo stretchy="false" form="prefix">(</mo><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝑿</mi><msup><mo stretchy="false" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">\bm H=\bm X(\bm X^{\top}\bm X)^{-1}\bm X^{\top}</annotation></semantics></math>
 and then use it. This supplement does three things.</p>
@@ -214,7 +210,7 @@ the complete transcript is in
 </div>
 </header>
 <h1 id="sec:model">符号与模型<span class="en">Notation and the model</span></h1>
-<div class="zh-guide"><strong>本节导读：</strong>先规定记法：标量形式、矩阵形式与基本假设（独立、零均值、同方差、正态）。这一节是后面所有推导的语言基础，学生必须能默写 $\bm y=\bm X\bm\beta+\bm\varepsilon$ 以及 $k=p+1$ 的含义，并理解满秩条件 $\operatorname{rank}(\bm X)=p+1$ 为什么是 $\bm X^{\top}\bm X$ 可逆的前提。</div>
+<div class="zh-guide"><strong>本节导读：</strong>先规定记法：标量形式、矩阵形式与基本假设（独立、零均值、同方差、正态）。这是后面所有推导的语言基础：学生要能默写 y = Xβ + ε，理解 k = p + 1 的含义，以及满秩条件 rank(X) = p + 1 为什么是 XᵀX 可逆的前提。</div>
 <h2 id="the-model-in-scalar-form">标量形式的模型<span class="en">The model in scalar form</span></h2>
 <p>With
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>
@@ -243,8 +239,7 @@ in
 <h2 id="the-model-in-matrix-form">矩阵形式的模型<span class="en">The model in matrix form</span></h2>
 <p>Stacking the
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
-equations <a href="#eq:model" data-reference-type="eqref"
-data-reference="eq:model">[eq:model]</a> gives
+equations <span class="xref">（见公式）</span> gives
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><munder><munder><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>y</mi><mn>1</mn></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>y</mi><mn>2</mn></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mi>⋮</mi></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>y</mi><mi>n</mi></msub></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mo accent="true">⏟</mo></munder><mrow><mi mathvariant="bold-italic">𝒚</mi><mspace width="0.222em"></mspace><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo>×</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow></munder><mo>=</mo><munder><munder><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd><mtd columnalign="center" style="text-align: center"><msub><mi>x</mi><mn>11</mn></msub></mtd><mtd columnalign="center" style="text-align: center"><msub><mi>x</mi><mn>12</mn></msub></mtd><mtd columnalign="center" style="text-align: center"><mi>⋯</mi></mtd><mtd columnalign="center" style="text-align: center"><msub><mi>x</mi><mrow><mn>1</mn><mi>p</mi></mrow></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd><mtd columnalign="center" style="text-align: center"><msub><mi>x</mi><mn>21</mn></msub></mtd><mtd columnalign="center" style="text-align: center"><msub><mi>x</mi><mn>22</mn></msub></mtd><mtd columnalign="center" style="text-align: center"><mi>⋯</mi></mtd><mtd columnalign="center" style="text-align: center"><msub><mi>x</mi><mrow><mn>2</mn><mi>p</mi></mrow></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mi>⋮</mi></mtd><mtd columnalign="center" style="text-align: center"><mi>⋮</mi></mtd><mtd columnalign="center" style="text-align: center"><mi>⋮</mi></mtd><mtd columnalign="center" style="text-align: center"><mo>⋱</mo></mtd><mtd columnalign="center" style="text-align: center"><mi>⋮</mi></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd><mtd columnalign="center" style="text-align: center"><msub><mi>x</mi><mrow><mi>n</mi><mn>1</mn></mrow></msub></mtd><mtd columnalign="center" style="text-align: center"><msub><mi>x</mi><mrow><mi>n</mi><mn>2</mn></mrow></msub></mtd><mtd columnalign="center" style="text-align: center"><mi>⋯</mi></mtd><mtd columnalign="center" style="text-align: center"><msub><mi>x</mi><mrow><mi>n</mi><mi>p</mi></mrow></msub></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mo accent="true">⏟</mo></munder><mrow><mi mathvariant="bold-italic">𝑿</mi><mspace width="0.222em"></mspace><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo>×</mo><mo stretchy="false" form="prefix">(</mo><mi>p</mi><mo>+</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo></mrow></munder><munder><munder><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>β</mi><mn>0</mn></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>β</mi><mn>1</mn></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mi>⋮</mi></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>β</mi><mi>p</mi></msub></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mo accent="true">⏟</mo></munder><mrow><mi mathvariant="bold-italic">𝜷</mi><mspace width="0.222em"></mspace><mo stretchy="false" form="prefix">(</mo><mo stretchy="false" form="prefix">(</mo><mi>p</mi><mo>+</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo>×</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow></munder><mo>+</mo><munder><munder><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>ε</mi><mn>1</mn></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>ε</mi><mn>2</mn></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mi>⋮</mi></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>ε</mi><mi>n</mi></msub></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mo accent="true">⏟</mo></munder><mrow><mi mathvariant="bold-italic">𝜺</mi><mspace width="0.222em"></mspace><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo>×</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow></munder><mi>.</mi></mrow><annotation encoding="application/x-tex">\begin{equation}
 \label{eq:matrixmodel}
   \underbrace{\begin{pmatrix}y_1\\y_2\\\vdots\\y_n\end{pmatrix}}_{\bm y\ (n\times1)}
@@ -289,7 +284,7 @@ dummy variables while an intercept is also present (the “dummy-variable
 trap”).</p>
 </div>
 <h1 id="sec:lse">最小二乘估计<span class="en">Least squares estimation</span></h1>
-<div class="zh-guide"><strong>本节导读：</strong>从残差平方和出发，用矩阵微积分推出正规方程与 $\hat{\bm\beta}=(\bm X^{\top}\bm X)^{-1}\bm X^{\top}\bm y$；随后给出拟合值、残差与帽子矩阵，并证明它们对称、幂等、迹为 $k$。最后证明 $\hat{\bm\beta}$ 无偏、协方差为 $\sigma^{2}(\bm X^{\top}\bm X)^{-1}$，为后面的标准误公式做准备。</div>
+<div class="zh-guide"><strong>本节导读：</strong>从残差平方和出发，用矩阵微积分推出正规方程与 β̂ = (XᵀX)⁻¹Xᵀy；随后给出拟合值、残差与帽子矩阵 H = X(XᵀX)⁻¹Xᵀ，并证明它们对称、幂等、迹为 k。最后证明 β̂ 无偏、协方差为 σ²(XᵀX)⁻¹，为后面的标准误公式做准备。</div>
 <h2 id="the-least-squares-criterion-and-the-normal-equations">最小二乘准则与正规方程<span class="en">The least squares criterion and the normal equations</span></h2>
 <div class="definition"><div class="env-label">定义</div>
 <p><strong>Definition 2</strong> (Least squares estimator). The least
@@ -341,8 +336,7 @@ which is the
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math>-th
 entry of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝑨</mi><mo>+</mo><msup><mi mathvariant="bold-italic">𝑨</mi><mi>⊤</mi></msup><mo stretchy="false" form="postfix">)</mo><mi mathvariant="bold-italic">𝜷</mi></mrow><annotation encoding="application/x-tex">(\bm A+\bm A^{\top})\bm\beta</annotation></semantics></math>.)
-Applying these to <a href="#eq:expand" data-reference-type="eqref"
-data-reference="eq:expand">[eq:expand]</a> with
+Applying these to <span class="xref">（见公式）</span> with
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝑨</mi><mo>=</mo><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝑿</mi></mrow><annotation encoding="application/x-tex">\bm A=\bm X^{\top}\bm X</annotation></semantics></math>
 symmetric gives the gradient
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>S</mi><mi>S</mi><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝜷</mi><mo stretchy="false" form="postfix">)</mo></mrow><mrow><mi>∂</mi><mi mathvariant="bold-italic">𝜷</mi></mrow></mfrac><mo>=</mo><mi>−</mi><mn>2</mn><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝒚</mi><mo>+</mo><mn>2</mn><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝑿</mi><mi mathvariant="bold-italic">𝜷</mi><mo>=</mo><mi>−</mi><mn>2</mn><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝒚</mi><mo>−</mo><mi mathvariant="bold-italic">𝑿</mi><mi mathvariant="bold-italic">𝜷</mi><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">\begin{equation}
@@ -357,12 +351,10 @@ Because
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">rank</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝑿</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>p</mi><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\operatorname{rank}(\bm X)=p+1</annotation></semantics></math>,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝑿</mi></mrow><annotation encoding="application/x-tex">\bm X^{\top}\bm X</annotation></semantics></math>
 is positive definite and hence invertible, so the unique stationary
-point is <a href="#eq:betahat" data-reference-type="eqref"
-data-reference="eq:betahat">[eq:betahat]</a>. Finally, the Hessian
+point is <span class="xref">（见公式）</span>. Finally, the Hessian
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><msup><mi>∂</mi><mn>2</mn></msup><mi>S</mi><mi>S</mi><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝜷</mi><mo stretchy="false" form="postfix">)</mo></mrow><mrow><mi>∂</mi><mi mathvariant="bold-italic">𝜷</mi><mspace width="0.167em"></mspace><mi>∂</mi><msup><mi mathvariant="bold-italic">𝜷</mi><mi>⊤</mi></msup></mrow></mfrac><mo>=</mo><mn>2</mn><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝑿</mi></mrow><annotation encoding="application/x-tex">\frac{\partial^{2}SS(\bm\beta)}{\partial\bm\beta\,\partial\bm\beta^{\top}}
   =2\bm X^{\top}\bm X</annotation></semantics></math> is positive
-definite, so <a href="#eq:betahat" data-reference-type="eqref"
-data-reference="eq:betahat">[eq:betahat]</a> is a minimum (indeed the
+definite, so <span class="xref">（见公式）</span> is a minimum (indeed the
 unique global minimum, since
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>S</mi></mrow><annotation encoding="application/x-tex">SS</annotation></semantics></math>
 is a strictly convex quadratic). ◻</p>
@@ -381,9 +373,7 @@ In matrix form this is the single statement
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝒆</mi><mo>=</mo><mn mathvariant="bold">𝟎</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\begin{equation}
 \label{eq:Xte}
   \bm X^{\top}\bm e=\bm 0 .
-\end{equation}</annotation></semantics></math> Equation <a
-href="#eq:Xte" data-reference-type="eqref"
-data-reference="eq:Xte">[eq:Xte]</a> is the reason the ANOVA
+\end{equation}</annotation></semantics></math> Equation <span class="xref">（见公式）</span> is the reason the ANOVA
 decomposition works, so it deserves to be highlighted.</p>
 </div>
 <h2 id="fitted-values-residuals-and-the-hat-matrix">拟合值、残差与帽子矩阵<span class="en">Fitted values, residuals and the hat matrix</span></h2>
@@ -470,8 +460,7 @@ is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>∑</mo><mi>i</mi></msub><msub><mi>e</mi><mi>i</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\sum_ie_i=0</annotation></semantics></math>;
 and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>∑</mo><mi>i</mi></msub><msub><mover><mi>y</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><msub><mi>e</mi><mi>i</mi></msub><mo>=</mo><msup><mover><mi mathvariant="bold-italic">𝒚</mi><mo accent="true">̂</mo></mover><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝒆</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝑿</mi><mover><mi mathvariant="bold-italic">𝜷</mi><mo accent="true">̂</mo></mover><msup><mo stretchy="false" form="postfix">)</mo><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝒆</mi><mo>=</mo><msup><mover><mi mathvariant="bold-italic">𝜷</mi><mo accent="true">̂</mo></mover><mi>⊤</mi></msup><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝒆</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\sum_i\hat y_ie_i=\hat{\bm y}^{\top}\bm e=(\bm X\hat{\bm\beta})^{\top}\bm e=\hat{\bm\beta}^{\top}\bm X^{\top}\bm e=0</annotation></semantics></math>.
-For <a href="#eq:pythagoras" data-reference-type="eqref"
-data-reference="eq:pythagoras">[eq:pythagoras]</a>,
+For <span class="xref">（见公式）</span>,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒚</mi><mo>=</mo><mover><mi mathvariant="bold-italic">𝒚</mi><mo accent="true">̂</mo></mover><mo>+</mo><mi mathvariant="bold-italic">𝒆</mi></mrow><annotation encoding="application/x-tex">\bm y=\hat{\bm y}+\bm e</annotation></semantics></math>
 and the two pieces are orthogonal, so
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝒚</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝒚</mi><mo>=</mo><msup><mover><mi mathvariant="bold-italic">𝒚</mi><mo accent="true">̂</mo></mover><mi>⊤</mi></msup><mover><mi mathvariant="bold-italic">𝒚</mi><mo accent="true">̂</mo></mover><mo>+</mo><mn>2</mn><msup><mover><mi mathvariant="bold-italic">𝒚</mi><mo accent="true">̂</mo></mover><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝒆</mi><mo>+</mo><msup><mi mathvariant="bold-italic">𝒆</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝒆</mi><mo>=</mo><msup><mover><mi mathvariant="bold-italic">𝒚</mi><mo accent="true">̂</mo></mover><mi>⊤</mi></msup><mover><mi mathvariant="bold-italic">𝒚</mi><mo accent="true">̂</mo></mover><mo>+</mo><msup><mi mathvariant="bold-italic">𝒆</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝒆</mi></mrow><annotation encoding="application/x-tex">\bm y^{\top}\bm y=\hat{\bm y}^{\top}\hat{\bm y}+2\hat{\bm y}^{\top}\bm e+\bm e^{\top}\bm e=\hat{\bm y}^{\top}\hat{\bm y}+\bm e^{\top}\bm e</annotation></semantics></math>. ◻</p>
@@ -544,7 +533,7 @@ Off-diagonal elements are covariances,
 =\sigma^{2}[(\bm X^{\top}\bm X)^{-1}]_{jl}</annotation></semantics></math>.</p>
 </div>
 <h1 id="sec:derivations">ANOVA 表的完整推导<span class="en">The ANOVA table: derivations</span></h1>
-<div class="zh-guide"><strong>本节导读：</strong>本章的核心。按四个逻辑步骤拆开：（1）纯代数的分解 $\mathrm{TSS}=\mathrm{Reg\,SS}+\mathrm{RSS}$；（2）$\mathrm{MSE}$ 的无偏性；（3）正态性下 $\mathrm{RSS}$ 与 $\mathrm{Reg\,SS}$ 的卡方分布及独立性；（4）由此得到整体 $F$ 检验。要让学生清楚每一步用到了什么假设。</div>
+<div class="zh-guide"><strong>本节导读：</strong>本章的核心。按四个逻辑步骤拆开：（1）纯代数的分解 TSS = RegSS + RSS；（2）MSE 是 σ² 的无偏估计；（3）正态性下 RSS 与 RegSS 的 χ² 分布及相互独立；（4）由此得到整体 F 检验。要点是让学生清楚每一步分别用到了什么假设。</div>
 <p>This is the core of the chapter. We build the ANOVA table in four
 logically separate steps, because it is important to see what is pure
 algebra and what needs the normal model:</p>
@@ -558,9 +547,7 @@ assumption.</p></li>
 <li><p><strong>Unbiasedness</strong> (§<a href="#sec:unbiasedsigma"
 data-reference-type="ref" data-reference="sec:unbiasedsigma">3.2</a>):
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="double-struck">𝔼</mi><mo stretchy="false" form="prefix">[</mo><mrow><mi mathvariant="normal">M</mi><mi mathvariant="normal">S</mi><mi mathvariant="normal">E</mi></mrow><mo stretchy="false" form="postfix">]</mo><mo>=</mo><msup><mi>σ</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\mathbb{E}[\mathrm{MSE}]=\sigma^{2}</annotation></semantics></math>,
-which also needs only <a href="#eq:assumptions"
-data-reference-type="eqref"
-data-reference="eq:assumptions">[eq:assumptions]</a> and not
+which also needs only <span class="xref">（见公式）</span> and not
 normality.</p></li>
 <li><p><strong>Distributions</strong> (§<a href="#sec:chisq"
 data-reference-type="ref" data-reference="sec:chisq">3.3</a>): under
@@ -627,8 +614,7 @@ so
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝑯</mi><mn mathvariant="bold">𝟏</mn><mo>=</mo><mn mathvariant="bold">𝟏</mn></mrow><annotation encoding="application/x-tex">\bm H\bm 1=\bm 1</annotation></semantics></math>
 and therefore
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>∑</mo><mi>i</mi></msub><msub><mover><mi>y</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo>=</mo><msup><mn mathvariant="bold">𝟏</mn><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝒚</mi><mo>=</mo><msub><mo>∑</mo><mi>i</mi></msub><msub><mi>y</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\sum_i\hat y_i=\bm 1^{\top}\bm y=\sum_iy_i</annotation></semantics></math>.
-Now square <a href="#eq:telescope" data-reference-type="eqref"
-data-reference="eq:telescope">[eq:telescope]</a> and sum over
+Now square <span class="xref">（见公式）</span> and sum over
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>:
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">T</mi><mi mathvariant="normal">S</mi><mi mathvariant="normal">S</mi></mrow><mo>=</mo><munder><mo>∑</mo><mi>i</mi></munder><mo stretchy="false" form="prefix">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><mover><mi>y</mi><mo accent="true">‾</mo></mover><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup><mo>=</mo><munder><mo>∑</mo><mi>i</mi></munder><msubsup><mi>e</mi><mi>i</mi><mn>2</mn></msubsup><mo>+</mo><munder><mo>∑</mo><mi>i</mi></munder><mo stretchy="false" form="prefix">(</mo><msub><mover><mi>y</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo>−</mo><mover><mi>y</mi><mo accent="true">‾</mo></mover><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup><mo>+</mo><mn>2</mn><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>e</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mover><mi>y</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo>−</mo><mover><mi>y</mi><mo accent="true">‾</mo></mover><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathrm{TSS}=\sum_i(y_i-\bar y)^{2}
       =\sum_ie_i^{2}+\sum_i(\hat y_i-\bar y)^{2}
@@ -641,8 +627,7 @@ The cross term vanishes:
 and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>∑</mo><mi>i</mi></msub><msub><mi>e</mi><mi>i</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\sum_ie_i=0</annotation></semantics></math>
 from Proposition <a href="#prop:H" data-reference-type="ref"
-data-reference="prop:H">6</a> (equivalently, <a href="#eq:orth"
-data-reference-type="eqref" data-reference="eq:orth">[eq:orth]</a>).
+data-reference="prop:H">6</a> (equivalently, <span class="xref">（见公式）</span>).
 Hence
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">T</mi><mi mathvariant="normal">S</mi><mi mathvariant="normal">S</mi></mrow><mo>=</mo><mrow><mi mathvariant="normal">R</mi><mi mathvariant="normal">S</mi><mi mathvariant="normal">S</mi></mrow><mo>+</mo><mrow><mi mathvariant="normal">R</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">g</mi><mspace width="0.167em"></mspace><mi mathvariant="normal">S</mi><mi mathvariant="normal">S</mi></mrow></mrow><annotation encoding="application/x-tex">\mathrm{TSS}=\mathrm{RSS}+\mathrm{Reg\,SS}</annotation></semantics></math>.
 Non-negativity is clear from the squared-sum definitions. ◻</p>
@@ -662,9 +647,7 @@ part). The identity
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">T</mi><mi mathvariant="normal">S</mi><mi mathvariant="normal">S</mi></mrow><mo>=</mo><mrow><mi mathvariant="normal">R</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">g</mi><mspace width="0.167em"></mspace><mi mathvariant="normal">S</mi><mi mathvariant="normal">S</mi></mrow><mo>+</mo><mrow><mi mathvariant="normal">R</mi><mi mathvariant="normal">S</mi><mi mathvariant="normal">S</mi></mrow></mrow><annotation encoding="application/x-tex">\mathrm{TSS}=\mathrm{Reg\,SS}+\mathrm{RSS}</annotation></semantics></math>
 is Pythagoras’ theorem in
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi mathvariant="double-struck">ℝ</mi><mi>n</mi></msup><annotation encoding="application/x-tex">\mathbb{R}^{n}</annotation></semantics></math>,
-after centring. This is why <a href="#eq:pythagoras"
-data-reference-type="eqref"
-data-reference="eq:pythagoras">[eq:pythagoras]</a> and
+after centring. This is why <span class="xref">（见公式）</span> and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>∑</mo><mi>i</mi></msub><msub><mi>e</mi><mi>i</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\sum_ie_i=0</annotation></semantics></math>
 are the only two facts needed.</p>
 </div>
@@ -675,22 +658,12 @@ normal equations
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">R</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">g</mi><mspace width="0.167em"></mspace><mi mathvariant="normal">S</mi><mi mathvariant="normal">S</mi></mrow><mo>=</mo><msup><mover><mi mathvariant="bold-italic">𝜷</mi><mo accent="true">̂</mo></mover><mi>⊤</mi></msup><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝒚</mi><mo>−</mo><mi>n</mi><msup><mover><mi>y</mi><mo accent="true">‾</mo></mover><mn>2</mn></msup><mo>=</mo><msup><mover><mi mathvariant="bold-italic">𝜷</mi><mo accent="true">̂</mo></mover><mi>⊤</mi></msup><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝒚</mi><mo>−</mo><mstyle displaystyle="false"><mfrac><mn>1</mn><mi>n</mi></mfrac></mstyle><msup><mi mathvariant="bold-italic">𝒚</mi><mi>⊤</mi></msup><mn mathvariant="bold">𝟏</mn><msup><mn mathvariant="bold">𝟏</mn><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝒚</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">\begin{equation}
 \label{eq:regssbeta}
   \mathrm{Reg\,SS}=\hat{\bm\beta}^{\top}\bm X^{\top}\bm y-n\bar y^{2}=\hat{\bm\beta}^{\top}\bm X^{\top}\bm y-\tfrac1n\bm y^{\top}\bm 1\bm 1^{\top}\bm y,
-\end{equation}</annotation></semantics></math> and, subtracting <a
-href="#eq:anovatss" data-reference-type="eqref"
-data-reference="eq:anovatss">[eq:anovatss]</a> from <a href="#eq:tss"
-data-reference-type="eqref" data-reference="eq:tss">[eq:tss]</a> and
-using <span class="math inline">$\hat\bm y^{\top}\hat\bm y=\bm
-y^{\top}\bm y-\mathrm{RSS}$</span> from <a href="#eq:pythagoras"
-data-reference-type="eqref"
-data-reference="eq:pythagoras">[eq:pythagoras]</a>,
+\end{equation}</annotation></semantics></math> and, subtracting <span class="xref">（见公式）</span> from <span class="xref">（见公式）</span> and
+using <span class="uni-math">ŷᵀŷ = yᵀy − RSS</span> from <span class="xref">（见公式）</span>,
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">R</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">g</mi><mspace width="0.167em"></mspace><mi mathvariant="normal">S</mi><mi mathvariant="normal">S</mi></mrow><mo>=</mo><msup><mover><mi mathvariant="bold-italic">𝒚</mi><mo accent="true">̂</mo></mover><mi>⊤</mi></msup><mover><mi mathvariant="bold-italic">𝒚</mi><mo accent="true">̂</mo></mover><mo>−</mo><mstyle displaystyle="false"><mfrac><mn>1</mn><mi>n</mi></mfrac></mstyle><msup><mi mathvariant="bold-italic">𝒚</mi><mi>⊤</mi></msup><mn mathvariant="bold">𝟏</mn><msup><mn mathvariant="bold">𝟏</mn><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝒚</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\begin{equation}
 \label{eq:regssalt}
   \mathrm{Reg\,SS}=\hat{\bm y}^{\top}\hat{\bm y}-\tfrac1n\bm y^{\top}\bm 1\bm 1^{\top}\bm y.
-\end{equation}</annotation></semantics></math> Formulae <a
-href="#eq:regssbeta" data-reference-type="eqref"
-data-reference="eq:regssbeta">[eq:regssbeta]</a> and <a
-href="#eq:regssalt" data-reference-type="eqref"
-data-reference="eq:regssalt">[eq:regssalt]</a> are the two versions
+\end{equation}</annotation></semantics></math> Formulae <span class="xref">（见公式）</span> and <span class="xref">（见公式）</span> are the two versions
 students should be able to reproduce; the worked example of §<a
 href="#sec:example" data-reference-type="ref"
 data-reference="sec:example">6</a> checks that they agree.</p>
@@ -906,9 +879,7 @@ by Proposition <a href="#prop:H" data-reference-type="ref"
 data-reference="prop:H">6</a>, so Lemma <a href="#lem:quadform"
 data-reference-type="ref" data-reference="lem:quadform">17</a> gives
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi mathvariant="normal">R</mi><mi mathvariant="normal">S</mi><mi mathvariant="normal">S</mi></mrow><msup><mi>σ</mi><mn>2</mn></msup></mfrac><mo>=</mo><msup><mi mathvariant="bold-italic">𝒛</mi><mi>⊤</mi></msup><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝑰</mi><mi>n</mi></msub><mo>−</mo><mi mathvariant="bold-italic">𝑯</mi><mo stretchy="false" form="postfix">)</mo><mi mathvariant="bold-italic">𝒛</mi><mo>∼</mo><msubsup><mi>χ</mi><mrow><mi>n</mi><mo>−</mo><mi>k</mi></mrow><mn>2</mn></msubsup><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\mathrm{RSS}}{\sigma^{2}}=\bm z^{\top}(\bm I_n-\bm H)\bm z\sim\chi^{2}_{n-k}.</annotation></semantics></math></p>
-<p><em>(b) Independence of <a href="#eq:rssdist"
-data-reference-type="eqref"
-data-reference="eq:rssdist">[eq:rssdist]</a>.</em> Since
+<p><em>(b) Independence of <span class="xref">（见公式）</span>.</em> Since
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝒆</mi><annotation encoding="application/x-tex">\bm e</annotation></semantics></math>
 and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi mathvariant="bold-italic">𝜷</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat{\bm\beta}</annotation></semantics></math>
@@ -991,9 +962,7 @@ and
   =\bm z^{\top}\bm M\bm z\sim\chi^{2}_{p}</annotation></semantics></math>
 by Lemma <a href="#lem:quadform" data-reference-type="ref"
 data-reference="lem:quadform">17</a>.</p>
-<p><em>(d) Independence of <a href="#eq:regssdist"
-data-reference-type="eqref"
-data-reference="eq:regssdist">[eq:regssdist]</a>.</em> Here it is
+<p><em>(d) Independence of <span class="xref">（见公式）</span>.</em> Here it is
 easiest to use the decomposition of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝒛</mi><annotation encoding="application/x-tex">\bm z</annotation></semantics></math>:
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝑴</mi><annotation encoding="application/x-tex">\bm M</annotation></semantics></math>
@@ -1008,25 +977,13 @@ data-reference="lem:quadform">17</a> applies and gives
 </div>
 <div id="cor:anovatable" class="corollary">
 <p><strong>Corollary 19</strong> (The ANOVA table). <em>Under the normal
-linear model with an intercept, <span
-class="math display">$$\begin{equation}
-\label{eq:anovatab}
-  \begin{array}{lcccc}
-    \toprule
-    \textbf{Source} &amp; \textbf{Sum of squares} &amp; \textbf{df}
-&amp; \textbf{Mean square} &amp; \textbf{$F$-value}\\
-    \midrule
-    Regression &amp; \mathrm{Reg\,SS}=\sum_i(\hat y_i-\bar y)^{2} &amp;
-p &amp; \mathrm{MSR}=\mathrm{Reg\,SS}/p &amp;
-\mathrm{MSR}/\mathrm{MSE}\\[0.25em]
-    Error      &amp; \mathrm{RSS}=\sum_i(y_i-\hat y_i)^{2}     &amp;
-n-p-1 &amp; \mathrm{MSE}=\mathrm{RSS}/(n-p-1)=s^{2} &amp; \\[0.25em]
-    \midrule
-    Total      &amp; \mathrm{TSS}=\sum_i(y_i-\bar y)^{2}       &amp; n-1
-&amp; &amp; \\
-    \bottomrule
-  \end{array}
-\end{equation}$$</span> The error mean square
+linear model with an intercept, <div class="table-wrap"><table>
+<thead><tr><th>来源 Source</th><th>平方和 Sum of squares</th><th>自由度 df</th><th>均方 Mean square</th><th>F 值</th></tr></thead>
+<tbody>
+<tr><td>回归 Regression</td><td>RegSS = Σᵢ(ŷᵢ − ȳ)²</td><td>p</td><td>MSR = RegSS / p</td><td>MSR / MSE</td></tr>
+<tr><td>误差 Error</td><td>RSS = Σᵢ(yᵢ − ŷᵢ)²</td><td>n − p − 1</td><td>MSE = RSS / (n − p − 1) = s²</td><td></td></tr>
+<tr><td>总计 Total</td><td>TSS = Σᵢ(yᵢ − ȳ)²</td><td>n − 1</td><td></td><td></td></tr>
+</tbody></table></div> The error mean square
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">M</mi><mi mathvariant="normal">S</mi><mi mathvariant="normal">E</mi></mrow><mo>=</mo><msup><mi>s</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\mathrm{MSE}=s^{2}</annotation></semantics></math>
 is an unbiased estimator of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>σ</mi><mn>2</mn></msup><annotation encoding="application/x-tex">\sigma^{2}</annotation></semantics></math>
@@ -1066,9 +1023,7 @@ and
 the formulas for standard errors and confidence intervals, and the
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^{2}</annotation></semantics></math>
 definitions are otherwise identical.</p>
-<p>A second remark worth making in class: the total line of <a
-href="#eq:anovatab" data-reference-type="eqref"
-data-reference="eq:anovatab">[eq:anovatab]</a> is <em>not</em> what R
+<p>A second remark worth making in class: the total line of <span class="xref">（见公式）</span> is <em>not</em> what R
 prints. <code>anova()</code> in R prints the sequential (Type I)
 break-down, one line per predictor, and then the residual line; the
 total line is the sum of all the printed sum-of-squares entries. See §<a
@@ -1171,7 +1126,7 @@ sole criterion for choosing a model; see §<a href="#sec:diagnostics"
 data-reference-type="ref" data-reference="sec:diagnostics">5</a>.</p>
 <h1
 id="inference-on-a-single-coefficient-and-the-partial-f-test">单个系数的推断与部分 F 检验<span class="en">Inference on a single coefficient, and the partial F -test</span></h1>
-<div class="zh-guide"><strong>本节导读：</strong>把上一节的结论落到单个系数：$t$ 检验、置信区间；再推广到联合检验若干斜率的部分 $F$ 检验，并证明 $t^{2}=F$。强调多个 $t$ 检验拼在一起会膨胀第一类错误率，所以必须用单个 $F$ 检验。</div>
+<div class="zh-guide"><strong>本节导读：</strong>把上一节的结论落到单个系数：t 检验与置信区间；再推广到联合检验若干斜率的部分 F 检验，并证明 t² = F。强调多个 t 检验拼在一起会膨胀第一类错误率，所以联合检验必须用单个 F 检验。</div>
 <h2 id="the-t-test-and-confidence-interval-for-one-slope">单个斜率的 t 检验与置信区间<span class="en">The t-test and confidence interval for one slope</span></h2>
 <div id="thm:ttest" class="theorem">
 <p><strong>Theorem 25</strong>
@@ -1186,8 +1141,7 @@ against
   \ \sim\ t_{\,n-p-1}\qquad\text{under }H_0,
 \end{equation}</annotation></semantics></math> with
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mrow><mi mathvariant="normal">s</mi><mi mathvariant="normal">e</mi></mrow><mo accent="true">̂</mo></mover><mo stretchy="false" form="prefix">(</mo><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mi>j</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\widehat{\mathrm{se}}(\hat\beta_j)</annotation></semantics></math>
-as in <a href="#eq:se" data-reference-type="eqref"
-data-reference="eq:se">[eq:se]</a>. A
+as in <span class="xref">（见公式）</span>. A
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>100</mn><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>α</mi><mo stretchy="false" form="postfix">)</mo><mi>%</mi></mrow><annotation encoding="application/x-tex">100(1-\alpha)\%</annotation></semantics></math>
 confidence interval for
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mi>j</mi></msub><annotation encoding="application/x-tex">\beta_j</annotation></semantics></math>
@@ -1328,8 +1282,7 @@ and
 <p><em>(c) Conclusion.</em> Dividing the two independent chi-square
 variables by their degrees of freedom and cancelling
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>σ</mi><mn>2</mn></msup><annotation encoding="application/x-tex">\sigma^{2}</annotation></semantics></math>
-gives <a href="#eq:partialF" data-reference-type="eqref"
-data-reference="eq:partialF">[eq:partialF]</a>. ◻</p>
+gives <span class="xref">（见公式）</span>. ◻</p>
 </div>
 <div id="cor:t2F" class="corollary">
 <p><strong>Corollary 27</strong> (Partial
@@ -1361,8 +1314,7 @@ from the full model increases
 by
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mover><mi>β</mi><mo accent="true">̂</mo></mover><mi>j</mi><mn>2</mn></msubsup><mi>/</mi><mover><mrow><mi mathvariant="normal">s</mi><mi mathvariant="normal">e</mi></mrow><mo accent="true">̂</mo></mover><mo stretchy="false" form="prefix">(</mo><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mi>j</mi></msub><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup><mo>⋅</mo><mrow><mi mathvariant="normal">M</mi><mi mathvariant="normal">S</mi><mi mathvariant="normal">E</mi></mrow></mrow><annotation encoding="application/x-tex">\hat\beta_j^{2}/\widehat{\mathrm{se}}(\hat\beta_j)^{2}\cdot\mathrm{MSE}</annotation></semantics></math>,
 i.e. <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">R</mi><mi mathvariant="normal">S</mi><mi mathvariant="normal">S</mi></mrow><mo stretchy="false" form="prefix">(</mo><mtext mathvariant="normal">R</mtext><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mrow><mi mathvariant="normal">R</mi><mi mathvariant="normal">S</mi><mi mathvariant="normal">S</mi></mrow><mo stretchy="false" form="prefix">(</mo><mtext mathvariant="normal">F</mtext><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msubsup><mover><mi>β</mi><mo accent="true">̂</mo></mover><mi>j</mi><mn>2</mn></msubsup><mi>/</mi><mover><mrow><mi mathvariant="normal">s</mi><mi mathvariant="normal">e</mi></mrow><mo accent="true">̂</mo></mover><mo stretchy="false" form="prefix">(</mo><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mi>j</mi></msub><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup><mo>⋅</mo><mrow><mi mathvariant="normal">M</mi><mi mathvariant="normal">S</mi><mi mathvariant="normal">E</mi></mrow></mrow><annotation encoding="application/x-tex">\mathrm{RSS}(\text{R})-\mathrm{RSS}(\text{F})=\hat\beta_j^{2}/\widehat{\mathrm{se}}(\hat\beta_j)^{2}\cdot\mathrm{MSE}</annotation></semantics></math>.
-Substituting into <a href="#eq:partialF" data-reference-type="eqref"
-data-reference="eq:partialF">[eq:partialF]</a> with
+Substituting into <span class="xref">（见公式）</span> with
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>−</mo><mi>q</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">p-q=1</annotation></semantics></math>
 gives
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi><mo>=</mo><msubsup><mover><mi>β</mi><mo accent="true">̂</mo></mover><mi>j</mi><mn>2</mn></msubsup><mi>/</mi><mover><mrow><mi mathvariant="normal">s</mi><mi mathvariant="normal">e</mi></mrow><mo accent="true">̂</mo></mover><mo stretchy="false" form="prefix">(</mo><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mi>j</mi></msub><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup><mo>=</mo><mi>t</mi><mo stretchy="false" form="prefix">(</mo><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mi>j</mi></msub><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">F=\hat\beta_j^{2}/\widehat{\mathrm{se}}(\hat\beta_j)^{2}=t(\hat\beta_j)^{2}</annotation></semantics></math>.
@@ -1376,17 +1328,14 @@ the reduced model is the intercept-only model
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="double-struck">𝔼</mi><mo stretchy="false" form="prefix">[</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">]</mo><mo>=</mo><msub><mi>β</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">\mathbb{E}[y_i]=\beta_0</annotation></semantics></math>,
 whose
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">R</mi><mi mathvariant="normal">S</mi><mi mathvariant="normal">S</mi></mrow><mo stretchy="false" form="prefix">(</mo><mtext mathvariant="normal">R</mtext><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mrow><mi mathvariant="normal">T</mi><mi mathvariant="normal">S</mi><mi mathvariant="normal">S</mi></mrow></mrow><annotation encoding="application/x-tex">\mathrm{RSS}(\text{R})=\mathrm{TSS}</annotation></semantics></math>.
-Then <a href="#eq:partialF" data-reference-type="eqref"
-data-reference="eq:partialF">[eq:partialF]</a> becomes exactly <a
-href="#eq:Fdist" data-reference-type="eqref"
-data-reference="eq:Fdist">[eq:Fdist]</a>. The global
+Then <span class="xref">（见公式）</span> becomes exactly <span class="xref">（见公式）</span>. The global
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>F</mi><annotation encoding="application/x-tex">F</annotation></semantics></math>-test
 is thus the partial
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>F</mi><annotation encoding="application/x-tex">F</annotation></semantics></math>-test
 of “all slopes are zero” – the same theorem, one special case.</p>
 </div>
 <h1 id="sec:diagnostics">回归诊断：杠杆、残差与影响<span class="en">Diagnostics: leverage, residuals and influence</span></h1>
-<div class="zh-guide"><strong>本节导读：</strong>帽子矩阵的对角元 $h_{ii}$ 即杠杆值；残差协方差为 $\sigma^{2}(\bm I-\bm H)$，所以残差方差不等且相关。据此定义标准化残差、学生化残差与 Cook 距离，最后讨论共线性与方差膨胀因子（VIF）。</div>
+<div class="zh-guide"><strong>本节导读：</strong>帽子矩阵的对角元 hᵢᵢ 即杠杆值；残差协方差为 σ²(I − H)，所以各残差方差不等且彼此相关。据此定义标准化残差、学生化残差与 Cook 距离，最后讨论共线性与方差膨胀因子（VIF）。</div>
 <h2 id="leverage">杠杆值<span class="en">Leverage</span></h2>
 <p>The
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>-th
@@ -1487,8 +1436,7 @@ so it is normal with mean
 and covariance
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝑰</mi><mi>n</mi></msub><mo>−</mo><mi mathvariant="bold-italic">𝑯</mi><mo stretchy="false" form="postfix">)</mo><msup><mi>σ</mi><mn>2</mn></msup><msub><mi mathvariant="bold-italic">𝑰</mi><mi>n</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝑰</mi><mi>n</mi></msub><mo>−</mo><mi mathvariant="bold-italic">𝑯</mi><msup><mo stretchy="false" form="postfix">)</mo><mi>⊤</mi></msup><mo>=</mo><msup><mi>σ</mi><mn>2</mn></msup><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝑰</mi><mi>n</mi></msub><mo>−</mo><mi mathvariant="bold-italic">𝑯</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(\bm I_n-\bm H)\sigma^{2}\bm I_n(\bm I_n-\bm H)^{\top}=\sigma^{2}(\bm I_n-\bm H)</annotation></semantics></math>
 using symmetry and idempotence. Reading off diagonal and off-diagonal
-entries gives <a href="#eq:varres" data-reference-type="eqref"
-data-reference="eq:varres">[eq:varres]</a>. ◻</p>
+entries gives <span class="xref">（见公式）</span>. ◻</p>
 </div>
 <p>Because
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">Var</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>e</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msup><mi>σ</mi><mn>2</mn></msup><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>h</mi><mrow><mi>i</mi><mi>i</mi></mrow></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\operatorname{Var}(e_i)=\sigma^{2}(1-h_{ii})</annotation></semantics></math>
@@ -1605,8 +1553,7 @@ is
 \end{equation}</annotation></semantics></math></p>
 </div>
 <div class="proposition"><div class="env-label">命题</div>
-<p><strong>Proposition 35</strong> (Interpretation). <em><span
-class="math inline">$\operatorname{Var}(\hat\beta_j)=\sigma^{2}\mathrm{VIF}_j/\bigl[(n-1)\hat\operatorname{Var}(x_j)\bigr]$</span>,
+<p><strong>Proposition 35</strong> (Interpretation). <em><span class="uni-math">Var(β_j)=σ^2VIF_j/[(n-1)V̂ar(x_j)]</span>,
 so
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mrow><mi mathvariant="normal">V</mi><mi mathvariant="normal">I</mi><mi mathvariant="normal">F</mi></mrow><mi>j</mi></msub><annotation encoding="application/x-tex">\mathrm{VIF}_j</annotation></semantics></math>
 is exactly the factor by which the variance of
@@ -1630,7 +1577,7 @@ rescaled, and that it involves only the predictors, never the
 response.</em></p>
 </div>
 <h1 id="sec:example">手工计算的完整例题（燃料数据）<span class="en">Worked example computed by hand</span></h1>
-<div class="zh-guide"><strong>本节导读：</strong>用讲义的燃料数据（$n=8,\ p=2$）把 ANOVA 表的每一个数字从头算一遍：原始求和 → $\bm X^{\top}\bm X$ 及其逆 → 最小二乘估计 → 拟合值与残差 → 三个平方和 → $F$ 检验 → 标准误与 $t$ 检验 → 部分 $F$ 检验 → 诊断量与预测。目的是让学生能用计算器独立复现。</div>
+<div class="zh-guide"><strong>本节导读：</strong>用讲义的燃料数据（n = 8，p = 2）把 ANOVA 表的每一个数字从头算一遍：原始求和 → XᵀX 及其逆 → 最小二乘估计 → 拟合值与残差 → 三个平方和 → F 检验 → 标准误与 t 检验 → 部分 F 检验 → 诊断量与预测。目的是让学生用计算器就能独立复现。</div>
 <p>We now do every number in the ANOVA table from first principles. The
 example is small because it is meant to be reproduced with a calculator
 and a
@@ -1828,9 +1775,7 @@ a direct evaluation gives
   \qquad \det(\bm S)=390\,884.225,
 \end{equation}</annotation></semantics></math> and indeed
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>8</mn><mo>×</mo><mn>390</mn><mspace width="0.167em"></mspace><mn>884.225</mn><mo>=</mo><mn>3</mn><mspace width="0.167em"></mspace><mn>127</mn><mspace width="0.167em"></mspace><mn>073.8</mn></mrow><annotation encoding="application/x-tex">8\times390\,884.225=3\,127\,073.8</annotation></semantics></math>.
-The centred quantities <a href="#eq:exampleCentred"
-data-reference-type="eqref"
-data-reference="eq:exampleCentred">[eq:exampleCentred]</a> are also what
+The centred quantities <span class="xref">（见公式）</span> are also what
 is needed for the slope formulas and the partial
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>F</mi><annotation encoding="application/x-tex">F</annotation></semantics></math>-test
 below.</p>
@@ -1867,9 +1812,7 @@ gives
   \end{pmatrix}.
 \end{equation}</annotation></semantics></math></p>
 <h2 id="step-3-the-least-squares-estimate">第 3 步：最小二乘估计<span class="en">Step 3: the least squares estimate</span></h2>
-<p>Multiplying the inverse <a href="#eq:exampleInv"
-data-reference-type="eqref"
-data-reference="eq:exampleInv">[eq:exampleInv]</a> by
+<p>Multiplying the inverse <span class="xref">（见公式）</span> by
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝒚</mi></mrow><annotation encoding="application/x-tex">\bm X^{\top}\bm y</annotation></semantics></math>
 row by row,
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mn>0</mn></msub></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><mo>=</mo><mn>5.434053</mn><mo stretchy="false" form="prefix">(</mo><mn>81.70</mn><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mn>0.085930</mn><mo stretchy="false" form="prefix">(</mo><mn>3413.11</mn><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mn>0.118857</mn><mo stretchy="false" form="prefix">(</mo><mn>1157.40</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>13.108737</mn><mo>,</mo></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mn>1</mn></msub></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><mo>=</mo><mi>−</mi><mn>0.085930</mn><mo stretchy="false" form="prefix">(</mo><mn>81.70</mn><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mn>0.001471</mn><mo stretchy="false" form="prefix">(</mo><mn>3413.11</mn><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mn>0.001651</mn><mo stretchy="false" form="prefix">(</mo><mn>1157.40</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>−</mi><mn>0.090014</mn><mo>,</mo></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mn>2</mn></msub></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><mo>=</mo><mi>−</mi><mn>0.118857</mn><mo stretchy="false" form="prefix">(</mo><mn>81.70</mn><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mn>0.001651</mn><mo stretchy="false" form="prefix">(</mo><mn>3413.11</mn><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mn>0.003593</mn><mo stretchy="false" form="prefix">(</mo><mn>1157.40</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mphantom><mo>−</mo></mphantom><mn>0.082495</mn><mi>.</mi></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{align}
@@ -1883,9 +1826,7 @@ row by row,
 <h4 id="an-exact-cross-check-worth-doing-once.">An exact cross-check
 worth doing once.</h4>
 <p>If the three products above are computed with the <em>integer</em>
-adjugate instead of the rounded inverse <a href="#eq:exampleInv"
-data-reference-type="eqref"
-data-reference="eq:exampleInv">[eq:exampleInv]</a>, the numerators come
+adjugate instead of the rounded inverse <span class="xref">（见公式）</span>, the numerators come
 out exactly as
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">adj</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝑿</mi><mo stretchy="false" form="postfix">)</mo><mspace width="0.167em"></mspace><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝒚</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>40</mn><mspace width="0.167em"></mspace><mn>991</mn><mspace width="0.167em"></mspace><mn>988.71</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>281</mn><mspace width="0.167em"></mspace><mn>480.02</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>257</mn><mspace width="0.167em"></mspace><mn>967.872</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\operatorname{adj}(\bm X^{\top}\bm X)\,\bm X^{\top}\bm y
   =\begin{pmatrix}40\,991\,988.71\\-281\,480.02\\257\,967.872\end{pmatrix},</annotation></semantics></math>
@@ -1895,8 +1836,7 @@ reproduces
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi mathvariant="bold-italic">𝜷</mi><mo accent="true">̂</mo></mover><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>13.1087372</mn><mo>,</mo><mi>−</mi><mn>0.0900139</mn><mo>,</mo><mn>0.0824950</mn><msup><mo stretchy="false" form="postfix">)</mo><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">\hat{\bm\beta}=(13.1087372,-0.0900139,0.0824950)^{\top}</annotation></semantics></math>.
 Students who use the
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>6</mn><annotation encoding="application/x-tex">6</annotation></semantics></math>-decimal
-inverse <a href="#eq:exampleInv" data-reference-type="eqref"
-data-reference="eq:exampleInv">[eq:exampleInv]</a> will instead get
+inverse <span class="xref">（见公式）</span> will instead get
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>13.108738</mn><annotation encoding="application/x-tex">13.108738</annotation></semantics></math>,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>0.0900144</mn></mrow><annotation encoding="application/x-tex">-0.0900144</annotation></semantics></math>
 and
@@ -1918,9 +1858,7 @@ chill index is associated with an increase of
 units.</p>
 <h4 id="a-second-route-worth-showing-students.">A second route, worth
 showing students.</h4>
-<p>Using the centred sums <a href="#eq:exampleCentred"
-data-reference-type="eqref"
-data-reference="eq:exampleCentred">[eq:exampleCentred]</a> together with
+<p>Using the centred sums <span class="xref">（见公式）</span> together with
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>S</mi><mrow><mn>1</mn><mi>y</mi></mrow></msub><mo>=</mo><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>x</mi><mrow><mi>i</mi><mn>1</mn></mrow></msub><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><mi>n</mi><msub><mover><mi>x</mi><mo accent="true">‾</mo></mover><mn>1</mn></msub><mover><mi>y</mi><mo accent="true">‾</mo></mover><mo>=</mo><mi>−</mi><mn>179.6475</mn><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>S</mi><mrow><mn>2</mn><mi>y</mi></mrow></msub><mo>=</mo><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>x</mi><mrow><mi>i</mi><mn>2</mn></mrow></msub><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><mi>n</mi><msub><mover><mi>x</mi><mo accent="true">‾</mo></mover><mn>2</mn></msub><mover><mi>y</mi><mo accent="true">‾</mo></mover><mo>=</mo><mn>105.5125</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">S_{1y}=\sum_ix_{i1}y_i-n\bar x_1\bar y=-179.6475,\qquad
   S_{2y}=\sum_ix_{i2}y_i-n\bar x_2\bar y=105.5125,</annotation></semantics></math>
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>S</mi><mrow><mi>y</mi><mi>y</mi></mrow></msub><mo>=</mo><munder><mo>∑</mo><mi>i</mi></munder><msubsup><mi>y</mi><mi>i</mi><mn>2</mn></msubsup><mo>−</mo><mi>n</mi><msup><mover><mi>y</mi><mo accent="true">‾</mo></mover><mn>2</mn></msup><mo>=</mo><mn>25.54875</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">S_{yy}=\sum_iy_i^{2}-n\bar y^{2}=25.54875,</annotation></semantics></math>
@@ -2009,19 +1947,7 @@ style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998
 <div class="checkpoint"><div class="env-label">检查点</div>
 <p><strong>Checkpoint 37</strong> (The checks that must come out exactly
 right). These are the sanity checks students should perform before
-trusting any further arithmetic: <span
-class="math display">$$\begin{align*}
-  \textstyle\sum_ie_i&amp;=-6\times10^{-13}\approx0
-    &amp;&amp;\text{(first normal equation, \eqref{eq:orth})}\\
-  \textstyle\sum_ix_{i1}e_i&amp;=-2.6\times10^{-11}\approx0
-    &amp;&amp;\text{(second normal equation)}\\
-  \textstyle\sum_ix_{i2}e_i&amp;=-9\times10^{-12}\approx0
-    &amp;&amp;\text{(third normal equation)}\\
-  \textstyle\sum_i\hat y_ie_i&amp;=-6.4\times10^{-12}\approx0
-    &amp;&amp;\text{(residuals orthogonal to the fit)}\\
-  \textstyle\sum_i\hat y_i&amp;=\sum_iy_i=81.70
-    &amp;&amp;\text{(so }\bar{\hat y}=\bar y\text{)}
-\end{align*}$$</span> and finally the two identities that make the ANOVA
+trusting any further arithmetic: <span class="uni-math">align* _ie_i&amp;=-610^-130 &amp;&amp;(first normal equation, eq:orth)\\ _ix_i1e_i&amp;=-2.610^-110 &amp;&amp;(second normal equation)\\ _ix_i2e_i&amp;=-910^-120 &amp;&amp;(third normal equation)\\ _iŷ_ie_i&amp;=-6.410^-120 &amp;&amp;(residuals orthogonal to the fit)\\ _iŷ_i&amp;=_iy_i=81.70 &amp;&amp;(so ŷ=y) align*</span> and finally the two identities that make the ANOVA
 decomposition work,
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><munder><mo>∑</mo><mi>i</mi></munder><msubsup><mover><mi>y</mi><mo accent="true">̂</mo></mover><mi>i</mi><mn>2</mn></msubsup><mo>=</mo><mn>859.236268</mn><mo>,</mo><mspace width="2.0em"></mspace><munder><mo>∑</mo><mi>i</mi></munder><msubsup><mi>y</mi><mi>i</mi><mn>2</mn></msubsup><mo>−</mo><munder><mo>∑</mo><mi>i</mi></munder><msubsup><mi>e</mi><mi>i</mi><mn>2</mn></msubsup><mo>=</mo><mn>859.91</mn><mo>−</mo><mn>0.673732</mn><mo>=</mo><mn>859.236268</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\sum_i\hat y_i^{2}=859.236268,\qquad
   \sum_iy_i^{2}-\sum_ie_i^{2}=859.91-0.673732=859.236268 .</annotation></semantics></math>
@@ -2142,10 +2068,7 @@ amount of the variation in fuel use.</p>
 <p>The adjusted coefficient of determination is
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>R</mi><mtext mathvariant="normal">adj</mtext><mn>2</mn></msubsup><mo>=</mo><mn>1</mn><mo>−</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mn>0.973630</mn><mo stretchy="false" form="postfix">)</mo><mfrac><mn>7</mn><mn>5</mn></mfrac><mo>=</mo><mn>0.963081</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">R^{2}_{\text{adj}}=1-(1-0.973630)\frac{7}{5}=0.963081 .</annotation></semantics></math></p>
 <h2 id="step-7-standard-errors-t-tests-and-confidence-intervals">第 7 步：标准误、t 检验与置信区间<span class="en">Step 7: standard errors, t -tests and confidence intervals</span></h2>
-<p>From <a href="#eq:se" data-reference-type="eqref"
-data-reference="eq:se">[eq:se]</a>, using the diagonal of <a
-href="#eq:exampleInv" data-reference-type="eqref"
-data-reference="eq:exampleInv">[eq:exampleInv]</a>:
+<p>From <span class="xref">（见公式）</span>, using the diagonal of <span class="xref">（见公式）</span>:
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"><mover><mrow><mi mathvariant="normal">s</mi><mi mathvariant="normal">e</mi></mrow><mo accent="true">̂</mo></mover><mo stretchy="false" form="prefix">(</mo><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mn>0</mn></msub><mo stretchy="false" form="postfix">)</mo></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><mo>=</mo><msqrt><mrow><mn>0.1347464</mn><mo>×</mo><mn>5.434053</mn></mrow></msqrt><mo>=</mo><mn>0.855698</mn><mo>,</mo></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"><mover><mrow><mi mathvariant="normal">s</mi><mi mathvariant="normal">e</mi></mrow><mo accent="true">̂</mo></mover><mo stretchy="false" form="prefix">(</mo><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mn>1</mn></msub><mo stretchy="false" form="postfix">)</mo></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><mo>=</mo><msqrt><mrow><mn>0.1347464</mn><mo>×</mo><mn>0.001470704</mn></mrow></msqrt><mo>=</mo><mn>0.0140774</mn><mo>,</mo></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"><mover><mrow><mi mathvariant="normal">s</mi><mi mathvariant="normal">e</mi></mrow><mo accent="true">̂</mo></mover><mo stretchy="false" form="prefix">(</mo><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mn>2</mn></msub><mo stretchy="false" form="postfix">)</mo></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><mo>=</mo><msqrt><mrow><mn>0.1347464</mn><mo>×</mo><mn>0.003592765</mn></mrow></msqrt><mo>=</mo><mn>0.0220025</mn><mi>.</mi></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{align*}
   \widehat{\mathrm{se}}(\hat\beta_0)&amp;=\sqrt{0.1347464\times5.434053}=0.855698,\\
   \widehat{\mathrm{se}}(\hat\beta_1)&amp;=\sqrt{0.1347464\times0.001470704}=0.0140774,\\
@@ -2275,8 +2198,7 @@ can be written directly from the full-model quantities:
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">R</mi><mi mathvariant="normal">S</mi><mi mathvariant="normal">S</mi></mrow><mo stretchy="false" form="prefix">(</mo><mtext mathvariant="normal">R</mtext><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mrow><mi mathvariant="normal">R</mi><mi mathvariant="normal">S</mi><mi mathvariant="normal">S</mi></mrow><mo stretchy="false" form="prefix">(</mo><mtext mathvariant="normal">F</mtext><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msubsup><mover><mi>β</mi><mo accent="true">̂</mo></mover><mn>2</mn><mn>2</mn></msubsup><mo minsize="180%" maxsize="180%" stretchy="true" form="prefix">(</mo><msub><mi>S</mi><mn>22</mn></msub><mo>−</mo><mfrac><msubsup><mi>S</mi><mn>12</mn><mn>2</mn></msubsup><msub><mi>S</mi><mn>11</mn></msub></mfrac><mo minsize="180%" maxsize="180%" stretchy="true" form="postfix">)</mo><mo>=</mo><msup><mn>0.082495</mn><mn>2</mn></msup><mo>×</mo><mn>278.33719</mn><mo>=</mo><mn>1.894202</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">\mathrm{RSS}(\text{R})-\mathrm{RSS}(\text{F})
   =\hat\beta_2^{2}\Bigl(S_{22}-\frac{S_{12}^{2}}{S_{11}}\Bigr)
   =0.082495^{2}\times278.33719=1.894202 ,</annotation></semantics></math>
-which is exactly the difference of <a href="#eq:exRSS"
-data-reference-type="eqref" data-reference="eq:exRSS">[eq:exRSS]</a>
+which is exactly the difference of <span class="xref">（见公式）</span>
 computed above. This formula is the MLR analogue of the SLR identity
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">R</mi><mi mathvariant="normal">S</mi><mi mathvariant="normal">S</mi></mrow><mo stretchy="false" form="prefix">(</mo><mtext mathvariant="normal">R</mtext><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mrow><mi mathvariant="normal">R</mi><mi mathvariant="normal">S</mi><mi mathvariant="normal">S</mi></mrow><mo stretchy="false" form="prefix">(</mo><mtext mathvariant="normal">F</mtext><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msubsup><mover><mi>β</mi><mo accent="true">̂</mo></mover><mn>1</mn><mn>2</mn></msubsup><msub><mi>S</mi><mrow><mi>x</mi><mi>x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\mathrm{RSS}(\text{R})-\mathrm{RSS}(\text{F})=\hat\beta_1^{2}S_{xx}</annotation></semantics></math>.</p>
 </div>
@@ -2287,8 +2209,7 @@ computed above. This formula is the MLR analogue of the SLR identity
   \qquad \textstyle\sum_ih_{ii}=3=p+1\ \checkmark</annotation></semantics></math>
 With
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>h</mi><mo accent="true">‾</mo></mover><mo>=</mo><mn>3</mn><mi>/</mi><mn>8</mn><mo>=</mo><mn>0.375</mn></mrow><annotation encoding="application/x-tex">\bar h=3/8=0.375</annotation></semantics></math>
-and the rule <a href="#eq:levrule" data-reference-type="eqref"
-data-reference="eq:levrule">[eq:levrule]</a> at
+and the rule <span class="xref">（见公式）</span> at
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">c=2</annotation></semantics></math>,
 the cut-off is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.75</mn><annotation encoding="application/x-tex">0.75</annotation></semantics></math>:
@@ -2485,9 +2406,7 @@ as written. The reason is that
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn mathvariant="bold">𝟏</mn><annotation encoding="application/x-tex">\bm 1</annotation></semantics></math>
 is no longer a column of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝑿</mi><annotation encoding="application/x-tex">\bm X</annotation></semantics></math>,
-so the fitted values need not sum to the observed ones and <a
-href="#eq:telescope" data-reference-type="eqref"
-data-reference="eq:telescope">[eq:telescope]</a> fails at the step
+so the fitted values need not sum to the observed ones and <span class="xref">（见公式）</span> fails at the step
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>∑</mo><mi>i</mi></msub><msub><mover><mi>y</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo>=</mo><msub><mo>∑</mo><mi>i</mi></msub><msub><mi>y</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\sum_i\hat y_i=\sum_iy_i</annotation></semantics></math>.
 The “total” sum of squares then becomes the uncorrected
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>∑</mo><mi>i</mi></msub><msubsup><mi>y</mi><mi>i</mi><mn>2</mn></msubsup></mrow><annotation encoding="application/x-tex">\sum_iy_i^{2}</annotation></semantics></math>
@@ -2508,7 +2427,7 @@ software warns about models without an intercept and why the intercept
 should be retained unless there is a strong substantive reason – and a
 re-derivation.</p>
 <h1 id="sec:rverify">同一例题的 R 验证（逐项对照）<span class="en">The same example in R: side-by-side verification</span></h1>
-<div class="zh-guide"><strong>本节导读：</strong>把上面每个手算量对应到 R 命令与输出，逐项比较并标出 MATCH。教学上是“先手算、再上机”，让学生看到两种途径给出同一套数字，从而建立对公式的信任。</div>
+<div class="zh-guide"><strong>本节导读：</strong>把上面每个手算量对应到 R 命令与输出，逐项比较并标出 MATCH。教学上是「先手算、再上机」，让学生看到两种途径给出同一套数字，从而建立对公式的信任。</div>
 <p>The point of this section is that the students should see the two
 columns agree. Each hand-computed quantity is followed by the R command
 that reproduces it. All R output below was produced by
@@ -2559,8 +2478,7 @@ from fitting <code>Temp</code> alone, the second line is the
 <em>after</em> <code>Temp</code>. Hence
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><munder><munder><mn>22.98082</mn><mo accent="true">⏟</mo></munder><mtext mathvariant="normal">Temp</mtext></munder><mo>+</mo><munder><munder><mn>1.89420</mn><mo accent="true">⏟</mo></munder><mtext mathvariant="normal">Chill</mtext></munder><mo>=</mo><mn>24.87502</mn><mo>=</mo><mrow><mi mathvariant="normal">R</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">g</mi><mspace width="0.167em"></mspace><mi mathvariant="normal">S</mi><mi mathvariant="normal">S</mi></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\underbrace{22.98082}_{\text{Temp}}+\underbrace{1.89420}_{\text{Chill}}
   =24.87502=\mathrm{Reg\,SS},</annotation></semantics></math> matching
-<a href="#eq:exRegSS" data-reference-type="eqref"
-data-reference="eq:exRegSS">[eq:exRegSS]</a>. The residual line is
+<span class="xref">（见公式）</span>. The residual line is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">R</mi><mi mathvariant="normal">S</mi><mi mathvariant="normal">S</mi></mrow><mo>=</mo><mn>0.67373</mn></mrow><annotation encoding="application/x-tex">\mathrm{RSS}=0.67373</annotation></semantics></math>
 with
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>5</mn><annotation encoding="application/x-tex">5</annotation></semantics></math>
@@ -2683,8 +2601,7 @@ via
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">tr</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝑰</mi><mi>n</mi></msub><mo>−</mo><mi mathvariant="bold-italic">𝑯</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\operatorname{tr}(\bm I_n-\bm H)</annotation></semantics></math>;
 then the chi-square and independence steps; then
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi><mo>∼</mo><msub><mi>F</mi><mrow><mi>p</mi><mo>,</mo><mi>n</mi><mo>−</mo><mi>p</mi><mo>−</mo><mn>1</mn></mrow></msub></mrow><annotation encoding="application/x-tex">F\sim F_{p,n-p-1}</annotation></semantics></math>.
-Do <em>not</em> skip the two orthogonality facts <a href="#eq:orth"
-data-reference-type="eqref" data-reference="eq:orth">[eq:orth]</a>:
+Do <em>not</em> skip the two orthogonality facts <span class="xref">（见公式）</span>:
 everything hinges on them.</p>
 <p>Give the eight data points and the raw sums. Groups compute
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝑿</mi></mrow><annotation encoding="application/x-tex">\bm X^{\top}\bm X</annotation></semantics></math>,
@@ -2692,8 +2609,7 @@ then its determinant and inverse, then
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi mathvariant="bold-italic">𝜷</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat{\bm\beta}</annotation></semantics></math>.
 Use the centred
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>×</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">2\times2</annotation></semantics></math>
-route <a href="#eq:exCentredSlopes" data-reference-type="eqref"
-data-reference="eq:exCentredSlopes">[eq:exCentredSlopes]</a> if time is
+route <span class="xref">（见公式）</span> if time is
 short.</p>
 <p>Sums of squares, then degrees of freedom, then mean squares, then the
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>F</mi><annotation encoding="application/x-tex">F</annotation></semantics></math>-statistic
@@ -3087,7 +3003,7 @@ Regression</em> (lecture slides) and <em>Tutorial 3</em>.
 XJTLU.</p></li>
 </ul>
 <h1 id="companion_part">补充讲义：帽子矩阵全解<span class="en">COMPANION_PART</span></h1>
-<div class="zh-guide"><strong>本节导读：</strong>第二篇把帽子矩阵 $\bm H=\bm X(\bm X^{\top}\bm X)^{-1}\bm X^{\top}$ 讲透：它的含义与名称由来、完整矩阵、性质、杠杆、残差协方差、标准误与推断、标准化/学生化残差、Cook 距离、影响分析表，并给出一个更大的 Duncan 数据例子与纯基础 R 的实现。适合作为课后补充阅读。</div>
+<div class="zh-guide"><strong>本节导读：</strong>第二篇把帽子矩阵 H = X(XᵀX)⁻¹Xᵀ 讲透：含义与名称由来、完整矩阵、性质、杠杆、残差协方差、标准误与推断、标准化与学生化残差、Cook 距离、影响分析表，并给出更大的 Duncan 数据例子与纯基础 R 的实现。适合作为课后补充阅读。</div>
 <h2 id="what-bm-h-is-and-why-it-is-called-the-hat-matrix">帽子矩阵是什么、为什么叫“帽子矩阵”<span class="en">What 𝑯 is, and why it is called the hat matrix</span></h2>
 <p>With
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒚</mi><mo>=</mo><mi mathvariant="bold-italic">𝑿</mi><mi mathvariant="bold-italic">𝜷</mi><mo>+</mo><mi mathvariant="bold-italic">𝜺</mi></mrow><annotation encoding="application/x-tex">\bm y=\bm X\bm\beta+\bm\varepsilon</annotation></semantics></math>
@@ -3643,22 +3559,18 @@ Then
 \end{align}</annotation></semantics></math></em></p>
 </div>
 <div class="proof"><div class="env-label">证明</div>
-<p><em>Proof.</em> <a href="#eq:sym" data-reference-type="eqref"
-data-reference="eq:sym">[eq:sym]</a>:
+<p><em>Proof.</em> <span class="xref">（见公式）</span>:
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝑯</mi><mi>⊤</mi></msup><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝑿</mi><mo stretchy="false" form="prefix">(</mo><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝑿</mi><msup><mo stretchy="false" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><msup><mo stretchy="false" form="postfix">)</mo><mi>⊤</mi></msup><mo>=</mo><mi mathvariant="bold-italic">𝑿</mi><mo stretchy="false" form="prefix">(</mo><mo stretchy="false" form="prefix">(</mo><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝑿</mi><msup><mo stretchy="false" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup><msup><mo stretchy="false" form="postfix">)</mo><mi>⊤</mi></msup><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mo>=</mo><mi mathvariant="bold-italic">𝑯</mi></mrow><annotation encoding="application/x-tex">\bm H^{\top}=(\bm X(\bm X^{\top}\bm X)^{-1}\bm X^{\top})^{\top}
 =\bm X((\bm X^{\top}\bm X)^{-1})^{\top}\bm X^{\top}=\bm H</annotation></semantics></math>,
 since
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝑿</mi></mrow><annotation encoding="application/x-tex">\bm X^{\top}\bm X</annotation></semantics></math>
-and its inverse are symmetric. <a href="#eq:idem"
-data-reference-type="eqref" data-reference="eq:idem">[eq:idem]</a>:
+and its inverse are symmetric. <span class="xref">（见公式）</span>:
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝑯</mi><mn>2</mn></msup><mo>=</mo><mi mathvariant="bold-italic">𝑿</mi><mo stretchy="false" form="prefix">(</mo><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝑿</mi><msup><mo stretchy="false" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup><munder><munder><mrow><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝑿</mi><mo stretchy="false" form="prefix">(</mo><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝑿</mi><msup><mo stretchy="false" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup></mrow><mo accent="true">⏟</mo></munder><msub><mi mathvariant="bold-italic">𝑰</mi><mi>n</mi></msub></munder><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mo>=</mo><mi mathvariant="bold-italic">𝑯</mi></mrow><annotation encoding="application/x-tex">\bm H^{2}=\bm X(\bm X^{\top}\bm X)^{-1}\underbrace{\bm X^{\top}\bm X(\bm X^{\top}\bm X)^{-1}}_{\bm I_n}
-\bm X^{\top}=\bm H</annotation></semantics></math>. <a href="#eq:fixes"
-data-reference-type="eqref" data-reference="eq:fixes">[eq:fixes]</a>:
+\bm X^{\top}=\bm H</annotation></semantics></math>. <span class="xref">（见公式）</span>:
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝑯</mi><mi mathvariant="bold-italic">𝑿</mi><mo>=</mo><mi mathvariant="bold-italic">𝑿</mi><mo stretchy="false" form="prefix">(</mo><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝑿</mi><msup><mo stretchy="false" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝑿</mi><mo>=</mo><mi mathvariant="bold-italic">𝑿</mi></mrow><annotation encoding="application/x-tex">\bm H\bm X=\bm X(\bm X^{\top}\bm X)^{-1}\bm X^{\top}\bm X=\bm X</annotation></semantics></math>,
 and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝑯</mi><mover><mi mathvariant="bold-italic">𝒚</mi><mo accent="true">̂</mo></mover><mo>=</mo><mi mathvariant="bold-italic">𝑯</mi><mi mathvariant="bold-italic">𝑿</mi><mover><mi mathvariant="bold-italic">𝜷</mi><mo accent="true">̂</mo></mover><mo>=</mo><mi mathvariant="bold-italic">𝑿</mi><mover><mi mathvariant="bold-italic">𝜷</mi><mo accent="true">̂</mo></mover><mo>=</mo><mover><mi mathvariant="bold-italic">𝒚</mi><mo accent="true">̂</mo></mover></mrow><annotation encoding="application/x-tex">\bm H\hat{\bm y}=\bm H\bm X\hat{\bm\beta}=\bm X\hat{\bm\beta}=\hat{\bm y}</annotation></semantics></math>.
-<a href="#eq:trace" data-reference-type="eqref"
-data-reference="eq:trace">[eq:trace]</a>: for any idempotent matrix,
+<span class="xref">（见公式）</span>: for any idempotent matrix,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">rank</mi><mo>&#8289;</mo></mrow><mo>=</mo><mi mathvariant="normal">tr</mi></mrow><annotation encoding="application/x-tex">\operatorname{rank}=\operatorname{tr}</annotation></semantics></math>
 (the eigenvalues are
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0</mn><annotation encoding="application/x-tex">0</annotation></semantics></math>
@@ -3670,8 +3582,7 @@ because
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝑯</mi><annotation encoding="application/x-tex">\bm H</annotation></semantics></math>
 is the projector onto
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="script">𝒞</mi><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝑿</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\mathcal{C}(\bm X)</annotation></semantics></math>.
-<a href="#eq:orth" data-reference-type="eqref"
-data-reference="eq:orth">[eq:orth]</a>:
+<span class="xref">（见公式）</span>:
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝑯</mi><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝑰</mi><mi>n</mi></msub><mo>−</mo><mi mathvariant="bold-italic">𝑯</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi mathvariant="bold-italic">𝑯</mi><mo>−</mo><msup><mi mathvariant="bold-italic">𝑯</mi><mn>2</mn></msup><mo>=</mo><mn mathvariant="bold">𝟎</mn></mrow><annotation encoding="application/x-tex">\bm H(\bm I_n-\bm H)=\bm H-\bm H^{2}=\bm 0</annotation></semantics></math>. ◻</p>
 </div>
 <div id="prop:eigen" class="proposition">
@@ -3703,8 +3614,7 @@ for each eigenvalue, so
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>∈</mo><mo stretchy="false" form="prefix">{</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">\lambda\in\{0,1\}</annotation></semantics></math>;
 and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">tr</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝑯</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msub><mo>∑</mo><mi>j</mi></msub><msub><mi>λ</mi><mi>j</mi></msub><mo>=</mo><mi>k</mi></mrow><annotation encoding="application/x-tex">\operatorname{tr}(\bm H)=\sum_j\lambda_j=k</annotation></semantics></math>
-by <a href="#eq:trace" data-reference-type="eqref"
-data-reference="eq:trace">[eq:trace]</a>, so exactly
+by <span class="xref">（见公式）</span>, so exactly
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
 of them equal
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math>.
@@ -3768,8 +3678,7 @@ so
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>h</mi><mrow><mi>i</mi><mi>i</mi></mrow></msub><mo>∈</mo><mo stretchy="false" form="prefix">[</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">h_{ii}\in[0,1]</annotation></semantics></math>;
 summing the diagonal gives
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>∑</mo><mi>i</mi></msub><msub><mi>h</mi><mrow><mi>i</mi><mi>i</mi></mrow></msub><mo>=</mo><mrow><mi mathvariant="normal">tr</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝑯</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>k</mi></mrow><annotation encoding="application/x-tex">\sum_ih_{ii}=\operatorname{tr}(\bm H)=k</annotation></semantics></math>
-by <a href="#eq:trace" data-reference-type="eqref"
-data-reference="eq:trace">[eq:trace]</a>, hence
+by <span class="xref">（见公式）</span>, hence
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>h</mi><mo accent="true">‾</mo></mover><mo>=</mo><mi>k</mi><mi>/</mi><mi>n</mi></mrow><annotation encoding="application/x-tex">\bar h=k/n</annotation></semantics></math>. ◻</p>
 </div>
 <h2 class="unnumbered" id="the-fuel-example">The fuel example</h2>
@@ -4047,12 +3956,9 @@ one obtains
   +\frac{(\bm X^{\top}\bm X)^{-1}\bm x_i\bm x_i^{\top}(\bm X^{\top}\bm X)^{-1}}{1-h_{ii}},</annotation></semantics></math>
 and substituting this into
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi mathvariant="bold-italic">𝜷</mi><mo accent="true">̂</mo></mover><mrow><mo stretchy="false" form="prefix">(</mo><mi>i</mi><mo stretchy="false" form="postfix">)</mo></mrow></msub><mo>=</mo><mo stretchy="false" form="prefix">(</mo><msubsup><mi mathvariant="bold-italic">𝑿</mi><mrow><mo stretchy="false" form="prefix">(</mo><mi>i</mi><mo stretchy="false" form="postfix">)</mo></mrow><mi>⊤</mi></msubsup><msub><mi mathvariant="bold-italic">𝑿</mi><mrow><mo stretchy="false" form="prefix">(</mo><mi>i</mi><mo stretchy="false" form="postfix">)</mo></mrow></msub><msup><mo stretchy="false" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup><msubsup><mi mathvariant="bold-italic">𝑿</mi><mrow><mo stretchy="false" form="prefix">(</mo><mi>i</mi><mo stretchy="false" form="postfix">)</mo></mrow><mi>⊤</mi></msubsup><msub><mi mathvariant="bold-italic">𝒚</mi><mrow><mo stretchy="false" form="prefix">(</mo><mi>i</mi><mo stretchy="false" form="postfix">)</mo></mrow></msub></mrow><annotation encoding="application/x-tex">\hat{\bm\beta}_{(i)}=(\bm X_{(i)}^{\top}\bm X_{(i)})^{-1}\bm X_{(i)}^{\top}\bm y_{(i)}</annotation></semantics></math>
-and simplifying gives <a href="#eq:delbeta" data-reference-type="eqref"
-data-reference="eq:delbeta">[eq:delbeta]</a>; premultiplying by
+and simplifying gives <span class="xref">（见公式）</span>; premultiplying by
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝑿</mi><annotation encoding="application/x-tex">\bm X</annotation></semantics></math>
-gives <a href="#eq:delfit" data-reference-type="eqref"
-data-reference="eq:delfit">[eq:delfit]</a>. For <a href="#eq:dels2"
-data-reference-type="eqref" data-reference="eq:dels2">[eq:dels2]</a>,
+gives <span class="xref">（见公式）</span>. For <span class="xref">（见公式）</span>,
 the residual sum of squares of the deleted fit is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mrow><mi mathvariant="normal">R</mi><mi mathvariant="normal">S</mi><mi mathvariant="normal">S</mi></mrow><mrow><mo stretchy="false" form="prefix">(</mo><mi>i</mi><mo stretchy="false" form="postfix">)</mo></mrow></msub><mo>=</mo><mrow><mi mathvariant="normal">R</mi><mi mathvariant="normal">S</mi><mi mathvariant="normal">S</mi></mrow><mo>−</mo><msubsup><mi>e</mi><mi>i</mi><mn>2</mn></msubsup><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>h</mi><mrow><mi>i</mi><mi>i</mi></mrow></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\mathrm{RSS}_{(i)}=\mathrm{RSS}-e_i^{2}/(1-h_{ii})</annotation></semantics></math>. ◻</p>
 </div>
@@ -4060,8 +3966,7 @@ the residual sum of squares of the deleted fit is
 id="the-fuel-example-closed-form-against-actual-refitting">The fuel
 example: closed form against actual refitting</h2>
 <p>The script does both: it refits the model eight times and it
-evaluates <a href="#eq:dels2" data-reference-type="eqref"
-data-reference="eq:dels2">[eq:dels2]</a>. The two agree to
+evaluates <span class="xref">（见公式）</span>. The two agree to
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>7.7</mn><mo>×</mo><msup><mn>10</mn><mrow><mi>−</mi><mn>14</mn></mrow></msup></mrow><annotation encoding="application/x-tex">7.7\times10^{-14}</annotation></semantics></math>.</p>
 <pre style="outstyle"><code>obs          e     h_ii    1-h_ii      r_std  s_delete     r_stud
    1  0.3267417 0.324360  0.675640  1.0828999  0.390894  1.1070583
@@ -4099,8 +4004,7 @@ the point inflates its own yardstick.</p>
   D_i=\frac{\sum_{j=1}^{n}\bigl(\hat y_j-\hat y_{j(i)}\bigr)^{2}}{k\,s^{2}}
     =\frac{e_i^{2}}{k\,s^{2}}\cdot\frac{h_{ii}}{(1-h_{ii})^{2}} .
 \end{equation}</annotation></semantics></math> The second form follows
-from <a href="#eq:delfit" data-reference-type="eqref"
-data-reference="eq:delfit">[eq:delfit]</a> and needs only
+from <span class="xref">（见公式）</span> and needs only
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>e</mi><mi>i</mi></msub><annotation encoding="application/x-tex">e_i</annotation></semantics></math>,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>h</mi><mrow><mi>i</mi><mi>i</mi></mrow></msub><annotation encoding="application/x-tex">h_{ii}</annotation></semantics></math>
 and
@@ -4109,8 +4013,7 @@ A common cut-off is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>D</mi><mi>i</mi></msub><mo>&gt;</mo><mn>4</mn><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo>−</mo><mi>k</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">D_i&gt;4/(n-k)</annotation></semantics></math>.</p>
 </div>
 <div class="proof"><div class="env-label">证明</div>
-<p><em>Derivation of the closed form.</em> From <a href="#eq:delfit"
-data-reference-type="eqref" data-reference="eq:delfit">[eq:delfit]</a>,
+<p><em>Derivation of the closed form.</em> From <span class="xref">（见公式）</span>,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>y</mi><mo accent="true">̂</mo></mover><mi>j</mi></msub><mo>−</mo><msub><mover><mi>y</mi><mo accent="true">̂</mo></mover><mrow><mi>j</mi><mo stretchy="false" form="prefix">(</mo><mi>i</mi><mo stretchy="false" form="postfix">)</mo></mrow></msub><mo>=</mo><msub><mi>h</mi><mrow><mi>j</mi><mi>i</mi></mrow></msub><msub><mi>e</mi><mi>i</mi></msub><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>h</mi><mrow><mi>i</mi><mi>i</mi></mrow></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\hat y_j-\hat y_{j(i)}=h_{ji}e_i/(1-h_{ii})</annotation></semantics></math>.
 Therefore
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><munder><mo>∑</mo><mi>j</mi></munder><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">(</mo><msub><mover><mi>y</mi><mo accent="true">̂</mo></mover><mi>j</mi></msub><mo>−</mo><msub><mover><mi>y</mi><mo accent="true">̂</mo></mover><mrow><mi>j</mi><mo stretchy="false" form="prefix">(</mo><mi>i</mi><mo stretchy="false" form="postfix">)</mo></mrow></msub><msup><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">)</mo><mn>2</mn></msup><mo>=</mo><mfrac><msubsup><mi>e</mi><mi>i</mi><mn>2</mn></msubsup><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>h</mi><mrow><mi>i</mi><mi>i</mi></mrow></msub><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup></mrow></mfrac><munder><mo>∑</mo><mi>j</mi></munder><msubsup><mi>h</mi><mrow><mi>j</mi><mi>i</mi></mrow><mn>2</mn></msubsup><mo>=</mo><mfrac><msubsup><mi>e</mi><mi>i</mi><mn>2</mn></msubsup><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>h</mi><mrow><mi>i</mi><mi>i</mi></mrow></msub><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup></mrow></mfrac><mspace width="0.167em"></mspace><msub><mi>h</mi><mrow><mi>i</mi><mi>i</mi></mrow></msub><mo>,</mo></mrow><annotation encoding="application/x-tex">\sum_j\bigl(\hat y_j-\hat y_{j(i)}\bigr)^{2}
@@ -4121,8 +4024,7 @@ using
 from Proposition <a href="#prop:lev" data-reference-type="ref"
 data-reference="prop:lev">46</a>. Dividing by
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><msup><mi>s</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">k s^{2}</annotation></semantics></math>
-gives <a href="#eq:cook" data-reference-type="eqref"
-data-reference="eq:cook">[eq:cook]</a>. ◻</p>
+gives <span class="xref">（见公式）</span>. ◻</p>
 </div>
 <h2 class="unnumbered" id="the-fuel-example-1">The fuel example</h2>
 <pre style="outstyle"><code>obs   h_ii   r_stud   D_closed    D_refit
@@ -4196,9 +4098,7 @@ measures the leverage with which that surprise is transmitted to the
 whole fitted surface.</p>
 <h2 id="the-full-influence-table">完整影响分析表<span class="en">The full influence table</span></h2>
 <p>The last column reports the change in each slope when the observation
-is deleted, computed from the vector form of <a href="#eq:delbeta"
-data-reference-type="eqref"
-data-reference="eq:delbeta">[eq:delbeta]</a>:
+is deleted, computed from the vector form of <span class="xref">（见公式）</span>:
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi mathvariant="bold-italic">𝜷</mi><mo accent="true">̂</mo></mover><mo>−</mo><msub><mover><mi mathvariant="bold-italic">𝜷</mi><mo accent="true">̂</mo></mover><mrow><mo stretchy="false" form="prefix">(</mo><mi>i</mi><mo stretchy="false" form="postfix">)</mo></mrow></msub><mo>=</mo><mo stretchy="false" form="prefix">(</mo><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝑿</mi><msup><mo stretchy="false" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup><msub><mi mathvariant="bold-italic">𝒙</mi><mi>i</mi></msub><msub><mi>e</mi><mi>i</mi></msub><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>h</mi><mrow><mi>i</mi><mi>i</mi></mrow></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\hat{\bm\beta}-\hat{\bm\beta}_{(i)}=(\bm X^{\top}\bm X)^{-1}\bm x_ie_i/(1-h_{ii})</annotation></semantics></math>.</p>
 <pre style="outstyle"><code>obs     h_ii      r_std     r_stud          D       dbeta1       dbeta2
    1 0.324360  1.0828999  1.1070583 0.18765834 -0.013807044  0.0032352536
