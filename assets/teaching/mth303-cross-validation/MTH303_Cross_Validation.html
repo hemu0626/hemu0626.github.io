@@ -1286,19 +1286,20 @@ if (window.hljs) {
   table { border-collapse:collapse; margin:.9em auto; font-size:.95em; max-width:100%; }
   th, td { padding:.3em .8em; border-bottom:1px solid var(--rule); }
   thead th { border-top:1.6px solid #999; border-bottom:1px solid #999; text-align:left; }
+  .table-wrap { overflow-x:auto; margin:1em 0; }
+  .table-wrap table { font-size:.86em; margin:0 auto; }
+  .table-wrap th, .table-wrap td { white-space:nowrap; padding:.32em .55em; }
   blockquote { border:1px solid var(--green); border-left:5px solid var(--green); background:#fff;
                border-radius:7px; margin:1.1em 0; padding:.55em 1em .55em 1.1em; color:#173a29; }
   blockquote strong { color:#123b26; }
   .math.display, span.math.display, .math.display math, math[display="block"] { display:block; text-align:center; margin:.75em 0; overflow-x:auto; }
   math { font-size:1.05em; }
   hr { border:none; border-top:1px solid var(--rule); margin:2em 0; }
-  /* panels: white background, coloured border + coloured title (no solid fill) */
   .stepbox, .keybox, .warnbox, .boardbox { border:1px solid; border-left-width:5px; border-radius:7px;
        margin:1em 0; padding:10px 14px 12px; background:#fff; overflow:hidden; }
   .stepbox { border-color:var(--blue); }  .keybox { border-color:var(--green); }
   .warnbox { border-color:var(--red); }   .boardbox { border-color:var(--gray); }
-  .box-title { font-weight:600; font-size:.98em; margin:0 0 8px; padding-bottom:5px;
-       border-bottom:1px solid #ececec; }
+  .box-title { font-weight:600; font-size:.98em; margin:0 0 8px; padding-bottom:5px; border-bottom:1px solid #ececec; }
   .stepbox .box-title { color:var(--blue); }  .keybox .box-title { color:var(--green); }
   .warnbox .box-title { color:var(--red); }   .boardbox .box-title { color:var(--gray); }
   .box-body > :first-child { margin-top:0; }
