@@ -1,0 +1,473 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>惩罚项从哪里来？adjusted R²、AIC 与 BIC 的来龙去脉</title>
+<style>
+  :root { --ink:#1a1a1a; --rule:#d8d8d8; --blue:#194478; --green:#166040; --red:#962020; --gray:#484848; --purple:#7b3fa0; }
+  html { -webkit-text-size-adjust:100%; scroll-behavior:smooth; }
+  body { margin:0; padding:0; background:#fafafa; color:var(--ink);
+         font-family:"Latin Modern Roman", Georgia, "Noto Serif CJK SC", "Source Han Serif SC", "Songti SC", "Microsoft YaHei", serif;
+         font-size:16.5px; line-height:1.8; }
+  .layout { display:flex; align-items:flex-start; gap:32px; max-width:1320px; margin:0 auto; padding:24px 20px 60px; }
+  .toc { flex:0 0 260px; width:260px; position:sticky; top:24px; max-height:calc(100vh - 48px); overflow-y:auto;
+         font-family:system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif; font-size:13px; line-height:1.5;
+         border-right:1px solid var(--rule); padding-right:14px; }
+  .toc .toc-title { font-weight:600; color:var(--blue); margin-bottom:10px; }
+  .toc ul { list-style:none; margin:0; padding:0; }
+  .toc li { margin:2px 0; }
+  .toc a { color:#34506b; text-decoration:none; display:block; padding:2px 6px; border-radius:4px; }
+  .toc a:hover { background:#eef3f8; color:var(--blue); }
+  .toc .toc-h1 a { font-weight:600; color:#1c3a57; margin-top:9px; }
+  .toc .toc-h2 a { padding-left:16px; }
+  .page { flex:1 1 auto; min-width:0; max-width:900px; background:#fff; padding:36px 44px 64px; box-shadow:0 1px 4px rgba(0,0,0,.08); border-radius:2px; }
+  .back { display:inline-block; margin:0 0 14px; font-size:13.5px; text-decoration:none; border:1px solid var(--blue);
+          border-radius:999px; padding:3px 12px; color:var(--blue); font-family:system-ui, sans-serif; }
+  .back:hover { background:var(--blue); color:#fff; }
+  h1 { font-size:1.5em; color:var(--blue); border-bottom:1px solid var(--rule); padding-bottom:.25em;
+       margin:1.7em 0 .5em; line-height:1.45; scroll-margin-top:16px; }
+  h1.doc-title { font-size:1.75em; border-bottom:none; margin:.2em 0 .1em; }
+  .doc-sub { color:#556; font-size:.95em; margin:0 0 .2em; }
+  .doc-meta { color:#7a8a9a; font-size:.85em; margin-bottom:1.2em; font-family:system-ui, sans-serif; }
+  h2 { font-size:1.18em; color:#1c4d80; margin:1.6em 0 .45em; scroll-margin-top:16px; line-height:1.45; }
+  h3 { font-size:1.05em; color:#2a5f96; margin:1.25em 0 .35em; scroll-margin-top:16px; }
+  p { margin:.55em 0; }
+  .zh { margin:.5em 0; }
+  .en { margin:.35em 0 .8em; color:#5c6b7a; font-size:.9em; line-height:1.65;
+        border-left:2px solid #e3e9ef; padding-left:.8em; }
+  ul, ol { margin:.5em 0 .8em; padding-left:1.6em; }
+  li { margin:.25em 0; }
+  a { color:var(--blue); }
+  code { font-family:Consolas,"Cascadia Mono",monospace; font-size:.88em; background:#f2f2f2; border-radius:4px; padding:.08em .35em; }
+  table { border-collapse:collapse; margin:1em auto; font-size:.92em; }
+  th, td { padding:.32em .7em; border-bottom:1px solid var(--rule); vertical-align:top; }
+  thead th { border-top:1.6px solid #999; border-bottom:1px solid #999; text-align:left; background:#fbfcfd; }
+  tbody tr:last-child td { border-bottom:1.6px solid #999; }
+  .table-wrap { overflow-x:auto; margin:1em 0; }
+  .formula { text-align:center; margin:.8em 0; font-size:1.02em; overflow-x:auto; }
+  .panel { border:1px solid; border-left-width:5px; border-radius:7px; margin:1em 0; padding:10px 14px 12px; background:#fff; }
+  .panel.blue { border-left-color:var(--blue); } .panel.green { border-left-color:var(--green); }
+  .panel.red { border-left-color:var(--red); } .panel.gray { border-left-color:var(--gray); }
+  .panel.purple { border-left-color:var(--purple); }
+  .panel-title { font-weight:600; font-size:.95em; margin:0 0 6px; padding-bottom:5px; border-bottom:1px solid #ececec; }
+  .panel.blue .panel-title { color:var(--blue); } .panel.green .panel-title { color:var(--green); }
+  .panel.red .panel-title { color:var(--red); } .panel.gray .panel-title { color:var(--gray); }
+  .panel.purple .panel-title { color:var(--purple); }
+  .ai-note { margin-top:2.6em; padding-top:.9em; border-top:1px solid var(--rule); font-size:.85em; color:#666; font-style:italic; }
+  @media (max-width:1100px) { .toc { display:none; } .layout { display:block; padding:16px 12px 40px; } .page { max-width:none; } }
+  @media (max-width:640px) { .page { padding:20px 16px 40px; } body { font-size:15.5px; } }
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="toc">
+<a class="back" href="/teachings/mth303/">&#8592; MTH303</a>
+<div class="toc-title">目录 Contents</div>
+<ul id="toc-list"></ul>
+</nav>
+<div class="page">
+
+<h1 class="doc-title">惩罚项从哪里来？<br>adjusted R²、AIC 与 BIC 的来龙去脉</h1>
+<p class="doc-sub">The Origins of adjusted R², AIC and BIC: who invented them, how, and why they look the way they do</p>
+<p class="doc-meta">MTH303 Linear Statistical Models · Chapter 3 Model Selection · 配套阅读材料</p>
+
+<div class="panel blue">
+<div class="panel-title">导读 / How to read this booklet</div>
+<p class="zh">课件给了三个准则的用法，但没说它们为什么长这样。本文回答四个问题：谁发明的？在什么问题上被逼出来的？推导的关键一步是什么？为什么惩罚项偏偏是 p/(n−p−1)、2(p+1) 和 (p+1)·log n？</p>
+<p class="en">The lecture slides give the rules of use but not the reasoning behind the formulas. This booklet answers four questions: who invented each criterion, what problem forced it into existence, what the key step of the derivation is, and why the penalty is exactly p/(n−p−1), 2(p+1) and (p+1)·log n.</p>
+<p class="zh">一句话剧透——三个准则其实在估计三个不同的东西：adjusted R² 估计总体 R²，AIC 估计样本外预测的信息损失，BIC 估计模型的后验概率。目标不同，惩罚自然不同。抓住这条主线，后面所有公式都不再是死记。</p>
+<p class="en">Spoiler: the three criteria estimate three different quantities — adjusted R² estimates the population R², AIC estimates the out-of-sample information loss, and BIC estimates the posterior probability of a model. Different targets, different penalties.</p>
+</div>
+
+<h1 id="s1">1 共同的问题：惩罚项从哪来</h1>
+<p class="doc-sub" style="color:#7a8a9a;font-size:.9em;">The common problem</p>
+
+<h2 id="s1-1">1.1 样本内与样本外 <span style="font-weight:400;color:#7a8a9a;font-size:.85em;">In-sample versus out-of-sample</span></h2>
+<p class="zh">R² 的致命缺陷不是「算得不准」，而是「问错了问题」：它衡量的是模型对已经用过的数据拟合得多好。而加一个变量总能让拟合变好——哪怕这个变量纯属噪声——因为最小二乘会利用这份数据里的一切偶然波动。</p>
+<p class="en">The flaw of R² is not inaccuracy but that it answers the wrong question: how well the model fits the data it was fitted on. Adding any variable improves the fit, even a pure-noise variable, because least squares exploits every chance fluctuation in that dataset.</p>
+<p class="zh">于是所有惩罚项都在做同一件事：把「样本内的乐观」扣回去。三个准则的差别，只在于它们如何度量这份乐观、以及想还原到哪个目标。</p>
+<p class="en">Every penalty does the same job: subtract the in-sample optimism. The three criteria differ only in how they measure that optimism and which target they restore.</p>
+
+<h2 id="s1-2">1.2 三个准则，三个目标 <span style="font-weight:400;color:#7a8a9a;font-size:.85em;">Three criteria, three targets</span></h2>
+<div class="table-wrap"><table>
+<thead><tr><th>准则</th><th>真正在估计什么</th><th>乐观量的来源</th><th>惩罚形式</th></tr></thead>
+<tbody>
+<tr><td>adjusted R²</td><td>总体 R²（ρ²）：模型在新样本上能解释的方差比例</td><td>用同一份数据既挑变量又评估</td><td>R² 上的乘性收缩：R²<sub>adj</sub> = 1 − (1−R²)(n−1)/(n−p−1)</td></tr>
+<tr><td>AIC</td><td>样本外预测的 KL 信息损失 ×(−2)</td><td>极大似然估计「迁就」了这份数据</td><td>加性 2(p+1)</td></tr>
+<tr><td>BIC</td><td>模型的后验概率 ×(−2)</td><td>忽略了参数空间体积随 n 的增长</td><td>加性 (p+1)·log n</td></tr>
+</tbody></table></div>
+<div class="panel green">
+<div class="panel-title">记住这张表 / Keep this table</div>
+<p class="zh">左列是三个准则，中列是它们的「靶子」。当有人问「到底该用哪个」时，正确的回答不是「AIC 好」或「BIC 好」，而是「你要估计什么」：要预测 → AIC；要挑出真变量（稀疏、可解释）→ BIC；要一个能与 F 检验、t 检验对话的方差解释比例 → adjusted R²。</p>
+<p class="en">The middle column is the target. “Which one should I use?” is answered not by “AIC is better” but by “what are you estimating?”: prediction → AIC; identifying the true sparse model → BIC; a variance-explained measure that talks to F- and t-tests → adjusted R².</p>
+</div>
+
+<h1 id="s2">2 adjusted R²：从自由度到总体 R²（Ezekiel, 1930）</h1>
+
+<h2 id="s2-1">2.1 历史背景：相关系数会「收缩」</h2>
+<div class="panel gray">
+<div class="panel-title">史料 History</div>
+<p class="zh">adjusted R² 是三个准则里最早的，诞生于 1930 年前后的心理测量学与相关分析传统，而不是回归诊断传统。通常归于 Mordecai Ezekiel（1930 年《Methods of Correlation Analysis》一书），其中给出的修正就是今天被直接称为「adjusted R²」的那一个；次年 R. J. Wherry（1931）从「多元相关系数的收缩（shrinkage）」角度给出了等价公式，因此这一族修正有时也叫 Wherry 公式、shrunken R²、cross-validity 修正 [1, 2]。</p>
+<p class="en">Adjusted R² is the oldest of the three and came out of the psychometric/correlation tradition of around 1930 rather than out of regression diagnostics. It is usually credited to Mordecai Ezekiel (1930, <em>Methods of Correlation Analysis</em>); R. J. Wherry (1931) derived an equivalent formula from the “shrinkage” of the multiple correlation coefficient, which is why this family of corrections is also called the Wherry formula, shrunken R², or the cross-validity correction.</p>
+<p class="zh">他们当时面对的不是「选模型」，而是一个更尖锐的问题：研究者从 p 个变量里挑出与 y 相关最强的组合，算出 R² = 0.6。可是如果换一批样本，这个 R² 还会是 0.6 吗？</p>
+<p class="en">Their problem was not model selection but something sharper: a researcher picks the combination of p variables most correlated with y and reports R² = 0.6. Would that 0.6 survive on a fresh sample?</p>
+<p class="zh">答案是：必然下降。因为「挑」这个动作本身就在消耗数据里的偶然性。这种下降当时被称为收缩（shrinkage），而收缩量正是今天所谓的选择偏差（selection bias）。</p>
+<p class="en">No — it must fall, because the act of choosing consumes the luck embedded in the sample. That fall was called shrinkage, and it is exactly what we now call selection bias.</p>
+</div>
+
+<h2 id="s2-2">2.2 为什么样本 R² 必然乐观 <span style="font-weight:400;color:#7a8a9a;font-size:.85em;">Why sample R² is optimistic</span></h2>
+<p class="zh">R² = 1 − SSE/SST。分子 SSE 是「模型没解释掉的部分」，但拟合时我们恰恰是让 SSE 尽可能小。p+1 个参数会主动去贴合这份数据里的 p+1 个方向，因此即使模型全是噪声，SSE 也会比它「应有的」小一些。这个人为的缩小量，就是乐观量。</p>
+<p class="en">In R² = 1 − SSE/SST the numerator is what the model failed to explain, and fitting deliberately makes SSE as small as possible. The p+1 parameters actively fit p+1 directions of this particular sample, so even a noise model ends up with an SSE smaller than it deserves. That artificial reduction is the optimism.</p>
+<div class="panel green">
+<div class="panel-title">一句话直觉 / The one-line intuition</div>
+<p class="zh">用 n 个数据点去估计 p+1 个参数，等于花掉了 p+1 个自由度。残留的自由度只有 n−p−1 个。所以凡是「用方差来打分」的准则，分母都得除以 n−p−1 而不是 n。</p>
+<p class="en">Estimating p+1 parameters from n points spends p+1 degrees of freedom, leaving n−p−1. Any criterion built on a variance estimate must therefore divide by n−p−1, not by n.</p>
+</div>
+
+<h2 id="s2-3">2.3 推导一：自由度与总体 R²</h2>
+<p class="zh">把 R² 写成两个方差估计之比。若模型设定正确，E[SSE/(n−p−1)] = σ²（残差方差的无偏估计），E[SST/(n−1)] = σ<sub>y</sub>² = Var(系统部分) + σ²。于是</p>
+<div class="formula">R²<sub>adj</sub> = 1 − [SSE/(n−p−1)] / [SST/(n−1)] &nbsp;⟶<sub>n 大</sub>&nbsp; 1 − σ²/σ<sub>y</sub>² = Var(系统部分)/(Var(系统部分)+σ²) = ρ²</div>
+<p class="zh">也就是总体 R²：如果有无穷多的数据、模型结构不变，这个模型在总体上能解释的方差比例。</p>
+<p class="en">Write R² as a ratio of two variance estimates. If the model is correct, SSE/(n−p−1) is unbiased for σ² and SST/(n−1) is unbiased for the total variance. Adjusted R² therefore estimates the population R², ρ²: the fraction of variance the model would explain with unlimited data.</p>
+<div class="panel blue">
+<div class="panel-title">为什么分子除以 n−p−1、分母除以 n−1？</div>
+<p class="zh">分母用的是 SST/(n−1)：SST 是相对样本均值 ȳ 的离差平方和，而 ȳ 本身也花掉了 1 个自由度，所以除以 n−1。分子用的是 SSE/(n−p−1)：模型花掉了 p+1 个自由度（p 个斜率加 1 个截距），所以除以 n−p−1。两个都是「每个自由度分摊的平方和」，即均方（mean square）。R²<sub>adj</sub> = 1 − MSE/MST 因此本质上是两个无偏方差估计之比，这正是它「长得像 R²、却又比 R² 公道」的原因。</p>
+<p class="en">The denominator divides SST by n−1, because SST is measured about the sample mean, which itself costs one degree of freedom. The numerator divides SSE by n−p−1, because the model spends p+1 degrees of freedom (p slopes plus the intercept). Both are mean squares, so R²<sub>adj</sub> = 1 − MSE/MST is a ratio of two unbiased variance estimates.</p>
+</div>
+
+<h2 id="s2-4">2.4 推导二：收缩因子（Wherry 的视角）</h2>
+<p class="zh">把上面两式相除，等价写法是</p>
+<div class="formula">1 − R²<sub>adj</sub> = (1 − R²) · (n−1)/(n−p−1) &nbsp;⟺&nbsp; R²<sub>adj</sub> = 1 − (1−R²)·(1 + p/(n−p−1))</div>
+<p class="zh">(n−1)/(n−p−1) 就是收缩因子：它把「样本里的未被解释比例」1−R² 放大，等价于把 R² 缩小。展开最后一式可得课件里那个更好用的形式：</p>
+<div class="formula">R²<sub>adj</sub> = R² − (1 − R²) · p/(n−p−1)</div>
+<p class="zh">每个自变量要交的「过路费」是 (1−R²)/(n−p−1)：模型本来解释得越差（1−R² 越大）、数据越少（n−p−1 越小），加变量的代价就越高。这就把「惩罚项」讲成了一句人话。</p>
+<p class="en">Equivalently 1 − R²<sub>adj</sub> = (1−R²)(n−1)/(n−p−1); the factor is a shrinkage factor. Expanding gives the slide’s form R²<sub>adj</sub> = R² − (1−R²)p/(n−p−1), so each predictor costs a toll of (1−R²)/(n−p−1) — higher when the model explains little and when the sample is small.</p>
+
+<h2 id="s2-5">2.5 用 t 检验的语言读它：门槛是 |t| &gt; 1</h2>
+<p class="zh">这一条最能说明「惩罚项长这样」的含义。向模型里加一个变量时，可以证明：</p>
+<div class="formula">R²<sub>adj</sub> 上升 &nbsp;⟺&nbsp; ΔSSE / (SSE<sub>新</sub>/(n−k−1)) &gt; 1 &nbsp;⟺&nbsp; |t| &gt; 1</div>
+<p class="zh">其中 t 正是该变量的 t 统计量（等价地，偏 F = t² &gt; 1）。</p>
+<p class="en">The cleanest reading of the penalty: adding one variable raises adjusted R² if and only if |t| &gt; 1 for that variable (equivalently, the partial F = t² &gt; 1).</p>
+<p class="zh">注意这个门槛不是 1.96。也就是说，用 adjusted R² 选模型，等价于「只要 t 的绝对值超过 1 就留下这个变量」——比 5% 显著性宽松得多。这解释了为什么 adjusted R² 选出的模型往往比 F 检验看上去该有的更大，也预告了后面 AIC（门槛 √2 ≈ 1.41）和 BIC（门槛 √log n）的差别（见 §5.3）。</p>
+<p class="en">The threshold is not 1.96: selecting by adjusted R² keeps any variable whose t-statistic exceeds one in absolute value, far looser than a 5% test. This is why adjusted R² tends to retain more variables, and it sets up the comparison with AIC (threshold √2 ≈ 1.41) and BIC (threshold √log n) in §5.3.</p>
+<div class="panel purple">
+<div class="panel-title">证明 Proof（一行）</div>
+<p class="zh">设加入变量前后残差平方和为 SSE<sub>k</sub> 与 SSE<sub>k+1</sub> = SSE<sub>k</sub> − ΔSSE。R²<sub>adj</sub> 上升 ⟺ SSE<sub>k+1</sub>/(n−k−1) &lt; SSE<sub>k</sub>/(n−k) ⟺ (n−k)SSE<sub>k+1</sub> &lt; (n−k−1)(SSE<sub>k+1</sub> + ΔSSE) ⟺ ΔSSE &gt; SSE<sub>k+1</sub>/(n−k−1)，而右边正是 t² 的分母形式。</p>
+<p class="en">Write SSE<sub>k+1</sub> = SSE<sub>k</sub> − ΔSSE; the inequality reduces to ΔSSE &gt; SSE<sub>k+1</sub>/(n−k−1), whose left-hand ratio is t².</p>
+</div>
+
+<h2 id="s2-6">2.6 性质与局限 <span style="font-weight:400;color:#7a8a9a;font-size:.85em;">Properties and limits</span></h2>
+<ul>
+<li><span class="zh">可以小于 0（模型比「只用 ȳ 预测」还差），也永远 ≤ R²。</span><span class="en" style="display:block;">It can be negative and is always at most R².</span></li>
+<li><span class="zh">不再单调：加入变量时它会升也可能降，因此「取最大」才有意义——这正是它能当准则用的原因。</span><span class="en" style="display:block;">It is no longer monotone, so “take the maximum” becomes meaningful — which is exactly what makes it usable as a criterion.</span></li>
+<li><span class="zh">它不是总体 R² 的无偏估计（两个无偏估计之比仍然有偏）。更精细的无偏估计是 Olkin–Pratt 估计量；在多数情形下它比 Ezekiel 修正更准，但计算与解释都更麻烦 [3]。</span><span class="en" style="display:block;">It is not unbiased for the population R² (a ratio of unbiased estimators is still biased). The Olkin–Pratt estimator is the minimum-variance unbiased alternative, preferable in most situations, at the cost of complexity.</span></li>
+<li><span class="zh">与其他准则一样，它不能跨 y 的不同变换比较（y 与 log y 的模型 R² 不可比），也不能跨不同数据集比较。</span><span class="en" style="display:block;">Like all such criteria it cannot compare models with different transformations of y, nor models fitted to different datasets.</span></li>
+</ul>
+<h1 id="s3">3 AIC：从 KL 散度到「为什么是 2k」（Akaike, 1971/1973/1974）</h1>
+
+<h2 id="s3-1">3.1 史料：一个日本统计学家的「信息量」</h2>
+<div class="panel gray">
+<div class="panel-title">史料 History</div>
+<p class="zh">AIC 由日本统计学家赤池弘次（Hirotugu Akaike, 1927–2009）提出。它最初的名字就是朴素的「一个信息准则」（an information criterion）。英文世界最早听到它，是 Akaike 在 1971 年布达佩斯国际信息论研讨会上的报告；会议论文集 1973 年出版，但那一篇只是概念的非正式陈述。正式论文是 1974 年发表在 <em>IEEE Transactions on Automatic Control</em> 上的《A new look at the statistical model identification》，这也是今天引用最多的那一篇 [5, 6]。</p>
+<p class="en">AIC was formulated by the Japanese statistician Hirotugu Akaike (1927–2009). Its original name was simply “an information criterion”. It was first announced in English at the 1971 International Symposium on Information Theory in Budapest; the proceedings appeared in 1973 but were only an informal presentation of the concepts. The first formal publication was the 1974 paper “A new look at the statistical model identification” in <em>IEEE Transactions on Automatic Control</em>, still the standard citation.</p>
+<p class="zh">后续的重要补丁：Takeuchi (1976) 把推导所需的强假设大幅放宽（得到 TIC）；Sugiura (1978) 针对线性回归给出小样本修正（AIC<sub>c</sub>）；Hurvich &amp; Tsai (1989) 把它推广到更多情形 [8, 11, 12]。</p>
+<p class="en">Later refinements: Takeuchi (1976) weakened the assumptions (TIC); Sugiura (1978) gave the small-sample correction for linear regression; Hurvich &amp; Tsai (1989) extended it.</p>
+</div>
+
+<h2 id="s3-2">3.2 出发点：模型与真相的「距离」</h2>
+<p class="zh">设数据由某个未知过程 f 生成，我们手里有候选模型 g₁, g₂, …。衡量一个模型有多接近真相，最自然的尺子是 Kullback–Leibler 散度（Kullback &amp; Leibler, 1951）：</p>
+<div class="formula">D<sub>KL</sub>(f ‖ g) = ∫ f(y) log[f(y)/g(y)] dy = E<sub>f</sub>[log f(y)] − E<sub>f</sub>[log g(y)]<br>
+<span style="font-size:.85em;color:#667;">（第一项与模型无关，是常数；第二项越接近真相越大）</span></div>
+<p class="zh">第一项只与未知的 f 有关，比较模型时是常数；所以「选最接近真相的模型」等价于「选 E<sub>f</sub>[log g] 最大的模型」。问题在于：f 未知，这个期望算不出来，只能用样本内的 log L(θ̂) 去估——而它恰好是乐观的。AIC 的全部内容，就是把这个乐观量扣掉。</p>
+<p class="en">The first term depends only on the unknown f and is a constant across models, so choosing the closest model means maximising E<sub>f</sub>[log g]. That expectation cannot be computed, and the in-sample log L(θ̂) that replaces it is optimistic. The whole of AIC is the correction of that optimism.</p>
+
+<h2 id="s3-3">3.3 关键一步：乐观量恰好是 k（用高斯模型严格算一遍）</h2>
+<p class="zh">先在最容易算的场合把答案算出来：正态误差线性模型 y = Xβ + ε，ε ∼ N(0, σ²I)，参数个数 k = p+1（截距 + p 个斜率），σ² 视为已知或并入常数项（这是 R 里 AIC() 的约定）。</p>
+<p class="en">Compute the answer in the one case where everything is exact: the Gaussian linear model with k = p+1 regression coefficients, treating σ² as known or absorbing it into the constant (the convention used by R’s AIC()).</p>
+<div class="panel blue">
+<div class="panel-title">第一步：样本内的偏差 Step 1 — in-sample deviance</div>
+<div class="formula">−2 log L(θ̂) = RSS/σ² + 常数，&nbsp;&nbsp; RSS/σ² ∼ χ²<sub>n−k</sub> &nbsp;⟹&nbsp; E[RSS/σ²] = n − k</div>
+<p class="zh">注意这里已经是 n−k 而不是 n——拟合「用掉」了 k 个自由度，模型因此显得比它真实水平更好。这个 −k 就是乐观量的具体形式。</p>
+<p class="en">Note the n−k rather than n: fitting consumed k degrees of freedom, making the model look better than it is. That −k is the optimism.</p>
+</div>
+<div class="panel blue">
+<div class="panel-title">第二步：样本外的偏差 Step 2 — out-of-sample deviance</div>
+<p class="zh">取一个新观测点 x*（不在训练集里），其响应为 y*。杠杆的定义给出</p>
+<div class="formula">E[(y* − x*ᵀβ̂)²] = σ² + σ²h** = σ²(1 + h**)，&nbsp;&nbsp; h** = x*ᵀ(XᵀX)⁻¹x*</div>
+<p class="zh">对所有新点平均，杠杆的平均值是 h̄ = k/n（因为 Σᵢhᵢᵢ = k）。于是 n 倍的平均样本外平方误差为</p>
+<div class="formula">n · σ²(1 + k/n) = (n + k)σ²</div>
+<p class="en">Averaging the leverage over new points gives h̄ = k/n since Σᵢhᵢᵢ = k, so n times the average out-of-sample squared error is (n+k)σ².</p>
+</div>
+<div class="panel blue">
+<div class="panel-title">第三步：相减得 2k Step 3 — the difference is 2k</div>
+<div class="formula">(n+k)σ² &nbsp;<span style="color:#667;font-size:.85em;">[样本外]</span>&nbsp; − &nbsp;(n−k)σ² &nbsp;<span style="color:#667;font-size:.85em;">[样本内]</span>&nbsp; = 2kσ² &nbsp;⟹&nbsp; 在 −2 log L 的尺度上相差 2k</div>
+</div>
+<div class="panel green">
+<div class="panel-title">结论 / Conclusion</div>
+<p class="zh">把 2k 加回去，就得到「样本外表现」的（近似）无偏估计：</p>
+<div class="formula">AIC = −2 log L(θ̂) + 2k</div>
+<p class="zh">2k 不是谁拍脑袋定的常数，而是最小二乘用掉 k 个自由度的价格。这也解释了为什么 AIC 与 R²<sub>adj</sub> 在精神上是亲戚：两者都在补偿被拟合吃掉的自由度，只是一个用加法（对偏差加 2k），一个用除法（把方差除以 n−k）。</p>
+<p class="en">Adding 2k back gives an approximately unbiased estimate of out-of-sample performance. The 2k is not arbitrary — it is the price of the k degrees of freedom that least squares consumes. This also explains the kinship with adjusted R²: both compensate for spent degrees of freedom, one additively, one by division.</p>
+</div>
+
+<h2 id="s3-4">3.4 一般情形：Akaike 的定理</h2>
+<p class="zh">上面的算法用到了正态性与线性。Akaike 的一般结论是（f 在候选模型类内、n 足够大）：</p>
+<div class="formula">E[−2 log L(θ̂)] ≈ E[−2 log g(y* | θ̂)] − 2k</div>
+<p class="zh">即「样本内偏差」比「样本外偏差」系统性地小约 2k。因此 AIC 是期望样本外偏差的近似无偏估计，等价地说，AIC 估计了 2·D<sub>KL</sub>(f ‖ ĝ<sub>θ̂</sub>) 加上一个所有模型共有的常数。Akaike 的原话精神是：用可计算的样本内似然，加上参数个数这一个便宜的修正，就能逼近不可计算的样本外信息损失——这就是它成为二十世纪最有影响力的模型选择工具的原因 [6, 18]。</p>
+<p class="en">Akaike’s general result is that the in-sample deviance is systematically smaller than the out-of-sample deviance by about 2k, so AIC is an approximately unbiased estimator of the expected out-of-sample deviance (equivalently of twice the KL divergence plus a common constant). His insight was that a cheap correction — one term in the number of parameters — turns a computable in-sample quantity into a good proxy for an incomputable out-of-sample one.</p>
+
+<h2 id="s3-5">3.5 为什么是「2」：尺度的约定</h2>
+<p class="zh">把似然换成「偏差」（deviance）D = −2 log L，是为了两件事：一是让「最优」变成「最小」（−2 log L 越小拟合越好）；二是让正态模型的偏差与 RSS/σ² 直接对应。在这个尺度下，每个参数的价格恰好是 2——因为上一步算出的乐观量是 2k。若改用 log L 本身，AIC 就写成 log L − k；若用 χ² 尺度，价格是 1。「2」是单位为「负二倍对数似然」的结果，不是额外的常数。</p>
+<p class="en">Working with the deviance D = −2 log L makes “best” mean “smallest” and aligns the Gaussian case with RSS/σ². On that scale each parameter costs exactly 2, because the optimism is 2k. In log-likelihood units AIC would read log L − k; on a χ² scale it would be 1. The “2” is a unit convention, not an extra constant.</p>
+
+<h2 id="s3-6">3.6 在我们课件里的样子 <span style="font-weight:400;color:#7a8a9a;font-size:.85em;">The form used in our slides</span></h2>
+<p class="zh">把正态似然代入 −2 log L + 2k，得</p>
+<div class="formula">AIC = n·log(RSS/n) + 2(p+1) + 常数<br>BIC = n·log(RSS/n) + (p+1)·log n + 常数</div>
+<p class="zh">这正是课件上 AIC = −2 log(L) + 2(p+1) 的线性模型版本（k = p+1）。比较模型时两边常数相同，可以直接比较。注意：如果把 σ² 也当作待估参数，k 要再 +1，两种约定相差一个常数，不影响同一批数据的模型排序，但会影响不同论文之间数字的对照。</p>
+<p class="en">Substituting the Gaussian likelihood gives the linear-model forms shown, matching the slide’s AIC = −2 log L + 2(p+1) with k = p+1. If σ² is also counted as estimated, k increases by one; the two conventions differ by a constant, so rankings are unaffected but numbers across papers may not match.</p>
+
+<h2 id="s3-7">3.7 小样本补丁：AIC<sub>c</sub>（Sugiura, 1978；Hurvich &amp; Tsai, 1989）</h2>
+<p class="zh">2k 的修正是渐近的。样本量小时，实际的乐观量大于 2k，AIC 因此倾向选出参数过多的模型（过拟合）。Sugiura (1978) 对线性回归算出了精确的有限样本修正，Hurvich &amp; Tsai (1989) 把它推广 [11, 12]：</p>
+<div class="formula">AIC<sub>c</sub> = AIC + 2k(k+1)/(n−k−1)，&nbsp;&nbsp; k = p+1</div>
+<p class="zh">多出来的这一项：n→∞ 时趋于 0（回到 AIC）；分母 n−k−1 与 adjusted R² 的分母一模一样——它们都在补偿同一件事，只是 AIC<sub>c</sub> 是二阶才补上。经验规则：当 n/k &lt; 40 时应优先用 AIC<sub>c</sub>。</p>
+<p class="en">The correction vanishes as n→∞ and has the same denominator as adjusted R². Rule of thumb: prefer AIC<sub>c</sub> when n/k &lt; 40.</p>
+
+<h2 id="s3-8">3.8 AIC 的三个重要性质 <span style="font-weight:400;color:#7a8a9a;font-size:.85em;">Three properties worth knowing</span></h2>
+<ul>
+<li><span class="zh"><strong>与留一交叉验证渐近等价</strong>：对普通线性回归，AIC 与 LOOCV 在 n 大时给出相同的模型排序。这不是巧合——两者都在估计样本外预测误差。实操含义：如果你更相信交叉验证，那么在 n 不小的时候 AIC 就是它的廉价替身 [19]。</span><span class="en" style="display:block;">Asymptotically equivalent to leave-one-out cross-validation for ordinary linear regression — not a coincidence, since both target out-of-sample prediction error.</span></li>
+<li><span class="zh"><strong>与 Mallows’ Cp 渐近等价</strong>：Cp 是 Colin Mallows 在 1973 年的 <em>Technometrics</em> 论文《Some comments on Cp》中提出的，靶子同样是预测误差（SSPE），只是用全模型估的 σ̂² 来标准化 [13]。在 σ² 已知时二者完全等价，σ² 未知时只是渐近等价——所以「AIC 就是 Cp」这句话严格说并不准确。</span><span class="en" style="display:block;">Asymptotically equivalent to Mallows’ Cp (1973), which targets the same sum of squared prediction error but standardises by σ̂² from the full model. Exactly equivalent only when σ² is known.</span></li>
+<li><span class="zh"><strong>AIC 是不一致（inconsistent）的</strong>：即使真模型在候选集里，当 n→∞ 时 AIC 仍有非零概率选一个更大的模型。这不是缺陷，而是目标使然：AIC 追求的是预测精度（efficiency），而多留一个弱变量对预测的伤害很小，删错一个强变量则代价很大。</span><span class="en" style="display:block;">AIC is not consistent: even when the true model is in the candidate set, it retains a nonzero probability of choosing a larger model as n→∞. That follows from its target — AIC optimises prediction, where keeping a weak variable costs little and dropping a strong one costs a lot.</span></li>
+</ul>
+
+<h1 id="s4">4 BIC：从贝叶斯模型证据到 log n（Schwarz, 1978）</h1>
+
+<h2 id="s4-1">4.1 史料：一篇只有四页的论文</h2>
+<div class="panel gray">
+<div class="panel-title">史料 History</div>
+<p class="zh">BIC 由 Gideon E. Schwarz（当时在贝尔实验室）在 1978 年提出，论文题为《Estimating the dimension of a model》，发表在 <em>The Annals of Statistics</em> 第 6 卷第 2 期 461–464 页 [9]。它出奇地短，也不谈「模型选择」这个大题目，只解决一个具体问题：如何估计模型的维数（例如多项式的次数）。方法是在贝叶斯框架下，用拉普拉斯方法近似模型证据（marginal likelihood），得到一个带 log n 惩罚的准则。</p>
+<p class="en">BIC was introduced by Gideon E. Schwarz (then at Bell Labs) in 1978 in the four-page paper “Estimating the dimension of a model”, <em>The Annals of Statistics</em> 6(2), 461–464. It addresses one narrow question — how to estimate a model’s dimension (say, the degree of a polynomial) — by approximating the Bayesian model evidence with Laplace’s method, which produces a penalty of log n.</p>
+<p class="zh">因此它又叫 Schwarz 准则（SIC、SBC、SBIC 都是它）。同一种惩罚形式此前/同期也独立出现过：Akaike (1977) 在「熵最大原理」一文中给出过 log n 版本，Rissanen (1978) 的 MDL（最短描述长度）原理也导出同样形式 [7, 10]。所以严格说，「BIC 是 Schwarz 提出的」是就这篇论文而言，思想是多人同时到达的。</p>
+<p class="en">It is therefore also called the Schwarz criterion (SIC, SBC, SBIC). The same penalty appeared independently around the same time: Akaike (1977) gave a log n version from the entropy maximisation principle, and Rissanen’s (1978) minimum description length principle leads to the same form. Schwarz’s paper is the canonical citation, not the only origin of the idea.</p>
+</div>
+
+<h2 id="s4-2">4.2 出发点：不问「预测多准」，而问「哪个才是真模型」</h2>
+<p class="zh">AIC 问的是「哪个模型预测新数据最好」；BIC 问的是一个完全不同的问题：看了这些数据之后，哪个模型最可能是产生数据的那个？这是贝叶斯问题，答案就是模型的后验概率：</p>
+<div class="formula">p(M<sub>j</sub> | y) = p(M<sub>j</sub>)·p(y | M<sub>j</sub>) / Σ<sub>i</sub> p(M<sub>i</sub>)·p(y | M<sub>i</sub>) &nbsp;&nbsp;其中&nbsp;&nbsp; p(y | M<sub>j</sub>) = ∫ p(y | θ, M<sub>j</sub>)·π(θ | M<sub>j</sub>) dθ</div>
+<p class="zh">分母对所有候选模型都一样，所以比较模型只需比较模型证据 p(y | M<sub>j</sub>)——也就是似然在参数先验上的加权平均（marginal likelihood）。两个模型证据之比就是贝叶斯因子，而 BIC 正是 −2 log 尺度上的贝叶斯因子的大样本近似。</p>
+<p class="en">AIC asks which model predicts new data best; BIC asks a different question: given these data, which model is most likely to have generated them? That is the posterior model probability, and comparing models reduces to comparing the model evidence p(y | M<sub>j</sub>), the likelihood averaged over the prior. The ratio of two evidences is the Bayes factor, and BIC is its large-sample approximation on the −2 log scale.</p>
+
+<h2 id="s4-3">4.3 推导：拉普拉斯近似如何生出 log n</h2>
+<p class="zh">把证据写成 p(y | M) = ∫ e<sup>ℓ(θ)</sup> dθ，其中 ℓ(θ) = log[p(y | θ, M)·π(θ | M)]。当 n 大时，被积函数在众数 θ̃ 附近急剧集中，于是可以用二阶泰勒展开（拉普拉斯方法）：</p>
+<div class="formula">∫ e<sup>ℓ(θ)</sup> dθ ≈ e<sup>ℓ(θ̃)</sup>·(2π)<sup>k/2</sup>·|−∇²ℓ(θ̃)|<sup>−1/2</sup>，&nbsp;&nbsp; |−∇²ℓ(θ̃)| ≈ n<sup>k</sup>·|I(θ̂)|</div>
+<p class="zh">其中 k 是参数个数，I 是 Fisher 信息矩阵。第二步是关键：观测信息量随样本量线性增长，因此行列式含因子 n<sup>k</sup>。两边取 −2 log：</p>
+<div class="formula">−2 log p(y | M) ≈ −2 log L(θ̂) <span style="color:#667;font-size:.85em;">[拟合]</span> + k·log n <span style="color:#667;font-size:.85em;">[体积/复杂度]</span> + O(1) 项 <span style="color:#667;font-size:.85em;">[含先验，随 n 有界]</span></div>
+<p class="zh">丢掉 O(1) 项（它们在 n→∞ 时被 k log n 支配），就得到</p>
+<div class="formula">BIC = −2 log L(θ̂) + k·log n</div>
+<p class="en">Write the evidence as an integral of e<sup>ℓ(θ)</sup> and apply Laplace’s method: the integrand concentrates near the mode, the second-derivative matrix scales like n times the Fisher information, so the determinant contributes n<sup>k</sup>. Taking −2 log gives −2 log L + k log n plus terms that stay bounded as n grows; dropping those leaves BIC.</p>
+<div class="panel purple">
+<div class="panel-title">为什么是 log n，不是 n 也不是常数</div>
+<p class="zh">惩罚项来自参数空间的体积。参数越多，模型能「伸到」的区域维度越高；而随着数据增多，每个参数方向的估计精度以 1/√n 提高，相应的体积以 n<sup>k/2</sup> 缩小。取 −2 log 之后，每个参数恰好贡献 log n——所以惩罚按参数个数线性、按样本量对数增长。对比 AIC：AIC 用的是固定的每参数价格 2，因为它的推导只保留到 O(1)（不关心体积），这也正是两者在 n 大时行为分道扬镳的根源。</p>
+<p class="en">The penalty comes from the volume of parameter space: more parameters means a higher-dimensional region to search, and as n grows the estimation uncertainty in each direction shrinks like 1/√n, shrinking that volume like n<sup>k/2</sup>. After −2 log, each parameter contributes exactly log n: linear in the number of parameters, logarithmic in the sample size. AIC instead charges a flat price of 2 per parameter because its derivation keeps only O(1) terms — which is exactly why the two diverge as n grows.</p>
+</div>
+
+<h2 id="s4-4">4.4 性质：一致性，以及「clunker」风险</h2>
+<ul>
+<li><span class="zh"><strong>一致性（consistency）</strong>：若真模型在候选集内，当 n→∞ 时 BIC 以概率 1 选中真模型。这是它相对 AIC 的最大卖点：BIC 是识别工具。</span><span class="en" style="display:block;">Consistency: if the true model is among the candidates, BIC selects it with probability tending to one — its main selling point over AIC. BIC is an identification tool.</span></li>
+<li><span class="zh"><strong>代价</strong>：惩罚重意味着可能把有用的变量也删掉，因此小样本或弱信号时预测表现不如 AIC。文献里甚至给出反例（Findley, 1991）：BIC 一致性所依赖的假设不成立时，它会稳定地选错 [16]。</span><span class="en" style="display:block;">The price: a heavy penalty can discard variables that matter, so BIC can predict worse than AIC in small samples or with weak signals. Findley (1991) gives counterexamples where BIC consistently picks the wrong model when its assumptions fail.</span></li>
+<li><span class="zh"><strong>不要把它当贝叶斯因子用</strong>：BIC 只是拉普拉斯近似，丢掉了 O(1) 项，因此 ΔBIC 不能直接解释为「后验概率之比」。所谓「ΔBIC &gt; 10 就是强证据」只是 Kass &amp; Raftery 式的经验刻度 [15]。</span><span class="en" style="display:block;">Do not read differences in BIC as transformed Bayes factors: BIC is an approximation with O(1) terms dropped. The familiar “ΔBIC &gt; 10 means strong evidence” is a rule-of-thumb scale, not a probability statement.</span></li>
+</ul>
+
+<h2 id="s4-5">4.5 两点补丁：Hannan–Quinn 与「中间路线」</h2>
+<p class="zh">既然 AIC 的惩罚是常数 2、BIC 是 log n，中间自然还有空间。Hannan–Quinn 准则（HQC, 1979）取</p>
+<div class="formula">HQC = −2 log L + 2k·log log n</div>
+<p class="zh">惩罚比 BIC 轻、比 AIC 重，并具有较弱的相合性 [14]。它说明「惩罚强度」不是二选一，而是一条连续谱。</p>
+<p class="en">Between AIC’s constant 2 and BIC’s log n sits the Hannan–Quinn criterion, −2 log L + 2k log log n, with a lighter penalty than BIC and a heavier one than AIC. Penalty strength is a continuum, not a binary choice.</p>
+
+<h1 id="s5">5 三个准则的配方表 <span style="font-weight:400;color:#7a8a9a;font-size:.85em;">The recipe table</span></h1>
+
+<h2 id="s5-1">5.1 它们其实是同一道菜的三种调味</h2>
+<p class="zh">把上面所有推导并排放，会发现三个准则（加上 Cp、HQC）都是同一个骨架：</p>
+<div class="formula">准则 = −2 log L(θ̂) <span style="color:#667;font-size:.85em;">[拟合：越小越好]</span> + penalty(k) <span style="color:#667;font-size:.85em;">[复杂度：随 k 增长]</span></div>
+<p class="zh">差别只在惩罚的形式、来源，以及它们各自想估计的目标。</p>
+<p class="en">Placed side by side, all of them share one skeleton: a fit term plus a penalty that grows with the number of parameters. They differ in the form and origin of the penalty, and in the target they estimate.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>准则</th><th>拟合项</th><th>惩罚</th><th>等价 |t| 门槛</th><th>估计目标</th><th>相合性</th></tr></thead>
+<tbody>
+<tr><td>adjusted R²</td><td>R²（或 SSE/(n−k)）</td><td>−(1−R²)·p/(n−p−1)</td><td>&gt; 1</td><td>总体 R²</td><td>不适用</td></tr>
+<tr><td>AIC</td><td>−2 log L</td><td>2k</td><td>&gt; √2 ≈ 1.414</td><td>样本外 KL 信息损失</td><td>否（efficient）</td></tr>
+<tr><td>AIC<sub>c</sub></td><td>−2 log L</td><td>2k + 2k(k+1)/(n−k−1)</td><td>略高于 √2</td><td>同上（小样本）</td><td>否</td></tr>
+<tr><td>BIC</td><td>−2 log L</td><td>k·log n</td><td>&gt; √log n</td><td>后验模型概率</td><td>是（consistent）</td></tr>
+<tr><td>HQC</td><td>−2 log L</td><td>2k·log log n</td><td>介于两者</td><td>折中</td><td>弱相合</td></tr>
+<tr><td>Mallows’ Cp</td><td>SSE<sub>p</sub>/σ̂²<sub>full</sub></td><td>−(n−2k)</td><td>≈ AIC</td><td>预测平方误差 SSPE</td><td>否</td></tr>
+</tbody></table></div>
+
+<h2 id="s5-2">5.2 惩罚强度对比：2 与 log n 何时交叉</h2>
+<p class="zh">2k 与 k log n 的大小关系只取决于 n：log n &gt; 2 ⟺ n &gt; e² ≈ 7.39。也就是说，只要样本量超过 8 个，BIC 对每个参数的惩罚就已经比 AIC 重，而且差距随 n 越来越大：</p>
+<p class="en">The comparison of 2k with k log n depends only on n: log n &gt; 2 if and only if n &gt; 7.39. For any sample larger than eight, BIC already penalises each parameter more heavily, and the gap widens with n.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>n</th><th>20</th><th>50</th><th>100</th><th>500</th><th>1,000</th><th>10,000</th></tr></thead>
+<tbody>
+<tr><td>AIC 每参数惩罚</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td></tr>
+<tr><td>BIC 每参数惩罚 log n</td><td>3.00</td><td>3.91</td><td>4.61</td><td>6.21</td><td>6.91</td><td>9.21</td></tr>
+<tr><td>HQC 每参数惩罚 2 log log n</td><td>2.18</td><td>2.74</td><td>3.05</td><td>3.50</td><td>3.62</td><td>3.74</td></tr>
+</tbody></table></div>
+
+<h2 id="s5-3">5.3 最有教学价值的一张表：三个准则隐含的 |t| 门槛</h2>
+<p class="zh">第 2.5 节证明了「加一个变量，adjusted R² 上升 ⟺ |t| &gt; 1」。同样的推演可以套到 AIC 与 BIC 上（用 AIC ≈ n log(RSS/n) + 2k）：</p>
+<div class="formula">加一个变量，AIC 下降 ⟺ |t| &gt; √2，&nbsp;&nbsp; BIC 下降 ⟺ |t| &gt; √log n</div>
+<p class="zh">这解释了所有「玄学」：</p>
+<ul>
+<li><span class="zh">|t| &gt; 1 对应双侧 p ≈ 0.32——adjusted R² 的门槛其实非常宽松；</span><span class="en" style="display:block;">|t| &gt; 1 is a two-sided p ≈ 0.32: adjusted R²’s implicit threshold is extremely loose.</span></li>
+<li><span class="zh">|t| &gt; √2 对应 p ≈ 0.157，这正好是 SAS 逐步回归默认显著性水平 0.15 的来历：用 α = 0.15 的逐步回归，本质上就是 AIC；</span><span class="en" style="display:block;">|t| &gt; √2 is p ≈ 0.157 — precisely the origin of the SAS default α = 0.15 for stepwise regression: stepwise at α = 0.15 is essentially AIC.</span></li>
+<li><span class="zh">BIC 的门槛随样本量上升：n = 20 时约 1.73，n = 100 时约 2.15，n = 1000 时约 2.63——数据越多，BIC 越挑剔。</span><span class="en" style="display:block;">BIC’s threshold rises with n: about 1.73 at n = 20, 2.15 at n = 100, 2.63 at n = 1000 — the more data, the more demanding BIC becomes.</span></li>
+</ul>
+<div class="table-wrap"><table>
+<thead><tr><th>n</th><th>20</th><th>50</th><th>100</th><th>500</th><th>1,000</th></tr></thead>
+<tbody>
+<tr><td>BIC 门槛 √log n</td><td>1.73</td><td>1.98</td><td>2.15</td><td>2.49</td><td>2.63</td></tr>
+<tr><td>对应双侧 p 值</td><td>0.084</td><td>0.048</td><td>0.032</td><td>0.013</td><td>0.009</td></tr>
+</tbody></table></div>
+<p class="en" style="font-size:.82em;">(The p-values use the large-sample normal approximation; exact values would use t<sub>n−k−1</sub>.)</p>
+<h1 id="s6">6 数值演示：同一组数据，三个准则 <span style="font-weight:400;color:#7a8a9a;font-size:.85em;">A worked comparison</span></h1>
+<p class="zh">设 n = 100，SST = 200，五个候选模型的 RSS 依次为 120, 100, 95, 92, 91.5（RSS 随变量增加而下降，这是必然的）。按三种准则分别打分：</p>
+<p class="en">Take n = 100 and SST = 200, with five candidate models whose RSS values are 120, 100, 95, 92, 91.5. Score them with the three criteria:</p>
+<div class="table-wrap"><table>
+<thead><tr><th>p（自变量个数）</th><th>RSS</th><th>R²</th><th>adjusted R²</th><th>AIC</th><th>BIC</th><th>备注</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>120.0</td><td>0.4000</td><td>0.3939</td><td>22.2322</td><td>27.4425</td><td></td></tr>
+<tr><td>2</td><td>100.0</td><td>0.5000</td><td>0.4897</td><td>6.0000</td><td>13.8155</td><td></td></tr>
+<tr><td>3</td><td>95.0</td><td>0.5250</td><td>0.5102</td><td>2.8707</td><td>13.2914</td><td>← BIC 选它</td></tr>
+<tr><td>4</td><td>92.0</td><td>0.5400</td><td>0.5206</td><td>1.6618</td><td>14.6877</td><td>← adjusted R² 与 AIC 选它</td></tr>
+<tr><td>5</td><td>91.5</td><td>0.5425</td><td>0.5182</td><td>3.1169</td><td>18.7479</td><td>两个准则都开始变差</td></tr>
+</tbody></table></div>
+<div class="panel green">
+<div class="panel-title">解读 Reading</div>
+<ul>
+<li><span class="zh">R² 一路从 0.4000 升到 0.5425，完全无法用来选择——它永远给最大的模型投票。</span><span class="en" style="display:block;">R² rises monotonically from 0.4000 to 0.5425 and can never choose: it always votes for the largest model.</span></li>
+<li><span class="zh">adjusted R² 与 AIC 都在 p = 4 达到最优；BIC 在 p = 3 达到最优——因为它多罚了 1 × log 100 = 4.61，而第 4 个变量带来的 AIC 改善只有 2.8707 − 1.6618 = 1.21。</span><span class="en" style="display:block;">Adjusted R² and AIC both peak at p = 4; BIC peaks at p = 3, because it charges an extra log 100 = 4.61 while the fourth variable improves AIC by only 1.21.</span></li>
+<li><span class="zh">注意「AIC 会一直下降」是错觉：p = 5 时 AIC 反而回升（1.66 → 3.12），说明 AIC 也有最小值，只是它的最小值比 BIC 更靠右。</span><span class="en" style="display:block;">Note that AIC does not fall forever: it rises again at p = 5, so AIC has a minimum too — just further to the right than BIC’s.</span></li>
+</ul>
+</div>
+
+<h1 id="s7">7 十个常见误解 <span style="font-weight:400;color:#7a8a9a;font-size:.85em;">Ten common misunderstandings</span></h1>
+<div class="panel red">
+<div class="panel-title">M1 ·「AIC/BIC 能算 p 值吗？」</div>
+<p class="zh">不能。它们不是检验统计量，没有零分布。ΔAIC 的经验刻度（2–4 有些支持、4–7 支持很弱、&gt; 10 基本可弃）只是启发式 [18]。</p>
+<p class="en">No: they are not test statistics and have no null distribution. The usual ΔAIC scale is a heuristic.</p>
+</div>
+<div class="panel red">
+<div class="panel-title">M2 ·「AIC 和 BIC 能跨数据集比较吗？」</div>
+<p class="zh">不能。它们的绝对值含 n log(RSS/n) 等项，只能比较同一份数据、同一个响应变量下的模型。跨 y 的变换（y 与 log y）也不可比。</p>
+<p class="en">No: only models for the same data and the same response can be compared, and never across transformations of y.</p>
+</div>
+<div class="panel red">
+<div class="panel-title">M3 ·「BIC 里的 log 是常用对数吧？」</div>
+<p class="zh">自然对数。用 log₁₀ 会改变惩罚强度（log₁₀ n 更小），结果不同。</p>
+<p class="en">Natural logarithm. Using base 10 changes the penalty and the answer.</p>
+</div>
+<div class="panel red">
+<div class="panel-title">M4 ·「k 到底算不算 σ²？」</div>
+<p class="zh">看约定。R 的 AIC() 对 lm 用 k = 系数个数（即 p+1），本讲义与课件沿用这一约定；若把 σ² 也算进去则 k = p+2。二者只差常数，不影响排序。</p>
+<p class="en">A matter of convention: R’s AIC() for lm uses k = p+1 coefficients; counting σ² gives k = p+2. Rankings are unaffected.</p>
+</div>
+<div class="panel red">
+<div class="panel-title">M5 ·「adjusted R² 是无偏估计吧？」</div>
+<p class="zh">不是。两个无偏估计之比仍有偏；更好的选择是 Olkin–Pratt 估计量 [3]。</p>
+<p class="en">No — a ratio of unbiased estimators is still biased; the Olkin–Pratt estimator is preferable.</p>
+</div>
+<div class="panel red">
+<div class="panel-title">M6 ·「为什么要 AIC<sub>c</sub>？」</div>
+<p class="zh">因为 2k 是渐近修正；n 小时真实乐观量更大，AIC 会过拟合。n/k &lt; 40 时优先用 AIC<sub>c</sub>。</p>
+<p class="en">Because 2k is asymptotic; with small n the true optimism is larger and AIC overfits.</p>
+</div>
+<div class="panel red">
+<div class="panel-title">M7 ·「AIC 会选出真模型吗？」</div>
+<p class="zh">不保证也不追求。AIC 追求预测效率（efficiency），BIC 追求识别正确（consistency）。两者不能兼得——Yang (2005) 证明了在一般情况下无法同时达到最优 [17]。</p>
+<p class="en">AIC does not aim at identifying the true model — it aims at predictive efficiency, while BIC aims at consistency. Yang (2005) shows the two goals cannot both be attained in general.</p>
+</div>
+<div class="panel red">
+<div class="panel-title">M8 ·「adjusted R² 和 Cp 是同一个东西吧？」</div>
+<p class="zh">接近但不相同。Cp 按「SSE<sub>p</sub> + 2kσ̂²」的尺度排序，adjusted R² 按「SSE<sub>p</sub>/(n−k)」排序，两者的惩罚尺度不同，排序可能不一致（σ² 已知时才严格等价于 AIC）。</p>
+<p class="en">Close but not identical: Cp ranks on an additive scale while adjusted R² ranks on a multiplicative one, so they can disagree.</p>
+</div>
+<div class="panel red">
+<div class="panel-title">M9 ·「三个准则给出三个答案，说明数据有问题？」</div>
+<p class="zh">不一定，通常说明信号处于边界——即那个变量带来的改善恰好落在各准则的门槛之间（例如本例 |t| 落在 1 与 √log n 之间）。这时应如实报告并说明取舍，而不是挑一个好看的。</p>
+<p class="en">Not necessarily — it usually means the evidence sits exactly between the thresholds. Report both and state the trade-off rather than picking the nicer answer.</p>
+</div>
+<div class="panel red">
+<div class="panel-title">M10 ·「有了 AIC/BIC 就不需要交叉验证了？」</div>
+<p class="zh">不是。AIC 只在渐近意义上等价于 LOO-CV，且假设模型族正确；CV 对错误设定更稳健，也更容易向非技术读者解释。用 CV 复核是最稳妥的收尾。</p>
+<p class="en">No: AIC is only asymptotically equivalent to LOO-CV and assumes the model family is correct; CV is more robust and easier to explain.</p>
+</div>
+
+<h1 id="s8">8 一页速查 <span style="font-weight:400;color:#7a8a9a;font-size:.85em;">One-page summary</span></h1>
+<h2 id="s8-1">三句话 Three sentences</h2>
+<ol>
+<li><span class="zh"><strong>adjusted R²（Ezekiel, 1930）</strong>：把「每自由度平方和」相除，估计的是总体 R²。门槛最松（|t| &gt; 1），是个与 F/t 检验同族的方差解释比例。</span><span class="en" style="display:block;">adjusted R² (Ezekiel, 1930) estimates the population R² from two mean squares; loosest threshold (|t| &gt; 1).</span></li>
+<li><span class="zh"><strong>AIC（Akaike, 1973/1974）</strong>：用 2k 补偿「极大似然迁就数据」带来的乐观，估计的是样本外预测的信息损失。门槛 |t| &gt; √2，与 LOO-CV 渐近等价，适合预测。</span><span class="en" style="display:block;">AIC (Akaike, 1973/1974) corrects the optimism of the in-sample likelihood by 2k, estimating out-of-sample information loss; threshold |t| &gt; √2.</span></li>
+<li><span class="zh"><strong>BIC（Schwarz, 1978）</strong>：用 k log n 补偿参数空间体积，估计的是模型的后验概率。门槛 |t| &gt; √log n 随 n 上升，相合，适合识别稀疏模型。</span><span class="en" style="display:block;">BIC (Schwarz, 1978) charges k log n for the volume of parameter space, approximating the posterior model probability; threshold |t| &gt; √log n; consistent.</span></li>
+</ol>
+<div class="table-wrap"><table>
+<thead><tr><th></th><th>adjusted R²</th><th>AIC</th><th>AIC<sub>c</sub></th><th>BIC</th></tr></thead>
+<tbody>
+<tr><td>年份 Year</td><td>1930</td><td>1973 / 1974</td><td>1978 / 1989</td><td>1978</td></tr>
+<tr><td>发明人 Who</td><td>Ezekiel（Wherry 1931 等价形式）</td><td>Akaike</td><td>Sugiura；Hurvich &amp; Tsai</td><td>Schwarz</td></tr>
+<tr><td>出身 Origin</td><td>相关分析、收缩问题</td><td>信息论、KL 散度</td><td>AIC 的有限样本修正</td><td>贝叶斯模型证据</td></tr>
+<tr><td>惩罚 Penalty</td><td>乘性收缩</td><td>2k</td><td>2k + 2k(k+1)/(n−k−1)</td><td>k log n</td></tr>
+<tr><td>方向 Direction</td><td>越大越好</td><td>越小越好</td><td>越小越好</td><td>越小越好</td></tr>
+<tr><td>目标 Target</td><td>总体 R²</td><td>预测</td><td>小样本预测</td><td>识别真模型</td></tr>
+<tr><td>嵌套要求 Nested?</td><td>不需要</td><td>不需要</td><td>不需要</td><td>不需要</td></tr>
+</tbody></table></div>
+
+<h1 id="refs">参考文献 <span style="font-weight:400;color:#7a8a9a;font-size:.85em;">References</span></h1>
+<ol style="font-size:.9em;line-height:1.7;">
+<li>Ezekiel, M. (1930). <em>Methods of Correlation Analysis</em>. New York: Wiley.（adjusted R² 通常追溯至此书）</li>
+<li>Wherry, R. J. (1931). A new formula for predicting the shrinkage of the coefficient of multiple correlation. <em>The Annals of Mathematical Statistics</em>, 2(4), 440–457.</li>
+<li>Olkin, I., &amp; Pratt, J. W. (1958). Unbiased estimation of certain correlation coefficients. <em>The Annals of Mathematical Statistics</em>, 29(1), 201–211.</li>
+<li>Kullback, S., &amp; Leibler, R. A. (1951). On information and sufficiency. <em>The Annals of Mathematical Statistics</em>, 22(1), 79–86.</li>
+<li>Akaike, H. (1973). Information theory and an extension of the maximum likelihood principle. In B. N. Petrov &amp; F. Csáki (Eds.), <em>2nd International Symposium on Information Theory</em> (pp. 267–281). Budapest: Akadémiai Kiadó.（1971 年会议报告，1973 年出版；概念性陈述）</li>
+<li>Akaike, H. (1974). A new look at the statistical model identification. <em>IEEE Transactions on Automatic Control</em>, 19(6), 716–723.（正式论文）</li>
+<li>Akaike, H. (1977). On entropy maximization principle. In P. R. Krishnaiah (Ed.), <em>Applications of Statistics</em> (pp. 27–41). Amsterdam: North-Holland.</li>
+<li>Takeuchi, K. (1976). Distribution of informational statistics and a criterion of model fitting. <em>Suri-Kagaku (Mathematical Sciences)</em>, 153, 12–18.（日文；TIC）</li>
+<li>Schwarz, G. (1978). Estimating the dimension of a model. <em>The Annals of Statistics</em>, 6(2), 461–464.</li>
+<li>Rissanen, J. (1978). Modeling by shortest data description. <em>Automatica</em>, 14(5), 465–471.（MDL）</li>
+<li>Sugiura, N. (1978). Further analysis of the data by Akaike’s information criterion and the finite corrections. <em>Communications in Statistics — Theory and Methods</em>, 7(1), 13–26.</li>
+<li>Hurvich, C. M., &amp; Tsai, C.-L. (1989). Regression and time series model selection in small samples. <em>Biometrika</em>, 76(2), 297–307.</li>
+<li>Mallows, C. L. (1973). Some comments on Cp. <em>Technometrics</em>, 15(4), 661–675.</li>
+<li>Hannan, E. J., &amp; Quinn, B. G. (1979). The determination of the order of an autoregression. <em>Journal of the Royal Statistical Society, Series B</em>, 41(2), 190–195.</li>
+<li>Kass, R. E., &amp; Raftery, A. E. (1995). Bayes factors. <em>Journal of the American Statistical Association</em>, 90(430), 773–795.</li>
+<li>Findley, D. F. (1991). Counterexamples to parsimony and BIC. <em>Annals of the Institute of Statistical Mathematics</em>, 43(3), 505–514.</li>
+<li>Yang, Y. (2005). Can the strengths of AIC and BIC be shared? A conflict between model identification and regression estimation. <em>Biometrika</em>, 92(4), 937–950.</li>
+<li>Burnham, K. P., &amp; Anderson, D. R. (2002). <em>Model Selection and Multimodel Inference: A Practical Information-Theoretic Approach</em> (2nd ed.). New York: Springer.</li>
+<li>背景阅读：Wikipedia, <em>Akaike information criterion</em>、<em>Bayesian information criterion</em>、<em>Coefficient of determination</em>（含上述原始文献的完整引用；本讲义的史料均以原始文献为准核对）。</li>
+</ol>
+
+<div class="ai-note"><p>This page was generated by DeepSeek 4.1 Flash from the course booklet (originally in PDF); the bilingual text and derivations follow the source document.</p>
+<p>本页由 DeepSeek 4.1 Flash 依据课程讲义 PDF 生成，中英文内容与推导均按原讲义整理。</p></div>
+
+</div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var page = document.querySelector('.page');
+  var list = document.getElementById('toc-list');
+  if (!page || !list) return;
+  page.querySelectorAll('h1,h2').forEach(function (h) {
+    if (h.classList.contains('doc-title')) return;
+    var t = (h.childNodes[0] ? h.childNodes[0].textContent : h.textContent).trim();
+    if (!t) return;
+    if (!h.id) h.id = 'sec-' + Math.abs(t.split('').reduce(function (a, c) { return (a * 31 + c.charCodeAt(0)) | 0; }, 7));
+    var li = document.createElement('li');
+    li.className = 'toc-' + h.tagName.toLowerCase();
+    var a = document.createElement('a');
+    a.href = '#' + h.id;
+    a.textContent = t;
+    li.appendChild(a);
+    list.appendChild(li);
+  });
+});
+</script>
+</body>
+</html>
