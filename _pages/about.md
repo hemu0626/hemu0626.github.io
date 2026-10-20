@@ -33,8 +33,9 @@ I am always seeking motivated and interested undergraduate and graduate students
 
 <style>
   .home-pelican {
-    clear: both;
-    margin: 1.5rem 0 2rem;
+    margin: 2.5rem 0 1rem;
+    opacity: 0;
+    transition: opacity 0.25s ease;
   }
   .home-pelican iframe {
     display: block;
@@ -46,3 +47,24 @@ I am always seeking motivated and interested undergraduate and graduate students
     background: #0b1622;
   }
 </style>
+
+<script>
+  // The about layout puts page content above News and Selected Publications,
+  // so move the animation to the end of the article after the page is parsed.
+  (function () {
+    function place() {
+      var block = document.querySelector(".home-pelican");
+      if (!block) return;
+      var pubs = document.querySelector(".post .publications");
+      if (pubs && pubs.parentNode) {
+        pubs.parentNode.insertBefore(block, pubs.nextSibling);
+      }
+      block.style.opacity = "1";
+    }
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", place);
+    } else {
+      place();
+    }
+  })();
+</script>
