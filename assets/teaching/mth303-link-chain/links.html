@@ -52,6 +52,8 @@
   .ai-note { margin-top:2.6em; padding-top:.9em; border-top:1px solid var(--rule); font-size:.85em; color:#666; font-style:italic; }
   @media (max-width:1100px) { .toc { display:none; } .layout { display:block; padding:16px 12px 40px; } .page { max-width:none; } }
   @media (max-width:640px) { .page { padding:20px 16px 40px; } body { font-size:15.5px; } }
+
+  .formula { text-align:center; margin:.8em 0; overflow-x:auto; }
 </style>
 </head>
 <body>
@@ -643,8 +645,8 @@ style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998
 代回各自的
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>h</mi><annotation encoding="application/x-tex">h</annotation></semantics></math>，都应得到同一个
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math>：
-<span class="uni-math">h_logit(1.386294)=1.386294,</span>
-<span class="uni-math">h_probit(0.841621)=logit((0.841621))1.386294.</span>
+<div class="formula"><em>h</em><sub>logit</sub>(1.386294) = 1.386294</div>
+<div class="formula"><em>h</em><sub>probit</sub>(0.841621) = logit(Φ(0.841621)) ≈ 1.386294</div>
 这里可以说“自然参数不变”，前提是<strong>均值固定在同一个数</strong>。</p>
 <h2 class="unnumbered" id="比较二固定同一个-eta0.8">比较二：固定同一个
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>η</mi><mo>=</mo><mn>0.8</mn></mrow><annotation encoding="application/x-tex">\eta=0.8</annotation></semantics></math></h2>
@@ -696,7 +698,7 @@ probit，
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>η</mi><mo>=</mo><mn>0.8</mn></mrow><annotation encoding="application/x-tex">\eta=0.8</annotation></semantics></math>
 时，已经看到
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>θ</mi><mo>≠</mo><mi>η</mi></mrow><annotation encoding="application/x-tex">\theta\ne\eta</annotation></semantics></math>。因此
-<span class="uni-math">h_probit</span> 不是恒等函数。 检查
+<em>h</em><sub>probit</sub> 不是恒等函数。 检查
 canonical 要比较函数，不能只检查一个观测或一个点。</p>
 <div class="notebox"><div class="box-title">换链接后，系数的含义也改变</div><div class="box-body">logit 模型的
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mn>1</mn></msub><annotation encoding="application/x-tex">\beta_1</annotation></semantics></math>
@@ -836,7 +838,7 @@ id="二项计数mu-不等于成功概率">二项计数：<math display="inline" 
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>θ</mi><mo>=</mo><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mfrac><mrow><mi>μ</mi><mi>/</mi><mi>m</mi></mrow><mrow><mn>1</mn><mo>−</mo><mi>μ</mi><mi>/</mi><mi>m</mi></mrow></mfrac><mo>=</mo><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mfrac><mi>μ</mi><mrow><mi>m</mi><mo>−</mo><mi>μ</mi></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\theta=\log\frac{\mu/m}{1-\mu/m}=\log\frac{\mu}{m-\mu}.</annotation></semantics></math>
 所以对于<strong>计数均值</strong>
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>μ</mi><annotation encoding="application/x-tex">\mu</annotation></semantics></math>，典则链接为
-<span class="uni-math">g_can(μ)=μm-μ,μ=me^η1+e^η,θ=η.</span></p>
+<div class="formula"><em>g</em><sub>can</sub>(μ) = log[μ / (m − μ)], &nbsp;&nbsp; μ = m·e<sup>η</sup> / (1 + e<sup>η</sup>), &nbsp;&nbsp; θ = η</div></p>
 <div class="keybox"><div class="box-title">例：十次试验，成功概率 0.8</div><div class="box-body">若
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mo>=</mo><mn>10</mn><mo>,</mo><mi>π</mi><mo>=</mo><mn>0.8</mn></mrow><annotation encoding="application/x-tex">m=10,\pi=0.8</annotation></semantics></math>，则
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>μ</mi><mo>=</mo><mn>8</mn></mrow><annotation encoding="application/x-tex">\mu=8</annotation></semantics></math>，
