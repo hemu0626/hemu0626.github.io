@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>From Scratch: Deviance and Three Algorithms by Hand</title>
+  
+  <style>
+  :root { --ink:#1a1a1a; --rule:#d8d8d8; --blue:#194478; --green:#166040; --red:#962020; --gray:#484848; }
+  html { -webkit-text-size-adjust:100%; scroll-behavior:smooth; }
+  body { margin:0; padding:0; background:#fafafa; color:var(--ink);
+         font-family:"Latin Modern Roman", Georgia, "Noto Serif CJK SC", "Source Han Serif SC", "Songti SC", "Microsoft YaHei", serif;
+         font-size:16.5px; line-height:1.8; }
+  .layout { display:flex; align-items:flex-start; gap:32px; max-width:1320px; margin:0 auto; padding:24px 20px 60px; }
+  .toc { flex:0 0 260px; width:260px; position:sticky; top:24px; max-height:calc(100vh - 48px); overflow-y:auto;
+         font-family:system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif; font-size:13px; line-height:1.5;
+         border-right:1px solid var(--rule); padding-right:14px; }
+  .toc .toc-title { font-weight:600; color:var(--blue); margin-bottom:10px; }
+  .toc ul { list-style:none; margin:0; padding:0; }
+  .toc li { margin:2px 0; }
+  .toc a { color:#34506b; text-decoration:none; display:block; padding:2px 6px; border-radius:4px; }
+  .toc a:hover { background:#eef3f8; color:var(--blue); }
+  .toc .toc-h1 a { font-weight:600; color:#1c3a57; margin-top:9px; }
+  .toc .toc-h2 a { padding-left:16px; font-size:12.5px; color:#4a6278; }
+  .page { flex:1 1 auto; min-width:0; max-width:900px; background:#fff; padding:36px 44px 64px; box-shadow:0 1px 4px rgba(0,0,0,.08); border-radius:2px; }
+  .back { display:inline-block; margin:0 0 14px; font-size:13.5px; text-decoration:none; border:1px solid var(--blue);
+          border-radius:999px; padding:3px 12px; color:var(--blue); font-family:system-ui, sans-serif; }
+  .back:hover { background:var(--blue); color:#fff; }
+  h1 { font-size:1.45em; color:var(--blue); border-bottom:1px solid var(--rule); padding-bottom:.25em;
+       margin:1.7em 0 .5em; line-height:1.45; scroll-margin-top:16px; }
+  h1.title { font-size:1.6em; border-bottom:none; margin:.2em 0 .1em; }
+  .doc-sub { color:#556; font-size:.95em; margin:0 0 .4em; }
+  h2 { font-size:1.12em; color:#1c4d80; margin:1.3em 0 .4em; scroll-margin-top:16px; line-height:1.45; }
+  p { margin:.55em 0; }
+  ul, ol { margin:.5em 0 .8em; padding-left:1.6em; }
+  li { margin:.25em 0; }
+  a { color:var(--blue); }
+  code { font-family:Consolas,"Cascadia Mono",monospace; font-size:.88em; background:#f2f2f2; border-radius:4px; padding:.08em .35em; }
+  table { border-collapse:collapse; margin:1em auto; font-size:.92em; max-width:100%; }
+  th, td { padding:.32em .7em; border-bottom:1px solid var(--rule); vertical-align:top; }
+  thead th { border-top:1.6px solid #999; border-bottom:1px solid #999; text-align:left; background:#fbfcfd; }
+  .table-wrap { overflow-x:auto; margin:1em 0; }
+  .table-wrap table { font-size:.88em; }
+  .table-wrap th, .table-wrap td { white-space:nowrap; }
+  .formula, math[display="block"], span.math.display { display:block; text-align:center; margin:.8em 0; overflow-x:auto; }
+  math { font-size:1.04em; }
+  .stepbox, .keybox, .warnbox, .boardbox { border:1px solid; border-left-width:5px; border-radius:7px; margin:1em 0; padding:10px 14px 12px; background:#fff; overflow:hidden; }
+  .stepbox { border-color:var(--blue); } .keybox { border-color:var(--green); }
+  .warnbox { border-color:var(--red); }  .boardbox { border-color:var(--gray); }
+  .box-title { font-weight:600; font-size:.96em; margin:0 0 7px; padding-bottom:5px; border-bottom:1px solid #ececec; }
+  .stepbox .box-title { color:var(--blue); } .keybox .box-title { color:var(--green); }
+  .warnbox .box-title { color:var(--red); }  .boardbox .box-title { color:var(--gray); }
+  .box-body > :first-child { margin-top:0; } .box-body > :last-child { margin-bottom:0; }
+  .xref { color:#5a7189; font-size:.92em; }
+  .uni-math { font-style:italic; }
+  .ai-note { margin-top:2.6em; padding-top:.9em; border-top:1px solid var(--rule); font-size:.85em; color:#666; font-style:italic; }
+  @media (max-width:1100px) { .toc { display:none; } .layout { display:block; padding:16px 12px 40px; } .page { max-width:none; } }
+  @media (max-width:640px) { .page { padding:20px 16px 40px; } body { font-size:15.5px; } }
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="toc">
+<a class="back" href="/teachings/mth303/">&#8592; MTH303</a>
+<div class="toc-title">目录 Contents</div>
+<ul id="toc-list"></ul>
+</nav>
+<div class="page">
+<header id="title-block-header">
+<h1 class="title">From Scratch: Deviance and Three Algorithms by Hand</h1>
+<p class="doc-sub">从零开始：偏差的推导，以及 Newton / Fisher / IRLS 三种算法的手算迭代</p>
+</header>
+<div class="center">
+<p><span><strong>MTH303 Linear Statistical Models</strong></span><br />
+<span><span>专题：偏差的推导 与 三种算法的手算迭代</span></span><br />
+<span><strong>Deviance for Logistic Regression, and Newton / Fisher /
+IRLS by Hand</strong></span><br />
+<span><span>一个数据集，从
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>β</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><mo>=</mo><mn mathvariant="bold">𝟎</mn></mrow><annotation encoding="application/x-tex">\beta^{(0)}=\mathbf0</annotation></semantics></math>
+迭代到收敛</span></span><br />
+<span>One dataset, iterated to convergence by three methods</span><br />
+<span>：第 5 章讲义 <code>ch5_main.pdf</code>、补篇
+<code>supp_main.pdf</code></span><br />
+<span>MTH303 Teaching Group
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>⋅</mi><annotation encoding="application/x-tex">\cdot</annotation></semantics></math>School
+of Mathematics and Physics
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>⋅</mi><annotation encoding="application/x-tex">\cdot</annotation></semantics></math>
+XJTLU</span><br />
+<span>：<code>verify_iterations.py</code></span></p>
+</div>
+<h1 class="unnumbered"
+id="这份讲义做什么-what-this-note-does">这份讲义做什么 What this note
+does</h1>
+<p>两个具体的请求，两份具体的答案：</p>
+<ol>
+<li><p><strong>偏差（deviance）在逻辑回归里怎么一步步推出来？</strong>
+第 5 章只给了
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo>=</mo><mn>2</mn><mo>∑</mo><mo stretchy="false" form="prefix">[</mo><mi>y</mi><mo stretchy="false" form="prefix">(</mo><mover><mi>θ</mi><mo accent="true">̃</mo></mover><mo>−</mo><mover><mi>θ</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mi>b</mi><mo stretchy="false" form="prefix">(</mo><mover><mi>θ</mi><mo accent="true">̃</mo></mover><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mi>b</mi><mo stretchy="false" form="prefix">(</mo><mover><mi>θ</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">D=2\sum[y(\tilde\theta-\hat\theta)-b(\tilde\theta)+b(\hat\theta)]</annotation></semantics></math>，然后直接跳到
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>∑</mo><mo stretchy="false" form="prefix">[</mo><mi>y</mi><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>y</mi><mi>/</mi><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>y</mi><mo stretchy="false" form="postfix">)</mo><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>y</mi><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">2\sum[y\log(y/\hat\mu)+(1-y)\log((1-y)/(1-\hat\mu))]</annotation></semantics></math>。中间那一步牵涉"饱和模型的
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>θ</mi><mo>=</mo><mi>±</mi><mi>∞</mi></mrow><annotation encoding="application/x-tex">\theta=\pm\infty</annotation></semantics></math>"，
+必须用极限处理——本讲义把它逐行写出来，并用一个六观测的数据集手算出
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>D</mi><annotation encoding="application/x-tex">D</annotation></semantics></math>。</p></li>
+<li><p><strong>Newton–Raphson、Fisher scoring、IRLS
+能不能手算到收敛？</strong> 能。本讲义用同一个逻辑回归数据集， 从
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>β</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><mo>=</mo><mn mathvariant="bold">𝟎</mn></mrow><annotation encoding="application/x-tex">\beta^{(0)}=\mathbf0</annotation></semantics></math>
+出发，把三种方法的<strong>第一步</strong>各算一遍（数字完全相同），再给出
+<strong>到收敛的完整迭代表</strong>（5 步），最后用 probit 展示"非典则时
+Newton 与 Fisher 会分道扬镳"。</p></li>
+</ol>
+<h1 class="unnumbered"
+id="数据集与记号-the-dataset-and-the-notation">数据集与记号 The dataset
+and the notation</h1>
+<div class="center">
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th
+style="text-align: left;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math></th>
+<th style="text-align: center;">1</th>
+<th style="text-align: center;">2</th>
+<th style="text-align: center;">3</th>
+<th style="text-align: center;">4</th>
+<th style="text-align: center;">5</th>
+<th style="text-align: center;">6</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td
+style="text-align: left;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>x</mi><mi>i</mi></msub><annotation encoding="application/x-tex">x_i</annotation></semantics></math></td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">5</td>
+</tr>
+<tr>
+<td
+style="text-align: left;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>y</mi><mi>i</mi></msub><annotation encoding="application/x-tex">y_i</annotation></semantics></math></td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>6</mn></mrow><annotation encoding="application/x-tex">n=6</annotation></semantics></math>，单变量逻辑回归：<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>π</mi><mi>i</mi></msub><mo>=</mo><mrow><mi mathvariant="normal">Pr</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>Y</mi><mi>i</mi></msub><mo>=</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msup><mrow><mi mathvariant="normal">logit</mi><mo>&#8289;</mo></mrow><mrow><mi>−</mi><mn>1</mn></mrow></msup><mo stretchy="false" form="prefix">(</mo><msub><mi>β</mi><mn>0</mn></msub><mo>+</mo><msub><mi>β</mi><mn>1</mn></msub><msub><mi>x</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\pi_i=\Pr(Y_i=1)=\operatorname{logit}^{-1}(\beta_0+\beta_1x_i)</annotation></semantics></math>，<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi mathvariant="bold-italic">𝒙</mi><mi>i</mi><mi>⊤</mi></msubsup><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><msub><mi>x</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\mathbf{x}_i^{\top}=(1,x_i)</annotation></semantics></math>。
+设计矩阵的两个基本量：
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝑿</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>6</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>15</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>15</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>55</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><mrow><mi mathvariant="normal">det</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝑿</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>6</mn><mo>⋅</mo><mn>55</mn><mo>−</mo><msup><mn>15</mn><mn>2</mn></msup><mo>=</mo><mn>330</mn><mo>−</mo><mn>225</mn><mo>=</mo><mn>105</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbf{X}^{\top}\mathbf{X}=\begin{pmatrix}6&amp;15\\15&amp;55\end{pmatrix},
+\qquad
+\det(\mathbf{X}^{\top}\mathbf{X})=6\cdot55-15^{2}=330-225=105 .</annotation></semantics></math>
+（这两个数在第 §3 节手算时会反复用到。）<br />
+记号与第 5
+章一致：<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>η</mi><mi>i</mi></msub><mo>=</mo><msubsup><mi mathvariant="bold-italic">𝒙</mi><mi>i</mi><mi>⊤</mi></msubsup><mi mathvariant="bold-italic">𝜷</mi></mrow><annotation encoding="application/x-tex">\eta_i=\mathbf{x}_i^{\top}\boldsymbol{\beta}</annotation></semantics></math>，<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>μ</mi><mi>i</mi></msub><mo>=</mo><msub><mi>π</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\mu_i=\pi_i</annotation></semantics></math>，<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>w</mi><mi>i</mi></msub><mo>=</mo><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">w_i=\mu_i(1-\mu_i)</annotation></semantics></math>，
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>z</mi><mi>i</mi></msub><annotation encoding="application/x-tex">z_i</annotation></semantics></math>（有的书写
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>ξ</mi><mi>i</mi></msub><annotation encoding="application/x-tex">\xi_i</annotation></semantics></math>）是工作响应。</p>
+<div class="keybox"><div class="box-title">先给结论，好让手算有目标</div><div class="box-body"><p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi mathvariant="bold-italic">𝜷</mi><mo accent="true">̂</mo></mover><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>1.68411723</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>0.67364689</mn><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mspace width="2.0em"></mspace><mi>D</mi><mo>=</mo><mn>6.7728380383</mn><mo>,</mo><mspace width="2.0em"></mspace><mi>ℓ</mi><mo stretchy="false" form="prefix">(</mo><mover><mi mathvariant="bold-italic">𝜷</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>−</mi><mn>3.3864190191</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\hat{\boldsymbol{\beta}}=(-1.68411723,\ 0.67364689),
+\qquad
+D=6.7728380383,
+\qquad
+\ell(\hat{\boldsymbol{\beta}})=-3.3864190191 .</annotation></semantics></math>
+拟合概率
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>0.15655105</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>0.26688782</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>0.41658131</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>0.58341869</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>0.73311218</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>0.84344895</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\hat\mu=(0.15655105,\ 0.26688782,\ 0.41658131,\ 0.58341869,\ 0.73311218,\ 0.84344895)</annotation></semantics></math>，
+并且可以当堂验算两条"典则不变量"：
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><munder><mo>∑</mo><mi>i</mi></munder><msub><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo>=</mo><mn>3.00000000</mn><mo>=</mo><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>y</mi><mi>i</mi></msub><mo>,</mo><mspace width="2.0em"></mspace><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>x</mi><mi>i</mi></msub><msub><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo>=</mo><mn>10.00000000</mn><mo>=</mo><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>x</mi><mi>i</mi></msub><msub><mi>y</mi><mi>i</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\sum_i\hat\mu_i=3.00000000=\sum_i y_i,
+\qquad
+\sum_i x_i\hat\mu_i=10.00000000=\sum_i x_iy_i .</annotation></semantics></math></p></div></div>
+<h1
+id="偏差从定义到逻辑回归的闭式-deviance-from-the-definition-to-the-logistic-closed-form">偏差：从定义到逻辑回归的闭式
+Deviance: from the definition to the logistic closed form</h1>
+<h2 id="定义复习">定义（复习） </h2>
+<div class="stepbox"><div class="box-title">两行</div><div class="box-body"><p><strong>尺度化偏差：</strong><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>D</mi><mo>*</mo></msup><mo>=</mo><mi>−</mi><mn>2</mn><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">[</mo><mi>ℓ</mi><mo stretchy="false" form="prefix">(</mo><mover><mi mathvariant="bold-italic">𝝁</mi><mo accent="true">̂</mo></mover><mo>;</mo><mi mathvariant="bold-italic">𝒚</mi><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mi>ℓ</mi><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝒚</mi><mo>;</mo><mi mathvariant="bold-italic">𝒚</mi><mo stretchy="false" form="postfix">)</mo><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">D^{*}=-2\big[\ell(\hat{\boldsymbol{\mu}};\mathbf{y})-\ell(\mathbf{y};\mathbf{y})\big]</annotation></semantics></math>；<strong>偏差：</strong><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo>=</mo><mi>a</mi><mo stretchy="false" form="prefix">(</mo><mi>ϕ</mi><mo stretchy="false" form="postfix">)</mo><mspace width="0.167em"></mspace><msup><mi>D</mi><mo>*</mo></msup></mrow><annotation encoding="application/x-tex">D=a(\phi)\,D^{*}</annotation></semantics></math>。<br />
+二项与伯努利
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo stretchy="false" form="prefix">(</mo><mi>ϕ</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">a(\phi)=1</annotation></semantics></math>，所以本节
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>D</mi><mo>*</mo></msup><mo>=</mo><mi>D</mi></mrow><annotation encoding="application/x-tex">D^{*}=D</annotation></semantics></math>。展开成逐观测的形式：
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo>=</mo><mn>2</mn><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><mo minsize="180%" maxsize="180%" stretchy="true" form="prefix">{</mo><msub><mi>y</mi><mi>i</mi></msub><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">(</mo><msub><mover><mi>θ</mi><mo accent="true">̃</mo></mover><mi>i</mi></msub><mo>−</mo><msub><mover><mi>θ</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">)</mo><mo>−</mo><mi>b</mi><mo stretchy="false" form="prefix">(</mo><msub><mover><mi>θ</mi><mo accent="true">̃</mo></mover><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mi>b</mi><mo stretchy="false" form="prefix">(</mo><msub><mover><mi>θ</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mo minsize="180%" maxsize="180%" stretchy="true" form="postfix">}</mo><mo>,</mo></mrow><annotation encoding="application/x-tex">\begin{equation}
+D=2\sum_{i=1}^{n}\Big\{y_i\big(\tilde\theta_i-\hat\theta_i\big)-b(\tilde\theta_i)+b(\hat\theta_i)\Big\},
+\end{equation}</annotation></semantics></math> 其中
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>θ</mi><mo accent="true">̃</mo></mover><mi>i</mi></msub><annotation encoding="application/x-tex">\tilde\theta_i</annotation></semantics></math>
+是<strong>饱和模型</strong>（<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>μ</mi><mo accent="true">̃</mo></mover><mi>i</mi></msub><mo>=</mo><msub><mi>y</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\tilde\mu_i=y_i</annotation></semantics></math>，每个观测一个参数）对应的自然参数。</p></div></div>
+<h2 id="逻辑回归里饱和模型的-theta-是-pminfty">逻辑回归里，饱和模型的
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math>
+是
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>±</mi><mi>∞</mi></mrow><annotation encoding="application/x-tex">\pm\infty</annotation></semantics></math>
+</h2>
+<p>伯努利：<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi><mo stretchy="false" form="prefix">(</mo><mi>θ</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>+</mo><msup><mi>e</mi><mi>θ</mi></msup><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">b(\theta)=\log(1+e^{\theta})</annotation></semantics></math>，<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi><mo>=</mo><mstyle displaystyle="true"><mfrac><msup><mi>e</mi><mi>θ</mi></msup><mrow><mn>1</mn><mo>+</mo><msup><mi>e</mi><mi>θ</mi></msup></mrow></mfrac></mstyle></mrow><annotation encoding="application/x-tex">\pi=\dfrac{e^{\theta}}{1+e^{\theta}}</annotation></semantics></math>，<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>θ</mi><mo>=</mo><mrow><mi mathvariant="normal">logit</mi><mo>&#8289;</mo></mrow><mi>π</mi></mrow><annotation encoding="application/x-tex">\theta=\operatorname{logit}\pi</annotation></semantics></math>。饱和模型取
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>π</mi><mo accent="true">̃</mo></mover><mi>i</mi></msub><mo>=</mo><msub><mi>y</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\tilde\pi_i=y_i</annotation></semantics></math>，于是
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>y</mi><mi>i</mi></msub><mo>=</mo><mn>1</mn><mspace width="0.222em"></mspace><mo>⇒</mo><mspace width="0.222em"></mspace><msub><mover><mi>θ</mi><mo accent="true">̃</mo></mover><mi>i</mi></msub><mo>=</mo><mrow><mi mathvariant="normal">logit</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>+</mi><mi>∞</mi><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>y</mi><mi>i</mi></msub><mo>=</mo><mn>0</mn><mspace width="0.222em"></mspace><mo>⇒</mo><mspace width="0.222em"></mspace><msub><mover><mi>θ</mi><mo accent="true">̃</mo></mover><mi>i</mi></msub><mo>=</mo><mrow><mi mathvariant="normal">logit</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>−</mi><mi>∞</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">y_i=1\ \Longrightarrow\ \tilde\theta_i=\operatorname{logit}(1)=+\infty,
+\qquad
+y_i=0\ \Longrightarrow\ \tilde\theta_i=\operatorname{logit}(0)=-\infty .</annotation></semantics></math>
+<strong>不能直接把
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>±</mi><mi>∞</mi></mrow><annotation encoding="application/x-tex">\pm\infty</annotation></semantics></math>
+代进 <span class="xref">（见对应公式/小节）</span></strong>。正确做法是：先把
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mi>θ</mi><mo>−</mo><mi>b</mi><mo stretchy="false" form="prefix">(</mo><mi>θ</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">y\theta-b(\theta)</annotation></semantics></math>
+<strong>作为一个整体</strong>求极限，再相减。下面两步就是这件事。</p>
+<h2 id="六步推导伯努利">六步推导（伯努利） </h2>
+<div class="stepbox"><div class="box-title">第 1
+步：<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">y=1</annotation></semantics></math>
+时的饱和项</div><div class="box-body"><p>取
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>θ</mi><mo>→</mo><mi>+</mi><mi>∞</mi></mrow><annotation encoding="application/x-tex">\theta\to+\infty</annotation></semantics></math>。用
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>+</mo><msup><mi>e</mi><mi>θ</mi></msup><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>θ</mi><mo>+</mo><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>+</mo><msup><mi>e</mi><mrow><mi>−</mi><mi>θ</mi></mrow></msup><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\log(1+e^{\theta})=\theta+\log(1+e^{-\theta})</annotation></semantics></math>：
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mi>θ</mi><mo>−</mo><mi>b</mi><mo stretchy="false" form="prefix">(</mo><mi>θ</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>θ</mi><mo>−</mo><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>+</mo><msup><mi>e</mi><mi>θ</mi></msup><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>θ</mi><mo>−</mo><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">[</mo><mi>θ</mi><mo>+</mo><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>+</mo><msup><mi>e</mi><mrow><mi>−</mi><mi>θ</mi></mrow></msup><mo stretchy="false" form="postfix">)</mo><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">]</mo><mo>=</mo><mi>−</mi><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>+</mo><msup><mi>e</mi><mrow><mi>−</mi><mi>θ</mi></mrow></msup><mo stretchy="false" form="postfix">)</mo><mspace width="0.222em"></mspace><mo>→</mo><mspace width="0.222em"></mspace><mo>−</mo><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mn>1</mn><mo>=</mo><mn>0</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">y\theta-b(\theta)=\theta-\log(1+e^{\theta})
+=\theta-\big[\theta+\log(1+e^{-\theta})\big]
+=-\log(1+e^{-\theta})\ \longrightarrow\ -\log 1=0 .</annotation></semantics></math>
+所以
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">y=1</annotation></semantics></math>
+的观测在饱和模型下的贡献是
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0</mn><annotation encoding="application/x-tex">0</annotation></semantics></math>，不是
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>∞</mi><annotation encoding="application/x-tex">\infty</annotation></semantics></math>——两项的无穷大互相抵消了。</p></div></div>
+<div class="stepbox"><div class="box-title">第 2
+步：<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">y=0</annotation></semantics></math>
+时的饱和项</div><div class="box-body"><p>取
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>θ</mi><mo>→</mo><mi>−</mi><mi>∞</mi></mrow><annotation encoding="application/x-tex">\theta\to-\infty</annotation></semantics></math>。此时
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mi>θ</mi><mo>=</mo><mn>0</mn><mo>⋅</mo><mi>θ</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">y\theta=0\cdot\theta=0</annotation></semantics></math>，而
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi><mo stretchy="false" form="prefix">(</mo><mi>θ</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>+</mo><msup><mi>e</mi><mi>θ</mi></msup><mo stretchy="false" form="postfix">)</mo><mo>→</mo><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mn>1</mn><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">b(\theta)=\log(1+e^{\theta})\to\log 1=0</annotation></semantics></math>：
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mi>θ</mi><mo>−</mo><mi>b</mi><mo stretchy="false" form="prefix">(</mo><mi>θ</mi><mo stretchy="false" form="postfix">)</mo><mspace width="0.222em"></mspace><mo>→</mo><mspace width="0.222em"></mspace><mn>0</mn><mo>−</mo><mn>0</mn><mo>=</mo><mn>0</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">y\theta-b(\theta)\ \longrightarrow\ 0-0=0 .</annotation></semantics></math></p></div></div>
+<div class="stepbox"><div class="box-title">第 3 步：把两个情形合并</div><div class="box-body"><p>两步合起来：
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mover><mi>θ</mi><mo accent="true">̃</mo></mover><mo>−</mo><mi>b</mi><mo stretchy="false" form="prefix">(</mo><mover><mi>θ</mi><mo accent="true">̃</mo></mover><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>y</mi><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mi>y</mi><mo>+</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>y</mi><mo stretchy="false" form="postfix">)</mo><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>y</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>0</mn><mspace width="2.0em"></mspace><mo stretchy="false" form="prefix">(</mo><mrow><mtext mathvariant="normal">约定 </mtext><mspace width="0.333em"></mspace></mrow><mn>0</mn><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mn>0</mn><mo>=</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">\begin{equation}
+y\tilde\theta-b(\tilde\theta)=y\log y+(1-y)\log(1-y)=0
+\qquad(\text{约定 }0\log0=0).
+\end{equation}</annotation></semantics></math>
+这个"<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0</mn><annotation encoding="application/x-tex">0</annotation></semantics></math>"就是常识：<strong>饱和模型把每个观测都解释得完美，所以它的对数似然是
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0</mn><annotation encoding="application/x-tex">0</annotation></semantics></math></strong>（伯努利情形）。</p></div></div>
+<div class="stepbox"><div class="box-title">第 4 步：拟合项</div><div class="box-body"><p>由
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>θ</mi><mo accent="true">̂</mo></mover><mo>=</mo><mrow><mi mathvariant="normal">logit</mi><mo>&#8289;</mo></mrow><mover><mi>π</mi><mo accent="true">̂</mo></mover><mo>=</mo><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mover><mi>π</mi><mo accent="true">̂</mo></mover><mo>−</mo><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mover><mi>π</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\hat\theta=\operatorname{logit}\hat\pi=\log\hat\pi-\log(1-\hat\pi)</annotation></semantics></math>
+与
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi><mo stretchy="false" form="prefix">(</mo><mover><mi>θ</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>−</mi><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mover><mi>π</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">b(\hat\theta)=-\log(1-\hat\pi)</annotation></semantics></math>：
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mover><mi>θ</mi><mo accent="true">̂</mo></mover><mo>−</mo><mi>b</mi><mo stretchy="false" form="prefix">(</mo><mover><mi>θ</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>y</mi><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">[</mo><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mover><mi>π</mi><mo accent="true">̂</mo></mover><mo>−</mo><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mover><mi>π</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="postfix">)</mo><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">]</mo><mo>+</mo><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mover><mi>π</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>y</mi><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mover><mi>π</mi><mo accent="true">̂</mo></mover><mo>+</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>y</mi><mo stretchy="false" form="postfix">)</mo><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mover><mi>π</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">y\hat\theta-b(\hat\theta)
+=y\big[\log\hat\pi-\log(1-\hat\pi)\big]+\log(1-\hat\pi)
+=y\log\hat\pi+(1-y)\log(1-\hat\pi).</annotation></semantics></math>
+这正是单个观测的对数似然
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ℓ</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">(</mo><mover><mi mathvariant="bold-italic">𝝁</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\ell_i(\hat{\boldsymbol{\mu}})</annotation></semantics></math>。</p></div></div>
+<div class="stepbox"><div class="box-title">第 5 步：相减</div><div class="box-body"><p>把 <span class="xref">（见对应公式/小节）</span> 与第 4 步代入 <span class="xref">（见对应公式/小节）</span>：
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo>=</mo><mn>2</mn><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><mo minsize="180%" maxsize="180%" stretchy="true" form="prefix">{</mo><munder><munder><mn>0</mn><mo accent="true">⏟</mo></munder><mtext mathvariant="normal">饱和</mtext></munder><mo>−</mo><munder><munder><mrow><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">[</mo><msub><mi>y</mi><mi>i</mi></msub><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><msub><mover><mi>π</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo>+</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mover><mi>π</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">]</mo></mrow><mo accent="true">⏟</mo></munder><mtext mathvariant="normal">拟合</mtext></munder><mo minsize="180%" maxsize="180%" stretchy="true" form="postfix">}</mo><mo>=</mo><mi>−</mi><mn>2</mn><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">[</mo><msub><mi>y</mi><mi>i</mi></msub><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><msub><mover><mi>π</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo>+</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mover><mi>π</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">]</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">\begin{equation}
+D=2\sum_{i=1}^{n}\Big\{\underbrace{0}_{\text{饱和}}-\underbrace{\big[y_i\log\hat\pi_i+(1-y_i)\log(1-\hat\pi_i)\big]}_{\text{拟合}}\Big\}
+=-2\sum_{i=1}^{n}\big[y_i\log\hat\pi_i+(1-y_i)\log(1-\hat\pi_i)\big].
+\end{equation}</annotation></semantics></math> 右端就是
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>2</mn><mi>ℓ</mi><mo stretchy="false" form="prefix">(</mo><mover><mi mathvariant="bold-italic">𝝁</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">-2\ell(\hat{\boldsymbol{\mu}})</annotation></semantics></math>——因为饱和对数似然是
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0</mn><annotation encoding="application/x-tex">0</annotation></semantics></math>。</p></div></div>
+<div class="stepbox"><div class="box-title">第 6 步：写成"逐点贡献"的形式（手算用这个）</div><div class="box-body"><p>式 <span class="xref">（见对应公式/小节）</span> 里每一项只取
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>y</mi><mi>i</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">y_i=0</annotation></semantics></math>
+或
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math>，于是
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>d</mi><mi>i</mi></msub><mo>=</mo><mi>−</mi><mn>2</mn><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><msub><mover><mi>π</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><mspace width="1.0em"></mspace><mo stretchy="false" form="prefix">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>=</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>d</mi><mi>i</mi></msub><mo>=</mo><mi>−</mi><mn>2</mn><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mover><mi>π</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mspace width="1.0em"></mspace><mo stretchy="false" form="prefix">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>=</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mspace width="2.0em"></mspace><mi>D</mi><mo>=</mo><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>d</mi><mi>i</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\begin{equation}
+d_i=-2\log\hat\pi_i\quad(y_i=1),
+\qquad
+d_i=-2\log(1-\hat\pi_i)\quad(y_i=0),
+\qquad
+D=\sum_i d_i .
+\end{equation}</annotation></semantics></math>
+<strong>这是手算最方便的形式</strong>：预测得越"自信地错"，贡献越大。</p></div></div>
+<div class="keybox"><div class="box-title">与常见写法对照</div><div class="box-body"><p>教材常写
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo>=</mo><mn>2</mn><mo>∑</mo><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">[</mo><mi>y</mi><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mfrac><mi>y</mi><mover><mi>μ</mi><mo accent="true">̂</mo></mover></mfrac><mo>+</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>y</mi><mo stretchy="false" form="postfix">)</mo><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mfrac><mrow><mn>1</mn><mo>−</mo><mi>y</mi></mrow><mrow><mn>1</mn><mo>−</mo><mover><mi>μ</mi><mo accent="true">̂</mo></mover></mrow></mfrac><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">D=2\sum\big[y\log\frac{y}{\hat\mu}+(1-y)\log\frac{1-y}{1-\hat\mu}\big]</annotation></semantics></math>。它与
+<span class="xref">（见对应公式/小节）</span> 完全等价：
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo minsize="180%" maxsize="180%" stretchy="true" form="prefix">[</mo><mi>y</mi><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mfrac><mi>y</mi><mover><mi>μ</mi><mo accent="true">̂</mo></mover></mfrac><mo>+</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>y</mi><mo stretchy="false" form="postfix">)</mo><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mfrac><mrow><mn>1</mn><mo>−</mo><mi>y</mi></mrow><mrow><mn>1</mn><mo>−</mo><mover><mi>μ</mi><mo accent="true">̂</mo></mover></mrow></mfrac><mo minsize="180%" maxsize="180%" stretchy="true" form="postfix">]</mo><mo>=</mo><mn>2</mn><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">[</mo><mi>y</mi><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mi>y</mi><mo>+</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>y</mi><mo stretchy="false" form="postfix">)</mo><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>y</mi><mo stretchy="false" form="postfix">)</mo><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">]</mo><mo>−</mo><mn>2</mn><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">[</mo><mi>y</mi><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mo>+</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>y</mi><mo stretchy="false" form="postfix">)</mo><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="postfix">)</mo><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">]</mo><mo>,</mo></mrow><annotation encoding="application/x-tex">2\Big[y\log\frac{y}{\hat\mu}+(1-y)\log\frac{1-y}{1-\hat\mu}\Big]
+=2\big[y\log y+(1-y)\log(1-y)\big]-2\big[y\log\hat\mu+(1-y)\log(1-\hat\mu)\big],</annotation></semantics></math>
+而第一项在
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>∈</mo><mo stretchy="false" form="prefix">{</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">y\in\{0,1\}</annotation></semantics></math>
+时为
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0</mn><annotation encoding="application/x-tex">0</annotation></semantics></math>，于是回到
+<span class="xref">（见对应公式/小节）</span>。保留
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y\log y</annotation></semantics></math>
+的写法是为了在
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>&gt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">n&gt;1</annotation></semantics></math>
+时不丢常数——见下一小节。</p></div></div>
+<h2
+id="分组二项n1那个-nlog-n-是怎么消失的">分组二项（<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>&gt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">n&gt;1</annotation></semantics></math>）：那个
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n\log n</annotation></semantics></math>
+是怎么消失的 </h2>
+<p>计数响应
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Y</mi><mo>∼</mo><mrow><mi mathvariant="normal">B</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">m</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">l</mi></mrow><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo>,</mo><mi>π</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">Y\sim\mathrm{Binomial}(n,\pi)</annotation></semantics></math>
+时
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>μ</mi><mo>=</mo><mi>n</mi><mi>π</mi></mrow><annotation encoding="application/x-tex">\mu=n\pi</annotation></semantics></math>，饱和值是
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>π</mi><mo accent="true">̃</mo></mover><mo>=</mo><mi>y</mi><mi>/</mi><mi>n</mi></mrow><annotation encoding="application/x-tex">\tilde\pi=y/n</annotation></semantics></math>，对应的
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>θ</mi><mo accent="true">̃</mo></mover><mo>=</mo><mrow><mi mathvariant="normal">logit</mi><mo>&#8289;</mo></mrow><mo minsize="180%" maxsize="180%" stretchy="true" form="prefix">(</mo><mfrac><mi>y</mi><mi>n</mi></mfrac><mo minsize="180%" maxsize="180%" stretchy="true" form="postfix">)</mo><mo>=</mo><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mfrac><mi>y</mi><mrow><mi>n</mi><mo>−</mo><mi>y</mi></mrow></mfrac><mo>,</mo></mrow><annotation encoding="application/x-tex">\tilde\theta=\operatorname{logit}\Big(\frac{y}{n}\Big)=\log\frac{y}{n-y},</annotation></semantics></math>
+只要
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>&lt;</mo><mi>y</mi><mo>&lt;</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">0&lt;y&lt;n</annotation></semantics></math>
+就是有限数；<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">y=0</annotation></semantics></math>
+或
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">y=n</annotation></semantics></math>
+时同样取极限（结论不变）。</p>
+<div class="stepbox"><div class="box-title">第 1 步：饱和项</div><div class="box-body"><p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mover><mi>θ</mi><mo accent="true">̃</mo></mover><mo>=</mo><mi>y</mi><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mi>y</mi><mo>−</mo><mi>y</mi><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo>−</mo><mi>y</mi><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mspace width="2.0em"></mspace><mi>b</mi><mo stretchy="false" form="prefix">(</mo><mover><mi>θ</mi><mo accent="true">̃</mo></mover><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>n</mi><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mo minsize="180%" maxsize="180%" stretchy="true" form="prefix">(</mo><mn>1</mn><mo>+</mo><mfrac><mi>y</mi><mrow><mi>n</mi><mo>−</mo><mi>y</mi></mrow></mfrac><mo minsize="180%" maxsize="180%" stretchy="true" form="postfix">)</mo><mo>=</mo><mi>n</mi><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mfrac><mi>n</mi><mrow><mi>n</mi><mo>−</mo><mi>y</mi></mrow></mfrac><mo>=</mo><mi>n</mi><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mi>n</mi><mo>−</mo><mi>n</mi><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo>−</mo><mi>y</mi><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">y\tilde\theta=y\log y-y\log(n-y),
+\qquad
+b(\tilde\theta)=n\log\Big(1+\frac{y}{n-y}\Big)=n\log\frac{n}{n-y}=n\log n-n\log(n-y).</annotation></semantics></math>
+相减：
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mover><mi>θ</mi><mo accent="true">̃</mo></mover><mo>−</mo><mi>b</mi><mo stretchy="false" form="prefix">(</mo><mover><mi>θ</mi><mo accent="true">̃</mo></mover><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>y</mi><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mi>y</mi><mo>+</mo><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo>−</mo><mi>y</mi><mo stretchy="false" form="postfix">)</mo><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo>−</mo><mi>y</mi><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mi>n</mi><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mi>n</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\begin{equation}
+y\tilde\theta-b(\tilde\theta)=y\log y+(n-y)\log(n-y)-n\log n .
+\end{equation}</annotation></semantics></math></p></div></div>
+<div class="stepbox"><div class="box-title">第 2 步：拟合项与相减</div><div class="box-body"><p>同理（把
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mi>/</mi><mi>n</mi></mrow><annotation encoding="application/x-tex">y/n</annotation></semantics></math>
+换成
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mi>/</mi><mi>n</mi></mrow><annotation encoding="application/x-tex">\hat\mu/n</annotation></semantics></math>）：
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mover><mi>θ</mi><mo accent="true">̂</mo></mover><mo>−</mo><mi>b</mi><mo stretchy="false" form="prefix">(</mo><mover><mi>θ</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>y</mi><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mo>+</mo><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo>−</mo><mi>y</mi><mo stretchy="false" form="postfix">)</mo><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo>−</mo><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mi>n</mi><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mi>n</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">y\hat\theta-b(\hat\theta)=y\log\hat\mu+(n-y)\log(n-\hat\mu)-n\log n .</annotation></semantics></math>
+两式相减，<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mi>n</mi><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">-n\log n</annotation></semantics></math>
+<strong>正好抵消</strong>：
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo>=</mo><mn>2</mn><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><mo minsize="180%" maxsize="180%" stretchy="true" form="prefix">{</mo><msub><mi>y</mi><mi>i</mi></msub><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mfrac><msub><mi>y</mi><mi>i</mi></msub><msub><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub></mfrac><mo>+</mo><mo stretchy="false" form="prefix">(</mo><msub><mi>n</mi><mi>i</mi></msub><mo>−</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mfrac><mrow><msub><mi>n</mi><mi>i</mi></msub><mo>−</mo><msub><mi>y</mi><mi>i</mi></msub></mrow><mrow><msub><mi>n</mi><mi>i</mi></msub><mo>−</mo><msub><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub></mrow></mfrac><mo minsize="180%" maxsize="180%" stretchy="true" form="postfix">}</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">\begin{equation}
+D=2\sum_{i=1}^{n}\Big\{y_i\log\frac{y_i}{\hat\mu_i}+(n_i-y_i)\log\frac{n_i-y_i}{n_i-\hat\mu_i}\Big\}.
+\end{equation}</annotation></semantics></math></p></div></div>
+<div class="stepbox"><div class="box-title">数值抽检（<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>5</mn><mo>,</mo><mspace width="0.222em"></mspace><mi>y</mi><mo>=</mo><mn>2</mn><mo>,</mo><mspace width="0.222em"></mspace><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mo>=</mo><mn>2.4</mn></mrow><annotation encoding="application/x-tex">n=5,\ y=2,\ \hat\mu=2.4</annotation></semantics></math>）</div><div class="box-body"><p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>π</mi><mo accent="true">̂</mo></mover><mo>=</mo><mn>2.4</mn><mi>/</mi><mn>5</mn><mo>=</mo><mn>0.48</mn></mrow><annotation encoding="application/x-tex">\hat\pi=2.4/5=0.48</annotation></semantics></math>，<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>π</mi><mo accent="true">̃</mo></mover><mo>=</mo><mn>2</mn><mi>/</mi><mn>5</mn><mo>=</mo><mn>0.4</mn></mrow><annotation encoding="application/x-tex">\tilde\pi=2/5=0.4</annotation></semantics></math>。
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo>=</mo><mn>2</mn><mo minsize="180%" maxsize="180%" stretchy="true" form="prefix">[</mo><mn>2</mn><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mfrac><mn>2</mn><mn>2.4</mn></mfrac><mo>+</mo><mn>3</mn><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mfrac><mn>3</mn><mn>2.6</mn></mfrac><mo minsize="180%" maxsize="180%" stretchy="true" form="postfix">]</mo><mo>=</mo><mn>2</mn><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">[</mo><mo>−</mo><mn>0.364643</mn><mo>+</mo><mn>0.429300</mn><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">]</mo><mo>=</mo><mn>0.12931883</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">D=2\Big[2\log\frac{2}{2.4}+3\log\frac{3}{2.6}\Big]=2\big[-0.364643+0.429300\big]=0.12931883 .</annotation></semantics></math>
+用
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>2</mn><mo stretchy="false" form="prefix">(</mo><msub><mi>ℓ</mi><mtext mathvariant="normal">fit</mtext></msub><mo>−</mo><msub><mi>ℓ</mi><mtext mathvariant="normal">sat</mtext></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">-2(\ell_{\text{fit}}-\ell_{\text{sat}})</annotation></semantics></math>
+核对：<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ℓ</mi><mtext mathvariant="normal">sat</mtext></msub><mo>=</mo><mn>2</mn><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mn>0.4</mn><mo>+</mo><mn>3</mn><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mn>0.6</mn><mo>=</mo><mi>−</mi><mn>3.36505834</mn></mrow><annotation encoding="application/x-tex">\ell_{\text{sat}}=2\log0.4+3\log0.6=-3.36505834</annotation></semantics></math>，
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ℓ</mi><mtext mathvariant="normal">fit</mtext></msub><mo>=</mo><mn>2</mn><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mn>0.48</mn><mo>+</mo><mn>3</mn><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mn>0.52</mn><mo>=</mo><mi>−</mi><mn>3.42971775</mn></mrow><annotation encoding="application/x-tex">\ell_{\text{fit}}=2\log0.48+3\log0.52=-3.42971775</annotation></semantics></math>，两者之差乘
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">-2</annotation></semantics></math>
+得
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.12931883</mn><annotation encoding="application/x-tex">0.12931883</annotation></semantics></math>。</p></div></div>
+<h2
+id="把这套公式用在我们的六观测数据上">把这套公式用在我们的六观测数据上
+</h2>
+<p>用上节的
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>μ</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat\mu</annotation></semantics></math>（<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>π</mi><mo accent="true">̂</mo></mover><mo>=</mo><mover><mi>μ</mi><mo accent="true">̂</mo></mover></mrow><annotation encoding="application/x-tex">\hat\pi=\hat\mu</annotation></semantics></math>），逐点算
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>d</mi><mi>i</mi></msub><annotation encoding="application/x-tex">d_i</annotation></semantics></math>，再求和。</p>
+<div class="center">
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math></th>
+<th
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>x</mi><mi>i</mi></msub><annotation encoding="application/x-tex">x_i</annotation></semantics></math></th>
+<th
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>y</mi><mi>i</mi></msub><annotation encoding="application/x-tex">y_i</annotation></semantics></math></th>
+<th
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><annotation encoding="application/x-tex">\hat\mu_i</annotation></semantics></math></th>
+<th style="text-align: center;">贡献公式</th>
+<th
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>d</mi><mi>i</mi></msub><annotation encoding="application/x-tex">d_i</annotation></semantics></math></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0.15655105</td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>2</mn><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">-2\log(1-\hat\mu)</annotation></semantics></math></td>
+<td style="text-align: center;">0.34051180</td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0.26688782</td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>2</mn><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">-2\log(1-\hat\mu)</annotation></semantics></math></td>
+<td style="text-align: center;">0.62091308</td>
+</tr>
+<tr>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0.41658131</td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>2</mn><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mover><mi>μ</mi><mo accent="true">̂</mo></mover></mrow><annotation encoding="application/x-tex">-2\log\hat\mu</annotation></semantics></math></td>
+<td style="text-align: center;">1.75134725</td>
+</tr>
+<tr>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0.58341869</td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>2</mn><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mover><mi>μ</mi><mo accent="true">̂</mo></mover></mrow><annotation encoding="application/x-tex">-2\log\hat\mu</annotation></semantics></math></td>
+<td style="text-align: center;">1.07770036</td>
+</tr>
+<tr>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0.73311218</td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>2</mn><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">-2\log(1-\hat\mu)</annotation></semantics></math></td>
+<td style="text-align: center;">2.64185375</td>
+</tr>
+<tr>
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0.84344895</td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>2</mn><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mover><mi>μ</mi><mo accent="true">̂</mo></mover></mrow><annotation encoding="application/x-tex">-2\log\hat\mu</annotation></semantics></math></td>
+<td style="text-align: center;">0.34051180</td>
+</tr>
+<tr>
+<td colspan="5" style="text-align: right;">合计</td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>6.77283804</mn><annotation encoding="application/x-tex">6.77283804</annotation></semantics></math></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="keybox"><div class="box-title">三个可以当堂讲的观察</div><div class="box-body"><p><strong>(1)</strong> 第 5
+个观测贡献最大（<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>2.6419</mn><annotation encoding="application/x-tex">2.6419</annotation></semantics></math>）：<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">x=4</annotation></semantics></math>
+时模型预测
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mo>=</mo><mn>0.733</mn></mrow><annotation encoding="application/x-tex">\hat\mu=0.733</annotation></semantics></math>，却观测到
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">y=0</annotation></semantics></math>——<strong>预测越自信地错，偏差越大</strong>。<br />
+<strong>(2)</strong> 第 1 与第 6
+个观测贡献相同（<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.34051180</mn><annotation encoding="application/x-tex">0.34051180</annotation></semantics></math>）：因为设计对称（<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><mn>0</mn><mo>,</mo><mi>…</mi><mo>,</mo><mn>5</mn></mrow><annotation encoding="application/x-tex">x=0,\dots,5</annotation></semantics></math>）且
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>∑</mo><mi>y</mi><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">\sum y=3</annotation></semantics></math>，模型给出
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mn>1</mn></msub><mo>=</mo><mn>1</mn><mo>−</mo><msub><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mn>6</mn></msub></mrow><annotation encoding="application/x-tex">\hat\mu_1=1-\hat\mu_6</annotation></semantics></math>，于是
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>2</mn><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mn>1</mn></msub><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>−</mi><mn>2</mn><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><msub><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mn>6</mn></msub></mrow><annotation encoding="application/x-tex">-2\log(1-\hat\mu_1)=-2\log\hat\mu_6</annotation></semantics></math>。<br />
+<strong>(3)</strong>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo>=</mo><mo>∑</mo><msubsup><mi>r</mi><mi>i</mi><mn>2</mn></msubsup></mrow><annotation encoding="application/x-tex">D=\sum r_i^{2}</annotation></semantics></math>，其中偏差残差
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>r</mi><mi>i</mi></msub><mo>=</mo><mrow><mi mathvariant="normal">sign</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><msub><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><msqrt><msub><mi>d</mi><mi>i</mi></msub></msqrt></mrow><annotation encoding="application/x-tex">r_i=\operatorname{sign}(y_i-\hat\mu_i)\sqrt{d_i}</annotation></semantics></math>。<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>D</mi><annotation encoding="application/x-tex">D</annotation></semantics></math>
+的"平方和"结构就是这样来的。</p></div></div>
+<div class="warnbox"><div class="box-title">两个常见错误</div><div class="box-body"><p><strong>(1) 直接把
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>θ</mi><mo accent="true">̃</mo></mover><mo>=</mo><mi>∞</mi></mrow><annotation encoding="application/x-tex">\tilde\theta=\infty</annotation></semantics></math>
+代进公式</strong>，得到
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∞</mi><mo>−</mo><mi>∞</mi></mrow><annotation encoding="application/x-tex">\infty-\infty</annotation></semantics></math>
+或
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>∞</mi><annotation encoding="application/x-tex">\infty</annotation></semantics></math>，从而误以为偏差发散。正确做法是先算
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mi>θ</mi><mo>−</mo><mi>b</mi><mo stretchy="false" form="prefix">(</mo><mi>θ</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">y\theta-b(\theta)</annotation></semantics></math>
+的整体极限（第 1、2 步）。<br />
+<strong>(2) 忘记
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n\log n</annotation></semantics></math>
+的抵消</strong>，在
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>&gt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">n&gt;1</annotation></semantics></math>
+时多出一项
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>2</mn><mi>n</mi><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">-2n\log n</annotation></semantics></math>。</p></div></div>
+<h1
+id="三种算法更新式与它们的关系-three-algorithms-and-how-they-relate">三种算法：更新式与它们的关系
+Three algorithms and how they relate</h1>
+<p>先写清楚三种方法各自"用什么、更新什么"，然后才动手算。</p>
+<h2 id="三个更新式">三个更新式 </h2>
+<div class="stepbox"><div class="box-title">Newton–Raphson：用观测信息
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>J</mi><annotation encoding="application/x-tex">J</annotation></semantics></math></div><div class="box-body"><p>把得分
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝜷</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">U(\boldsymbol{\beta})</annotation></semantics></math>
+在当前点线性化并令其为零：
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝜷</mi><mrow><mo stretchy="false" form="prefix">(</mo><mi>k</mi><mo>+</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><mo>=</mo><msup><mi mathvariant="bold-italic">𝜷</mi><mrow><mo stretchy="false" form="prefix">(</mo><mi>k</mi><mo stretchy="false" form="postfix">)</mo></mrow></msup><mo>+</mo><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">[</mo><mi>J</mi><mo stretchy="false" form="prefix">(</mo><msup><mi mathvariant="bold-italic">𝜷</mi><mrow><mo stretchy="false" form="prefix">(</mo><mi>k</mi><mo stretchy="false" form="postfix">)</mo></mrow></msup><mo stretchy="false" form="postfix">)</mo><msup><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">]</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup><mi>U</mi><mo stretchy="false" form="prefix">(</mo><msup><mi mathvariant="bold-italic">𝜷</mi><mrow><mo stretchy="false" form="prefix">(</mo><mi>k</mi><mo stretchy="false" form="postfix">)</mo></mrow></msup><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mspace width="2.0em"></mspace><mi>J</mi><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝜷</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>−</mi><mfrac><mrow><msup><mi>∂</mi><mn>2</mn></msup><mi>ℓ</mi></mrow><mrow><mi>∂</mi><mi mathvariant="bold-italic">𝜷</mi><mspace width="0.167em"></mspace><mi>∂</mi><msup><mi mathvariant="bold-italic">𝜷</mi><mi>⊤</mi></msup></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\boldsymbol{\beta}^{(k+1)}=\boldsymbol{\beta}^{(k)}+\big[J(\boldsymbol{\beta}^{(k)})\big]^{-1}U(\boldsymbol{\beta}^{(k)}),
+\qquad
+J(\boldsymbol{\beta})=-\frac{\partial^{2}\ell}{\partial\boldsymbol{\beta}\,\partial\boldsymbol{\beta}^{\top}} .</annotation></semantics></math></p></div></div>
+<div class="stepbox"><div class="box-title">Fisher scoring：用期望信息
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>I</mi><annotation encoding="application/x-tex">I</annotation></semantics></math></div><div class="box-body"><p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝜷</mi><mrow><mo stretchy="false" form="prefix">(</mo><mi>k</mi><mo>+</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><mo>=</mo><msup><mi mathvariant="bold-italic">𝜷</mi><mrow><mo stretchy="false" form="prefix">(</mo><mi>k</mi><mo stretchy="false" form="postfix">)</mo></mrow></msup><mo>+</mo><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">[</mo><mi>I</mi><mo stretchy="false" form="prefix">(</mo><msup><mi mathvariant="bold-italic">𝜷</mi><mrow><mo stretchy="false" form="prefix">(</mo><mi>k</mi><mo stretchy="false" form="postfix">)</mo></mrow></msup><mo stretchy="false" form="postfix">)</mo><msup><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">]</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup><mi>U</mi><mo stretchy="false" form="prefix">(</mo><msup><mi mathvariant="bold-italic">𝜷</mi><mrow><mo stretchy="false" form="prefix">(</mo><mi>k</mi><mo stretchy="false" form="postfix">)</mo></mrow></msup><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mspace width="2.0em"></mspace><mi>I</mi><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝜷</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi mathvariant="double-struck">𝔼</mi><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">[</mo><mi>J</mi><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝜷</mi><mo stretchy="false" form="postfix">)</mo><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">]</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">\boldsymbol{\beta}^{(k+1)}=\boldsymbol{\beta}^{(k)}+\big[I(\boldsymbol{\beta}^{(k)})\big]^{-1}U(\boldsymbol{\beta}^{(k)}),
+\qquad
+I(\boldsymbol{\beta})=\mathbb{E}\big[J(\boldsymbol{\beta})\big].</annotation></semantics></math>
+好处：<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>I</mi><annotation encoding="application/x-tex">I</annotation></semantics></math>
+不含
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝒚</mi><annotation encoding="application/x-tex">\mathbf{y}</annotation></semantics></math>，只需一阶量（<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>V</mi><annotation encoding="application/x-tex">V</annotation></semantics></math>
+与
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>g</mi><mo>′</mo></msup><annotation encoding="application/x-tex">g&#39;</annotation></semantics></math>），而且总正定。</p></div></div>
+<div class="stepbox"><div class="box-title">IRLS：把它写成加权最小二乘</div><div class="box-body"><p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝜷</mi><mrow><mo stretchy="false" form="prefix">(</mo><mi>k</mi><mo>+</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><mo>=</mo><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">(</mo><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝑾</mi><mi mathvariant="bold-italic">𝑿</mi><msup><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝑾</mi><mi mathvariant="bold-italic">𝒛</mi><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>w</mi><mi>i</mi></msub><mo>=</mo><mfrac><mn>1</mn><mrow><mi>V</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><msup><mi>g</mi><mo>′</mo></msup><mo stretchy="false" form="prefix">(</mo><msub><mi>μ</mi><mi>i</mi></msub><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup></mrow></mfrac><mo>,</mo><mspace width="1.0em"></mspace><msub><mi>z</mi><mi>i</mi></msub><mo>=</mo><msub><mi>η</mi><mi>i</mi></msub><mo>+</mo><msup><mi>g</mi><mo>′</mo></msup><mo stretchy="false" form="prefix">(</mo><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="prefix">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">\boldsymbol{\beta}^{(k+1)}=\big(\mathbf{X}^{\top}\mathbf{W}\mathbf{X}\big)^{-1}\mathbf{X}^{\top}\mathbf{W}\mathbf{z},
+\qquad
+w_i=\frac{1}{V(\mu_i)g&#39;(\mu_i)^{2}},\quad
+z_i=\eta_i+g&#39;(\mu_i)(y_i-\mu_i).</annotation></semantics></math></p></div></div>
+<h2 id="对逻辑回归三者是同一个迭代">对逻辑回归，三者是同一个迭代 </h2>
+<div class="stepbox"><div class="box-title">三行代数</div><div class="box-body"><p>逻辑回归（典则连接
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="normal">logit</mi><annotation encoding="application/x-tex">\operatorname{logit}</annotation></semantics></math>）：
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ℓ</mi><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝜷</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><munder><mo>∑</mo><mi>i</mi></munder><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">[</mo><msub><mi>y</mi><mi>i</mi></msub><msub><mi>η</mi><mi>i</mi></msub><mo>−</mo><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>+</mo><msup><mi>e</mi><msub><mi>η</mi><mi>i</mi></msub></msup><mo stretchy="false" form="postfix">)</mo><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">]</mo><mo>,</mo><mspace width="2.0em"></mspace><mi>U</mi><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝜷</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝒚</mi><mo>−</mo><mi mathvariant="bold-italic">𝝁</mi><mo stretchy="false" form="postfix">)</mo><mo>,</mo></mrow><annotation encoding="application/x-tex">\ell(\boldsymbol{\beta})=\sum_i\big[y_i\eta_i-\log(1+e^{\eta_i})\big],
+\qquad
+U(\boldsymbol{\beta})=\mathbf{X}^{\top}(\mathbf{y}-\boldsymbol{\mu}),</annotation></semantics></math>
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><msup><mi>∂</mi><mn>2</mn></msup><mi>ℓ</mi></mrow><mrow><mi>∂</mi><mi mathvariant="bold-italic">𝜷</mi><mi>∂</mi><msup><mi mathvariant="bold-italic">𝜷</mi><mi>⊤</mi></msup></mrow></mfrac><mo>=</mo><mi>−</mi><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mrow><mi mathvariant="normal">diag</mi><mo>&#8289;</mo></mrow><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">(</mo><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">)</mo><mi mathvariant="bold-italic">𝑿</mi><mspace width="1.0em"></mspace><mo>⇒</mo><mspace width="1.0em"></mspace><mi>J</mi><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝜷</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝑾</mi><mi mathvariant="bold-italic">𝑿</mi><mo>,</mo><mspace width="2.0em"></mspace><mi mathvariant="bold-italic">𝑾</mi><mo>=</mo><mrow><mi mathvariant="normal">diag</mi><mo>&#8289;</mo></mrow><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">(</mo><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial^{2}\ell}{\partial\boldsymbol{\beta}\partial\boldsymbol{\beta}^{\top}}
+=-\mathbf{X}^{\top}\operatorname{diag}\big(\mu_i(1-\mu_i)\big)\mathbf{X}
+\quad\Longrightarrow\quad
+J(\boldsymbol{\beta})=\mathbf{X}^{\top}\mathbf{W}\mathbf{X},\qquad \mathbf{W}=\operatorname{diag}\big(\mu_i(1-\mu_i)\big).</annotation></semantics></math>
+<strong>二阶导里没有
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝒚</mi><annotation encoding="application/x-tex">\mathbf{y}</annotation></semantics></math></strong>，所以
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mo>=</mo><mi mathvariant="double-struck">𝔼</mi><mo stretchy="false" form="prefix">[</mo><mi>J</mi><mo stretchy="false" form="postfix">]</mo><mo>=</mo><mi>J</mi></mrow><annotation encoding="application/x-tex">I=\mathbb{E}[J]=J</annotation></semantics></math>——Newton
+与 Fisher 的步长处处相同。 再把
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>U</mi><annotation encoding="application/x-tex">U</annotation></semantics></math>
+写成
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝑾</mi><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo>−</mo><mi mathvariant="bold-italic">𝑿</mi><mi mathvariant="bold-italic">𝜷</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\mathbf{X}^{\top}\mathbf{W}(z-\mathbf{X}\boldsymbol{\beta})</annotation></semantics></math>（因为
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>−</mo><mi>η</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mi>y</mi><mo>−</mo><mi>μ</mi><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mi>μ</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>μ</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">z-\eta=(y-\mu)/(\mu(1-\mu))</annotation></semantics></math>），就得到
+IRLS 的式子。</p></div></div>
+<div class="center">
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th style="text-align: left;"><strong>方法</strong></th>
+<th style="text-align: left;"><strong>用哪个矩阵</strong></th>
+<th style="text-align: left;"><strong>一步的形式</strong></th>
+<th style="text-align: left;"><strong>在 logit 下</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Newton</td>
+<td
+style="text-align: left;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mo>=</mo><mi>−</mi><msup><mi>∇</mi><mn>2</mn></msup><mi>ℓ</mi></mrow><annotation encoding="application/x-tex">J=-\nabla^{2}\ell</annotation></semantics></math></td>
+<td
+style="text-align: left;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝜷</mi><mo>+</mo><msup><mi>J</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mi>U</mi></mrow><annotation encoding="application/x-tex">\boldsymbol{\beta}+J^{-1}U</annotation></semantics></math></td>
+<td style="text-align: left;">与 Fisher 完全相同</td>
+</tr>
+<tr>
+<td style="text-align: left;">Fisher</td>
+<td
+style="text-align: left;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mo>=</mo><mi mathvariant="double-struck">𝔼</mi><mo stretchy="false" form="prefix">[</mo><mi>J</mi><mo stretchy="false" form="postfix">]</mo><mo>=</mo><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝑾</mi><mi mathvariant="bold-italic">𝑿</mi></mrow><annotation encoding="application/x-tex">I=\mathbb{E}[J]=\mathbf{X}^{\top}\mathbf{W}\mathbf{X}</annotation></semantics></math></td>
+<td
+style="text-align: left;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝜷</mi><mo>+</mo><msup><mi>I</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mi>U</mi></mrow><annotation encoding="application/x-tex">\boldsymbol{\beta}+I^{-1}U</annotation></semantics></math></td>
+<td style="text-align: left;">同上</td>
+</tr>
+<tr>
+<td style="text-align: left;">IRLS</td>
+<td
+style="text-align: left;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝑾</mi><annotation encoding="application/x-tex">\mathbf{W}</annotation></semantics></math>、<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝒛</mi><annotation encoding="application/x-tex">\mathbf{z}</annotation></semantics></math></td>
+<td
+style="text-align: left;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝑾</mi><mi mathvariant="bold-italic">𝑿</mi><msup><mo stretchy="false" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝑾</mi><mi mathvariant="bold-italic">𝒛</mi></mrow><annotation encoding="application/x-tex">(\mathbf{X}^{\top}\mathbf{W}\mathbf{X})^{-1}\mathbf{X}^{\top}\mathbf{W}\mathbf{z}</annotation></semantics></math></td>
+<td style="text-align: left;">同一个步的算法写法</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="warnbox"><div class="box-title">这不等于"三种方法没区别"</div><div class="box-body"><p>它们只在<strong>典则连接</strong>下重合。换成
+probit（§5），<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mo>≠</mo><mi>I</mi></mrow><annotation encoding="application/x-tex">J\ne I</annotation></semantics></math>，Newton
+与 Fisher 立刻分家——届时 Newton 6 步收敛，Fisher 要 14
+步，极限相同。</p></div></div>
+<h1
+id="手算第-1-步三种方法各走一遍-iteration-1-by-hand-three-ways">手算第 1
+步：三种方法各走一遍 Iteration 1 by hand, three ways</h1>
+<div class="stepbox"><div class="box-title">起点：<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝜷</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mn>0</mn><msup><mo stretchy="false" form="postfix">)</mo><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">\boldsymbol{\beta}^{(0)}=(0,0)^{\top}</annotation></semantics></math></div><div class="box-body"><p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>η</mi><mi>i</mi></msub><mo>≡</mo><mn>0</mn><mo>⇒</mo><msub><mi>μ</mi><mi>i</mi></msub><mo>=</mo><msup><mrow><mi mathvariant="normal">logit</mi><mo>&#8289;</mo></mrow><mrow><mi>−</mi><mn>1</mn></mrow></msup><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>0.5</mn></mrow><annotation encoding="application/x-tex">\eta_i\equiv0\Rightarrow\mu_i=\operatorname{logit}^{-1}(0)=0.5</annotation></semantics></math>，于是
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>w</mi><mi>i</mi></msub><mo>=</mo><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>0.25</mn><mspace width="0.222em"></mspace><mo stretchy="false" form="prefix">(</mo><mrow><mtext mathvariant="normal">对所有 </mtext><mspace width="0.333em"></mspace></mrow><mi>i</mi><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mspace width="2.0em"></mspace><mi mathvariant="bold-italic">𝑾</mi><mo>=</mo><mn>0.25</mn><mspace width="0.167em"></mspace><msub><mi mathvariant="bold-italic">𝑰</mi><mn>6</mn></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">w_i=\mu_i(1-\mu_i)=0.25\ (\text{对所有 }i),
+\qquad
+\mathbf{W}=0.25\,\mathbf{I}_6 .</annotation></semantics></math></p></div></div>
+<div class="stepbox"><div class="box-title">先算两个公共量：<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>U</mi><annotation encoding="application/x-tex">U</annotation></semantics></math>
+与
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝑾</mi><mi mathvariant="bold-italic">𝑿</mi></mrow><annotation encoding="application/x-tex">\mathbf{X}^{\top}\mathbf{W}\mathbf{X}</annotation></semantics></math></div><div class="box-body"><p><strong>得分：</strong>
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mo>=</mo><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝒚</mi><mo>−</mo><mi mathvariant="bold-italic">𝝁</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><munder><mo>∑</mo><mi>i</mi></munder><mo stretchy="false" form="prefix">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><mn>0.5</mn><mo stretchy="false" form="postfix">)</mo></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>x</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><mn>0.5</mn><mo stretchy="false" form="postfix">)</mo></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>3</mn><mo>−</mo><mn>3</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>10</mn><mo>−</mo><mn>7.5</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>2.5</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">U=\mathbf{X}^{\top}(\mathbf{y}-\boldsymbol{\mu})=
+\begin{pmatrix}\sum_i(y_i-0.5)\\[2pt] \sum_i x_i(y_i-0.5)\end{pmatrix}
+=\begin{pmatrix}3-3\\[2pt]10-7.5\end{pmatrix}
+=\begin{pmatrix}0\\2.5\end{pmatrix},</annotation></semantics></math>
+因为
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>∑</mo><msub><mi>y</mi><mi>i</mi></msub><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">\sum y_i=3</annotation></semantics></math>、<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>∑</mo><msub><mi>x</mi><mi>i</mi></msub><msub><mi>y</mi><mi>i</mi></msub><mo>=</mo><mn>0</mn><mo>+</mo><mn>0</mn><mo>+</mo><mn>2</mn><mo>+</mo><mn>3</mn><mo>+</mo><mn>0</mn><mo>+</mo><mn>5</mn><mo>=</mo><mn>10</mn></mrow><annotation encoding="application/x-tex">\sum x_iy_i=0+0+2+3+0+5=10</annotation></semantics></math>、<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>∑</mo><msub><mi>x</mi><mi>i</mi></msub><mo>=</mo><mn>15</mn></mrow><annotation encoding="application/x-tex">\sum x_i=15</annotation></semantics></math>。<br />
+<strong>信息矩阵：</strong>
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝑾</mi><mi mathvariant="bold-italic">𝑿</mi><mo>=</mo><mn>0.25</mn><mspace width="0.167em"></mspace><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝑿</mi><mo>=</mo><mn>0.25</mn><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>6</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>15</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>15</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>55</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>1.5</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>3.75</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>3.75</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>13.75</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><mrow><mi mathvariant="normal">det</mi><mo>&#8289;</mo></mrow><mo>=</mo><mn>1.5</mn><mo>×</mo><mn>13.75</mn><mo>−</mo><msup><mn>3.75</mn><mn>2</mn></msup><mo>=</mo><mn>6.5625</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbf{X}^{\top}\mathbf{W}\mathbf{X}=0.25\,\mathbf{X}^{\top}\mathbf{X}
+=0.25\begin{pmatrix}6&amp;15\\15&amp;55\end{pmatrix}
+=\begin{pmatrix}1.5&amp;3.75\\3.75&amp;13.75\end{pmatrix},
+\qquad
+\det=1.5\times13.75-3.75^{2}=6.5625 .</annotation></semantics></math>
+逆矩阵：
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">(</mo><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝑾</mi><mi mathvariant="bold-italic">𝑿</mi><msup><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup><mo>=</mo><mfrac><mn>1</mn><mn>6.5625</mn></mfrac><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>13.75</mn></mtd><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>3.75</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>3.75</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>1.5</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\big(\mathbf{X}^{\top}\mathbf{W}\mathbf{X}\big)^{-1}
+=\frac{1}{6.5625}\begin{pmatrix}13.75&amp;-3.75\\-3.75&amp;1.5\end{pmatrix}.</annotation></semantics></math></p></div></div>
+<div class="stepbox"><div class="box-title">方法一：Newton–Raphson</div><div class="box-body"><p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝜷</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><mo>=</mo><msup><mi mathvariant="bold-italic">𝜷</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><mo>+</mo><msup><mi>J</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mi>U</mi><mo>=</mo><mfrac><mn>1</mn><mn>6.5625</mn></mfrac><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>13.75</mn></mtd><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>3.75</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>3.75</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>1.5</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>2.5</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><mn>6.5625</mn></mfrac><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>9.375</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>3.75</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>1.42857143</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0.57142857</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\boldsymbol{\beta}^{(1)}=\boldsymbol{\beta}^{(0)}+J^{-1}U
+=\frac{1}{6.5625}\begin{pmatrix}13.75&amp;-3.75\\-3.75&amp;1.5\end{pmatrix}\begin{pmatrix}0\\2.5\end{pmatrix}
+=\frac{1}{6.5625}\begin{pmatrix}-9.375\\3.75\end{pmatrix}
+=\begin{pmatrix}-1.42857143\\0.57142857\end{pmatrix}.</annotation></semantics></math>
+两个分量正好是分数：<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>9.375</mn><mi>/</mi><mn>6.5625</mn><mo>=</mo><mi>−</mi><mn>10</mn><mi>/</mi><mn>7</mn></mrow><annotation encoding="application/x-tex">-9.375/6.5625=-10/7</annotation></semantics></math>，<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3.75</mn><mi>/</mi><mn>6.5625</mn><mo>=</mo><mn>4</mn><mi>/</mi><mn>7</mn></mrow><annotation encoding="application/x-tex">3.75/6.5625=4/7</annotation></semantics></math>。</p></div></div>
+<div class="stepbox"><div class="box-title">方法二：Fisher scoring</div><div class="box-body"><p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mo stretchy="false" form="prefix">(</mo><msup><mi mathvariant="bold-italic">𝜷</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi mathvariant="double-struck">𝔼</mi><mo stretchy="false" form="prefix">[</mo><mi>J</mi><mo stretchy="false" form="postfix">]</mo><mo>=</mo><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝑾</mi><mi mathvariant="bold-italic">𝑿</mi></mrow><annotation encoding="application/x-tex">I(\boldsymbol{\beta}^{(0)})=\mathbb{E}[J]=\mathbf{X}^{\top}\mathbf{W}\mathbf{X}</annotation></semantics></math>，与上一步<strong>同一个矩阵</strong>，所以
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝜷</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mn>0</mn><msup><mo stretchy="false" form="postfix">)</mo><mi>⊤</mi></msup><mo>+</mo><msup><mi>I</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mi>U</mi><mo>=</mo><mo minsize="180%" maxsize="180%" stretchy="true" form="prefix">(</mo><mo>−</mo><mstyle displaystyle="false"><mfrac><mn>10</mn><mn>7</mn></mfrac></mstyle><mo>,</mo><mspace width="0.222em"></mspace><mstyle displaystyle="false"><mfrac><mn>4</mn><mn>7</mn></mfrac></mstyle><msup><mo minsize="180%" maxsize="180%" stretchy="true" form="postfix">)</mo><mi>⊤</mi></msup><mo>,</mo></mrow><annotation encoding="application/x-tex">\boldsymbol{\beta}^{(1)}=(0,0)^{\top}+I^{-1}U=\Big(-\tfrac{10}{7},\ \tfrac{4}{7}\Big)^{\top},</annotation></semantics></math>
+与 Newton 逐位相同。这不是巧合：逻辑回归的二阶导不含
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝒚</mi><annotation encoding="application/x-tex">\mathbf{y}</annotation></semantics></math>。</p></div></div>
+<div class="stepbox"><div class="box-title">方法三：IRLS（加权最小二乘）</div><div class="box-body"><p>工作响应：<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>z</mi><mi>i</mi></msub><mo>=</mo><msub><mi>η</mi><mi>i</mi></msub><mo>+</mo><mstyle displaystyle="true"><mfrac><mrow><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><msub><mi>μ</mi><mi>i</mi></msub></mrow><mrow><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow></mfrac></mstyle><mo>=</mo><mn>0</mn><mo>+</mo><mstyle displaystyle="true"><mfrac><mrow><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><mn>0.5</mn></mrow><mn>0.25</mn></mfrac></mstyle><mo>=</mo><mn>4</mn><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">z_i=\eta_i+\dfrac{y_i-\mu_i}{\mu_i(1-\mu_i)}=0+\dfrac{y_i-0.5}{0.25}=4y_i-2</annotation></semantics></math>，即
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒛</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>2</mn><mo>,</mo><mspace width="0.222em"></mspace><mo>−</mo><mn>2</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>2</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>2</mn><mo>,</mo><mspace width="0.222em"></mspace><mo>−</mo><mn>2</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>2</mn><msup><mo stretchy="false" form="postfix">)</mo><mi>⊤</mi></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbf{z}=(-2,\ -2,\ 2,\ 2,\ -2,\ 2)^{\top}.</annotation></semantics></math>
+加权右端：
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝑾</mi><mi mathvariant="bold-italic">𝒛</mi><mo>=</mo><mn>0.25</mn><mspace width="0.167em"></mspace><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝒛</mi><mo>=</mo><mn>0.25</mn><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mo>∑</mo><msub><mi>z</mi><mi>i</mi></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mo>∑</mo><msub><mi>x</mi><mi>i</mi></msub><msub><mi>z</mi><mi>i</mi></msub></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mn>0.25</mn><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>10</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>2.5</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbf{X}^{\top}\mathbf{W}\mathbf{z}=0.25\,\mathbf{X}^{\top}\mathbf{z}
+=0.25\begin{pmatrix}\sum z_i\\ \sum x_iz_i\end{pmatrix}
+=0.25\begin{pmatrix}0\\10\end{pmatrix}
+=\begin{pmatrix}0\\2.5\end{pmatrix}.</annotation></semantics></math>
+（<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>∑</mo><msub><mi>z</mi><mi>i</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\sum z_i=0</annotation></semantics></math>，<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>∑</mo><msub><mi>x</mi><mi>i</mi></msub><msub><mi>z</mi><mi>i</mi></msub><mo>=</mo><mn>0</mn><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>2</mn><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mn>1</mn><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>2</mn><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mn>2</mn><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mn>3</mn><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mn>4</mn><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>2</mn><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mn>5</mn><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>10</mn></mrow><annotation encoding="application/x-tex">\sum x_iz_i=0(-2)+1(-2)+2(2)+3(2)+4(-2)+5(2)=10</annotation></semantics></math>。）于是
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝜷</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><mo>=</mo><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">(</mo><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝑾</mi><mi mathvariant="bold-italic">𝑿</mi><msup><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝑾</mi><mi mathvariant="bold-italic">𝒛</mi><mo>=</mo><mfrac><mn>1</mn><mn>6.5625</mn></mfrac><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>13.75</mn></mtd><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>3.75</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>3.75</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>1.5</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>2.5</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mo minsize="180%" maxsize="180%" stretchy="true" form="prefix">(</mo><mo>−</mo><mstyle displaystyle="false"><mfrac><mn>10</mn><mn>7</mn></mfrac></mstyle><mo>,</mo><mspace width="0.222em"></mspace><mstyle displaystyle="false"><mfrac><mn>4</mn><mn>7</mn></mfrac></mstyle><msup><mo minsize="180%" maxsize="180%" stretchy="true" form="postfix">)</mo><mi>⊤</mi></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">\boldsymbol{\beta}^{(1)}=\big(\mathbf{X}^{\top}\mathbf{W}\mathbf{X}\big)^{-1}\mathbf{X}^{\top}\mathbf{W}\mathbf{z}
+=\frac{1}{6.5625}\begin{pmatrix}13.75&amp;-3.75\\-3.75&amp;1.5\end{pmatrix}\begin{pmatrix}0\\2.5\end{pmatrix}
+=\Big(-\tfrac{10}{7},\ \tfrac{4}{7}\Big)^{\top}.</annotation></semantics></math></p></div></div>
+<div class="keybox"><div class="box-title">第 1 步的三个数字</div><div class="box-body"><p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝜷</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>1.42857143</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>0.57142857</mn><msup><mo stretchy="false" form="postfix">)</mo><mi>⊤</mi></msup><mo>,</mo><mspace width="2.0em"></mspace><msup><mi>D</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><mo>=</mo><mn>6.8017987882</mn><mo>,</mo><mspace width="2.0em"></mspace><msup><mi>ℓ</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><mo>=</mo><mi>−</mi><mn>3.4008993941</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\boldsymbol{\beta}^{(1)}=(-1.42857143,\ 0.57142857)^{\top},
+\qquad
+D^{(1)}=6.8017987882,
+\qquad
+\ell^{(1)}=-3.4008993941 .</annotation></semantics></math>
+三种方法给出同一组数——这正是 §2 的结论在具体数据上的体现。</p></div></div>
+<h1 id="迭代到收敛-iterating-to-convergence">迭代到收敛 Iterating to
+convergence</h1>
+<h2 id="第-2-步的中间量想自己复算的话从这里开始">第 2
+步的中间量（想自己复算的话从这里开始） </h2>
+<p>用
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝜷</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>1.42857143</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>0.57142857</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\boldsymbol{\beta}^{(1)}=(-1.42857143,\ 0.57142857)</annotation></semantics></math>
+算
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>η</mi><mi>i</mi></msub><mo>=</mo><msub><mi>β</mi><mn>0</mn></msub><mo>+</mo><msub><mi>β</mi><mn>1</mn></msub><msub><mi>x</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\eta_i=\beta_0+\beta_1x_i</annotation></semantics></math>，再算
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>μ</mi><mi>i</mi></msub><mo>=</mo><msup><mrow><mi mathvariant="normal">logit</mi><mo>&#8289;</mo></mrow><mrow><mi>−</mi><mn>1</mn></mrow></msup><mo stretchy="false" form="prefix">(</mo><msub><mi>η</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\mu_i=\operatorname{logit}^{-1}(\eta_i)</annotation></semantics></math>：</p>
+<div class="center">
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th
+style="text-align: left;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math></th>
+<th style="text-align: center;">1</th>
+<th style="text-align: center;">2</th>
+<th style="text-align: center;">3</th>
+<th style="text-align: center;">4</th>
+<th style="text-align: center;">5</th>
+<th style="text-align: center;">6</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td
+style="text-align: left;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>x</mi><mi>i</mi></msub><annotation encoding="application/x-tex">x_i</annotation></semantics></math></td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">5</td>
+</tr>
+<tr>
+<td
+style="text-align: left;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>η</mi><mi>i</mi></msub><annotation encoding="application/x-tex">\eta_i</annotation></semantics></math></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>1.4286</mn></mrow><annotation encoding="application/x-tex">-1.4286</annotation></semantics></math></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>0.8571</mn></mrow><annotation encoding="application/x-tex">-0.8571</annotation></semantics></math></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>0.2857</mn></mrow><annotation encoding="application/x-tex">-0.2857</annotation></semantics></math></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.2857</mn><annotation encoding="application/x-tex">0.2857</annotation></semantics></math></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.8571</mn><annotation encoding="application/x-tex">0.8571</annotation></semantics></math></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1.4286</mn><annotation encoding="application/x-tex">1.4286</annotation></semantics></math></td>
+</tr>
+<tr>
+<td
+style="text-align: left;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>μ</mi><mi>i</mi></msub><annotation encoding="application/x-tex">\mu_i</annotation></semantics></math></td>
+<td style="text-align: center;">0.19332</td>
+<td style="text-align: center;">0.29794</td>
+<td style="text-align: center;">0.42905</td>
+<td style="text-align: center;">0.57095</td>
+<td style="text-align: center;">0.70206</td>
+<td style="text-align: center;">0.80668</td>
+</tr>
+<tr>
+<td
+style="text-align: left;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>w</mi><mi>i</mi></msub><annotation encoding="application/x-tex">w_i</annotation></semantics></math></td>
+<td style="text-align: center;">0.15595</td>
+<td style="text-align: center;">0.20917</td>
+<td style="text-align: center;">0.24497</td>
+<td style="text-align: center;">0.24497</td>
+<td style="text-align: center;">0.20917</td>
+<td style="text-align: center;">0.15595</td>
+</tr>
+<tr>
+<td
+style="text-align: left;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>z</mi><mi>i</mi></msub><annotation encoding="application/x-tex">z_i</annotation></semantics></math></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>2.6682</mn></mrow><annotation encoding="application/x-tex">-2.6682</annotation></semantics></math></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>2.2815</mn></mrow><annotation encoding="application/x-tex">-2.2815</annotation></semantics></math></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>2.0450</mn><annotation encoding="application/x-tex">2.0450</annotation></semantics></math></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>2.0372</mn><annotation encoding="application/x-tex">2.0372</annotation></semantics></math></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>2.4993</mn></mrow><annotation encoding="application/x-tex">-2.4993</annotation></semantics></math></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>2.6682</mn><annotation encoding="application/x-tex">2.6682</annotation></semantics></math></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<p>由此
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝑾</mi><mi mathvariant="bold-italic">𝑿</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>1.22017039</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>3.05042596</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>3.05042596</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>10.63916770</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo><mspace width="1.0em"></mspace><mrow><mi mathvariant="normal">det</mi><mo>&#8289;</mo></mrow><mo>=</mo><mn>3.67649879</mn><mo>,</mo><mspace width="2.0em"></mspace><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝑾</mi><mi mathvariant="bold-italic">𝒛</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>2.01124316</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\mathbf{X}^{\top}\mathbf{W}\mathbf{X}=\begin{pmatrix}1.22017039&amp;3.05042596\\3.05042596&amp;10.63916770\end{pmatrix},
+\quad
+\det=3.67649879,
+\qquad
+\mathbf{X}^{\top}\mathbf{W}\mathbf{z}=\begin{pmatrix}0\\2.01124316\end{pmatrix},</annotation></semantics></math>
+解出
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝜷</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>1.66874756</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>0.66749902</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\boldsymbol{\beta}^{(2)}=(-1.66874756,\ 0.66749902)</annotation></semantics></math>。顺便注意这条式子里的
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>∑</mo><msub><mi>z</mi><mi>i</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\sum z_i=0</annotation></semantics></math>：因为
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math>
+关于
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>2.5</mn><annotation encoding="application/x-tex">2.5</annotation></semantics></math>
+对称、<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>y</mi><annotation encoding="application/x-tex">y</annotation></semantics></math>
+成对互补（<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>y</mi><mi>i</mi></msub><mo>+</mo><msub><mi>y</mi><mrow><mn>6</mn><mo>−</mo><mi>i</mi></mrow></msub><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">y_i+y_{6-i}=1</annotation></semantics></math>），每个迭代点都恰好有
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>∑</mo><msub><mi>μ</mi><mi>i</mi></msub><mo>=</mo><mo>∑</mo><msub><mi>y</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\sum\mu_i=\sum y_i</annotation></semantics></math>。这是这组数据带来的便利；<strong>一般数据在未收敛时</strong>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>∑</mo><mo stretchy="false" form="prefix">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>≠</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\sum(y_i-\mu_i)\ne0</annotation></semantics></math>。</p>
+<h2 id="完整迭代表">完整迭代表 </h2>
+<div class="center">
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th
+style="text-align: left;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math></th>
+<th
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>β</mi><mn>0</mn><mrow><mo stretchy="false" form="prefix">(</mo><mi>k</mi><mo stretchy="false" form="postfix">)</mo></mrow></msubsup><annotation encoding="application/x-tex">\beta_0^{(k)}</annotation></semantics></math></th>
+<th
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>β</mi><mn>1</mn><mrow><mo stretchy="false" form="prefix">(</mo><mi>k</mi><mo stretchy="false" form="postfix">)</mo></mrow></msubsup><annotation encoding="application/x-tex">\beta_1^{(k)}</annotation></semantics></math></th>
+<th
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mrow><mi mathvariant="normal">max</mi><mo>&#8289;</mo></mrow><mi>j</mi></msub><mo stretchy="false" form="prefix">|</mo><mi mathvariant="normal">Δ</mi><msub><mi>β</mi><mi>j</mi></msub><mo stretchy="false" form="prefix">|</mo></mrow><annotation encoding="application/x-tex">\max_j|\Delta\beta_j|</annotation></semantics></math></th>
+<th
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>D</mi><mrow><mo stretchy="false" form="prefix">(</mo><mi>k</mi><mo stretchy="false" form="postfix">)</mo></mrow></msup><annotation encoding="application/x-tex">D^{(k)}</annotation></semantics></math></th>
+<th
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ℓ</mi><mo stretchy="false" form="prefix">(</mo><msup><mi mathvariant="bold-italic">𝜷</mi><mrow><mo stretchy="false" form="prefix">(</mo><mi>k</mi><mo stretchy="false" form="postfix">)</mo></mrow></msup><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\ell(\boldsymbol{\beta}^{(k)})</annotation></semantics></math></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">1</td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>1.42857143</mn></mrow><annotation encoding="application/x-tex">-1.42857143</annotation></semantics></math></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.57142857</mn><annotation encoding="application/x-tex">0.57142857</annotation></semantics></math></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1.43</mn><mo>×</mo><msup><mn>10</mn><mn>0</mn></msup></mrow><annotation encoding="application/x-tex">1.43\times10^{0}</annotation></semantics></math></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>6.80179879</mn><annotation encoding="application/x-tex">6.80179879</annotation></semantics></math></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>3.40089939</mn></mrow><annotation encoding="application/x-tex">-3.40089939</annotation></semantics></math></td>
+</tr>
+<tr>
+<td style="text-align: left;">2</td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>1.66874756</mn></mrow><annotation encoding="application/x-tex">-1.66874756</annotation></semantics></math></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.66749902</mn><annotation encoding="application/x-tex">0.66749902</annotation></semantics></math></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2.40</mn><mo>×</mo><msup><mn>10</mn><mrow><mi>−</mi><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">2.40\times10^{-1}</annotation></semantics></math></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>6.77293856</mn><annotation encoding="application/x-tex">6.77293856</annotation></semantics></math></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>3.38646928</mn></mrow><annotation encoding="application/x-tex">-3.38646928</annotation></semantics></math></td>
+</tr>
+<tr>
+<td style="text-align: left;">3</td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>1.68405596</mn></mrow><annotation encoding="application/x-tex">-1.68405596</annotation></semantics></math></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.67362238</mn><annotation encoding="application/x-tex">0.67362238</annotation></semantics></math></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1.53</mn><mo>×</mo><msup><mn>10</mn><mrow><mi>−</mi><mn>2</mn></mrow></msup></mrow><annotation encoding="application/x-tex">1.53\times10^{-2}</annotation></semantics></math></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>6.77283804</mn><annotation encoding="application/x-tex">6.77283804</annotation></semantics></math></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>3.38641902</mn></mrow><annotation encoding="application/x-tex">-3.38641902</annotation></semantics></math></td>
+</tr>
+<tr>
+<td style="text-align: left;">4</td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>1.68411723</mn></mrow><annotation encoding="application/x-tex">-1.68411723</annotation></semantics></math></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.67364689</mn><annotation encoding="application/x-tex">0.67364689</annotation></semantics></math></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>6.13</mn><mo>×</mo><msup><mn>10</mn><mrow><mi>−</mi><mn>5</mn></mrow></msup></mrow><annotation encoding="application/x-tex">6.13\times10^{-5}</annotation></semantics></math></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>6.77283804</mn><annotation encoding="application/x-tex">6.77283804</annotation></semantics></math></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>3.38641902</mn></mrow><annotation encoding="application/x-tex">-3.38641902</annotation></semantics></math></td>
+</tr>
+<tr>
+<td style="text-align: left;">5</td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>1.68411723</mn></mrow><annotation encoding="application/x-tex">-1.68411723</annotation></semantics></math></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.67364689</mn><annotation encoding="application/x-tex">0.67364689</annotation></semantics></math></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>9.79</mn><mo>×</mo><msup><mn>10</mn><mrow><mi>−</mi><mn>10</mn></mrow></msup></mrow><annotation encoding="application/x-tex">9.79\times10^{-10}</annotation></semantics></math></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>6.77283804</mn><annotation encoding="application/x-tex">6.77283804</annotation></semantics></math></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>3.38641902</mn></mrow><annotation encoding="application/x-tex">-3.38641902</annotation></semantics></math></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="keybox"><div class="box-title">二次收敛，看得见</div><div class="box-body"><p>步长序列
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1.43</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>2.40</mn><mo>×</mo><msup><mn>10</mn><mrow><mi>−</mi><mn>1</mn></mrow></msup><mo>,</mo><mspace width="0.222em"></mspace><mn>1.53</mn><mo>×</mo><msup><mn>10</mn><mrow><mi>−</mi><mn>2</mn></mrow></msup><mo>,</mo><mspace width="0.222em"></mspace><mn>6.13</mn><mo>×</mo><msup><mn>10</mn><mrow><mi>−</mi><mn>5</mn></mrow></msup><mo>,</mo><mspace width="0.222em"></mspace><mn>9.79</mn><mo>×</mo><msup><mn>10</mn><mrow><mi>−</mi><mn>10</mn></mrow></msup></mrow><annotation encoding="application/x-tex">1.43,\ 2.40\times10^{-1},\ 1.53\times10^{-2},\ 6.13\times10^{-5},\ 9.79\times10^{-10}</annotation></semantics></math>，相邻比值是
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.168</mn><mo>,</mo><mspace width="1.0em"></mspace><mn>0.064</mn><mo>,</mo><mspace width="1.0em"></mspace><mn>0.0040</mn><mo>,</mo><mspace width="1.0em"></mspace><mn>1.6</mn><mo>×</mo><msup><mn>10</mn><mrow><mi>−</mi><mn>5</mn></mrow></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">0.168,\quad 0.064,\quad 0.0040,\quad 1.6\times10^{-5}.</annotation></semantics></math>
+比值本身在迅速变小——这正是<strong>二次收敛</strong>的样子（误差大致按平方缩小，有效数字每步翻倍）。所以逻辑回归"通常
+4–5 步"是有道理的。</p></div></div>
+<h2 id="收敛后的三条验收">收敛后的三条验收 </h2>
+<div class="stepbox"><div class="box-title">可以当堂核对</div><div class="box-body"><p><strong>(1) 得分归零：</strong>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mo stretchy="false" form="prefix">(</mo><mover><mi mathvariant="bold-italic">𝜷</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝒚</mi><mo>−</mo><mover><mi mathvariant="bold-italic">𝝁</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn mathvariant="bold">𝟎</mn></mrow><annotation encoding="application/x-tex">U(\hat{\boldsymbol{\beta}})=\mathbf{X}^{\top}(\mathbf{y}-\hat{\boldsymbol{\mu}})=\mathbf{0}</annotation></semantics></math>，即
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><munder><mo>∑</mo><mi>i</mi></munder><mo stretchy="false" form="prefix">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><msub><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>3</mn><mo>−</mo><mn>3.00000000</mn><mo>=</mo><mn>0</mn><mo>,</mo><mspace width="2.0em"></mspace><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>x</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><msub><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>10</mn><mo>−</mo><mn>10.00000000</mn><mo>=</mo><mn>0</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\sum_i(y_i-\hat\mu_i)=3-3.00000000=0,
+\qquad
+\sum_i x_i(y_i-\hat\mu_i)=10-10.00000000=0 .</annotation></semantics></math>
+<strong>(2) 典则不变量：</strong>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>∑</mo><mi>i</mi></msub><msub><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo>=</mo><msub><mo>∑</mo><mi>i</mi></msub><msub><mi>y</mi><mi>i</mi></msub><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">\sum_i\hat\mu_i=\sum_i y_i=3</annotation></semantics></math>、<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>∑</mo><mi>i</mi></msub><msub><mi>x</mi><mi>i</mi></msub><msub><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo>=</mo><msub><mo>∑</mo><mi>i</mi></msub><msub><mi>x</mi><mi>i</mi></msub><msub><mi>y</mi><mi>i</mi></msub><mo>=</mo><mn>10</mn></mrow><annotation encoding="application/x-tex">\sum_i x_i\hat\mu_i=\sum_i x_iy_i=10</annotation></semantics></math>。<br />
+<strong>(3) 偏差与似然：</strong>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo>=</mo><mn>6.77283804</mn></mrow><annotation encoding="application/x-tex">D=6.77283804</annotation></semantics></math>，<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ℓ</mi><mo stretchy="false" form="prefix">(</mo><mover><mi mathvariant="bold-italic">𝜷</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>−</mi><mn>3.38641902</mn></mrow><annotation encoding="application/x-tex">\ell(\hat{\boldsymbol{\beta}})=-3.38641902</annotation></semantics></math>，且
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo>=</mo><mi>−</mi><mn>2</mn><mi>ℓ</mi></mrow><annotation encoding="application/x-tex">D=-2\ell</annotation></semantics></math>（饱和似然为
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0</mn><annotation encoding="application/x-tex">0</annotation></semantics></math>）。</p></div></div>
+<div class="warnbox"><div class="box-title">停止准则怎么写</div><div class="box-body"><p>三种都合法：<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mrow><mi mathvariant="normal">max</mi><mo>&#8289;</mo></mrow><mi>j</mi></msub><mo stretchy="false" form="prefix">|</mo><msubsup><mi>β</mi><mi>j</mi><mrow><mo stretchy="false" form="prefix">(</mo><mi>k</mi><mo>+</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow></msubsup><mo>−</mo><msubsup><mi>β</mi><mi>j</mi><mrow><mo stretchy="false" form="prefix">(</mo><mi>k</mi><mo stretchy="false" form="postfix">)</mo></mrow></msubsup><mo stretchy="false" form="prefix">|</mo><mo>&lt;</mo><mi>ε</mi></mrow><annotation encoding="application/x-tex">\max_j|\beta_j^{(k+1)}-\beta_j^{(k)}|&lt;\varepsilon</annotation></semantics></math>（上表用的就是这个）、
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">|</mo><msup><mi>ℓ</mi><mrow><mo stretchy="false" form="prefix">(</mo><mi>k</mi><mo>+</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><mo>−</mo><msup><mi>ℓ</mi><mrow><mo stretchy="false" form="prefix">(</mo><mi>k</mi><mo stretchy="false" form="postfix">)</mo></mrow></msup><mo stretchy="false" form="prefix">|</mo><mo>&lt;</mo><mi>ε</mi></mrow><annotation encoding="application/x-tex">|\ell^{(k+1)}-\ell^{(k)}|&lt;\varepsilon</annotation></semantics></math>、或
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mrow><mi mathvariant="normal">max</mi><mo>&#8289;</mo></mrow><mi>j</mi></msub><mo stretchy="false" form="prefix">|</mo><msub><mi>U</mi><mi>j</mi></msub><mo stretchy="false" form="prefix">|</mo><mo>&lt;</mo><mi>ε</mi></mrow><annotation encoding="application/x-tex">\max_j|U_j|&lt;\varepsilon</annotation></semantics></math>。
+<strong>不要</strong>用"<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>D</mi><annotation encoding="application/x-tex">D</annotation></semantics></math>
+不再变化"单独作判据：<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>D</mi><annotation encoding="application/x-tex">D</annotation></semantics></math>
+在
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi mathvariant="bold-italic">𝜷</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat{\boldsymbol{\beta}}</annotation></semantics></math>
+附近是二阶平的，<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>D</mi><annotation encoding="application/x-tex">D</annotation></semantics></math>
+看起来没变时
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝜷</mi><annotation encoding="application/x-tex">\boldsymbol{\beta}</annotation></semantics></math>
+可能还差一点。</p></div></div>
+<h1
+id="换成-probitnewton-与-fisher-分家-probit-where-the-three-methods-part-company">换成
+probit：Newton 与 Fisher 分家 Probit: where the three methods part
+company</h1>
+<p>同一份数据、同一个起点
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝜷</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><mo>=</mo><mn mathvariant="bold">𝟎</mn></mrow><annotation encoding="application/x-tex">\boldsymbol{\beta}^{(0)}=\mathbf0</annotation></semantics></math>，只把
+logit 换成 probit。此时
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>g</mi><mo>′</mo></msup><mo stretchy="false" form="prefix">(</mo><mi>μ</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>1</mn><mi>/</mi><mi>φ</mi><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">g&#39;(\mu)=1/\varphi(z)</annotation></semantics></math>（<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>=</mo><msup><mi mathvariant="normal">Φ</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mo stretchy="false" form="prefix">(</mo><mi>μ</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">z=\Phi^{-1}(\mu)</annotation></semantics></math>），
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>w</mi><mi>i</mi></msub><mo>=</mo><mfrac><mrow><mi>φ</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>z</mi><mi>i</mi></msub><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup></mrow><mrow><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow></mfrac><mo>,</mo><mspace width="2.0em"></mspace><mi>I</mi><mo>=</mo><msup><mi mathvariant="bold-italic">𝑿</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝑾</mi><mi mathvariant="bold-italic">𝑿</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">w_i=\frac{\varphi(z_i)^{2}}{\mu_i(1-\mu_i)},
+\qquad
+I=\mathbf{X}^{\top}\mathbf{W}\mathbf{X},</annotation></semantics></math>
+而观测信息多出一项（因为
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>∂</mi><mn>2</mn></msup><mi>θ</mi><mi>/</mi><mi>∂</mi><msup><mi>η</mi><mn>2</mn></msup><mo>≠</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\partial^{2}\theta/\partial\eta^{2}\ne0</annotation></semantics></math>）：
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mo>=</mo><mi>I</mi><mo>−</mo><munder><mo>∑</mo><mi>i</mi></munder><mo stretchy="false" form="prefix">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mspace width="0.167em"></mspace><mfrac><mi>∂</mi><mrow><mi>∂</mi><mi>η</mi></mrow></mfrac><mo minsize="180%" maxsize="180%" stretchy="true" form="prefix">[</mo><mfrac><mrow><mi>φ</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>η</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><mrow><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow></mfrac><mo minsize="180%" maxsize="180%" stretchy="true" form="postfix">]</mo><msub><mi mathvariant="bold-italic">𝒙</mi><mi>i</mi></msub><msubsup><mi mathvariant="bold-italic">𝒙</mi><mi>i</mi><mi>⊤</mi></msubsup><mi>.</mi></mrow><annotation encoding="application/x-tex">J=I-\sum_i(y_i-\mu_i)\,\frac{\partial}{\partial\eta}\Big[\frac{\varphi(\eta_i)}{\mu_i(1-\mu_i)}\Big]\mathbf{x}_i\mathbf{x}_i^{\top}.</annotation></semantics></math>
+于是
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mo>≠</mo><mi>I</mi></mrow><annotation encoding="application/x-tex">J\ne I</annotation></semantics></math>。</p>
+<div class="stepbox"><div class="box-title">第 1 步仍然相同——原因很巧</div><div class="box-body"><p>在
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝜷</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><mo>=</mo><mn mathvariant="bold">𝟎</mn></mrow><annotation encoding="application/x-tex">\boldsymbol{\beta}^{(0)}=\mathbf0</annotation></semantics></math>
+处
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>η</mi><mi>i</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\eta_i=0</annotation></semantics></math>、<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>μ</mi><mi>i</mi></msub><mo>=</mo><mn>0.5</mn></mrow><annotation encoding="application/x-tex">\mu_i=0.5</annotation></semantics></math>，而那一项的系数里含有
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mn>2</mn><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(1-2\mu_i)</annotation></semantics></math>
+与
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>η</mi><mi>i</mi></msub><annotation encoding="application/x-tex">\eta_i</annotation></semantics></math>，两者同时为
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0</mn><annotation encoding="application/x-tex">0</annotation></semantics></math>，所以额外项<strong>恰好为零</strong>：
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mo stretchy="false" form="prefix">(</mo><mn mathvariant="bold">𝟎</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>I</mi><mo stretchy="false" form="prefix">(</mo><mn mathvariant="bold">𝟎</mn><mo stretchy="false" form="postfix">)</mo><mspace width="0.222em"></mspace><mo>⇒</mo><mspace width="0.222em"></mspace><msup><mi mathvariant="bold-italic">𝜷</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>0.89522438</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>0.35808975</mn><msup><mo stretchy="false" form="postfix">)</mo><mi>⊤</mi></msup><mo>,</mo></mrow><annotation encoding="application/x-tex">J(\mathbf0)=I(\mathbf0)\ \Longrightarrow\ \boldsymbol{\beta}^{(1)}=(-0.89522438,\ 0.35808975)^{\top},</annotation></semantics></math>
+两种方法的第一步一模一样。差异从第 2 步开始。</p></div></div>
+<div class="center">
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th
+style="text-align: left;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math></th>
+<th style="text-align: center;">Newton
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mn>0</mn></msub><annotation encoding="application/x-tex">\beta_0</annotation></semantics></math></th>
+<th style="text-align: center;">Newton
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mn>1</mn></msub><annotation encoding="application/x-tex">\beta_1</annotation></semantics></math></th>
+<th style="text-align: center;">Fisher
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>β</mi><mn>0</mn></msub><mo>,</mo><msub><mi>β</mi><mn>1</mn></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(\beta_0,\beta_1)</annotation></semantics></math></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">1</td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>0.89522438</mn></mrow><annotation encoding="application/x-tex">-0.89522438</annotation></semantics></math></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.35808975</mn><annotation encoding="application/x-tex">0.35808975</annotation></semantics></math></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>0.89522438</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>0.35808975</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(-0.89522438,\ 0.35808975)</annotation></semantics></math></td>
+</tr>
+<tr>
+<td style="text-align: left;">2</td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>1.07688427</mn></mrow><annotation encoding="application/x-tex">-1.07688427</annotation></semantics></math></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.42161923</mn><annotation encoding="application/x-tex">0.42161923</annotation></semantics></math></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>1.05646086</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>0.41591413</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(-1.05646086,\ 0.41591413)</annotation></semantics></math></td>
+</tr>
+<tr>
+<td style="text-align: left;">3</td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>1.08584149</mn></mrow><annotation encoding="application/x-tex">-1.08584149</annotation></semantics></math></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.42453242</mn><annotation encoding="application/x-tex">0.42453242</annotation></semantics></math></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>1.08240843</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>0.42354618</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(-1.08240843,\ 0.42354618)</annotation></semantics></math></td>
+</tr>
+<tr>
+<td style="text-align: left;">4</td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>1.08586268</mn></mrow><annotation encoding="application/x-tex">-1.08586268</annotation></semantics></math></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.42453906</mn><annotation encoding="application/x-tex">0.42453906</annotation></semantics></math></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>1.08547856</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>0.42442795</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(-1.08547856,\ 0.42442795)</annotation></semantics></math></td>
+</tr>
+<tr>
+<td style="text-align: left;">5</td>
+<td colspan="2" style="text-align: center;">（已收敛）</td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>1.08582023</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>0.42452681</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(-1.08582023,\ 0.42452681)</annotation></semantics></math></td>
+</tr>
+<tr>
+<td
+style="text-align: left;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>⋮</mi><annotation encoding="application/x-tex">\vdots</annotation></semantics></math></td>
+<td colspan="2" style="text-align: center;"></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>⋮</mi><annotation encoding="application/x-tex">\vdots</annotation></semantics></math></td>
+</tr>
+<tr>
+<td style="text-align: left;">14</td>
+<td colspan="2" style="text-align: center;"></td>
+<td
+style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>1.08586268</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>0.42453906</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(-1.08586268,\ 0.42453906)</annotation></semantics></math></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="keybox"><div class="box-title">两条路径的三个结论</div><div class="box-body"><p><strong>(1) 极限相同：</strong>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>1.08586268</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>0.42453906</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(-1.08586268,\ 0.42453906)</annotation></semantics></math>——同一似然，同一最大值。<br />
+<strong>(2) 速度不同：</strong> Newton <strong>6</strong> 步，Fisher
+<strong>14</strong> 步。Fisher 的
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">|</mo><mi>U</mi><mo stretchy="false" form="prefix">|</mo></mrow><annotation encoding="application/x-tex">|U|</annotation></semantics></math>
+每步只缩小到约
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.11</mn><annotation encoding="application/x-tex">0.11</annotation></semantics></math>
+倍（线性收敛），Newton 则近似平方缩小。<br />
+<strong>(3) 原因清楚：</strong>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mo>≠</mo><mi>I</mi></mrow><annotation encoding="application/x-tex">J\ne I</annotation></semantics></math>，Fisher
+用的是"平均曲率"，在远离解时低估了曲率；Newton
+用真实曲率，所以快。典则连接下两者相等，差异消失。</p></div></div>
+<h1 id="小结与检查清单-summary-and-a-checklist">小结与检查清单 Summary
+and a checklist</h1>
+<div class="keybox"><div class="box-title">偏差：手算就用这两个式子</div><div class="box-body"><p><strong>伯努利：</strong>
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo>=</mo><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>d</mi><mi>i</mi></msub><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>d</mi><mi>i</mi></msub><mo>=</mo><mi>−</mi><mn>2</mn><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><msub><mover><mi>π</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><mspace width="0.222em"></mspace><mo stretchy="false" form="prefix">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>=</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>d</mi><mi>i</mi></msub><mo>=</mo><mi>−</mi><mn>2</mn><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mover><mi>π</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mspace width="0.222em"></mspace><mo stretchy="false" form="prefix">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>=</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">D=\sum_i d_i,\qquad
+d_i=-2\log\hat\pi_i\ (y_i=1),\qquad
+d_i=-2\log(1-\hat\pi_i)\ (y_i=0).</annotation></semantics></math>
+<strong>二项（计数）：</strong>
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo>=</mo><mn>2</mn><munder><mo>∑</mo><mi>i</mi></munder><mo minsize="180%" maxsize="180%" stretchy="true" form="prefix">[</mo><msub><mi>y</mi><mi>i</mi></msub><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mfrac><msub><mi>y</mi><mi>i</mi></msub><msub><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub></mfrac><mo>+</mo><mo stretchy="false" form="prefix">(</mo><msub><mi>n</mi><mi>i</mi></msub><mo>−</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mfrac><mrow><msub><mi>n</mi><mi>i</mi></msub><mo>−</mo><msub><mi>y</mi><mi>i</mi></msub></mrow><mrow><msub><mi>n</mi><mi>i</mi></msub><mo>−</mo><msub><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub></mrow></mfrac><mo minsize="180%" maxsize="180%" stretchy="true" form="postfix">]</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">D=2\sum_i\Big[y_i\log\frac{y_i}{\hat\mu_i}+(n_i-y_i)\log\frac{n_i-y_i}{n_i-\hat\mu_i}\Big].</annotation></semantics></math>
+两者都等于
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>2</mn><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">[</mo><mi>ℓ</mi><mo stretchy="false" form="prefix">(</mo><mover><mi mathvariant="bold-italic">𝝁</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mi>ℓ</mi><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝒚</mi><mo stretchy="false" form="postfix">)</mo><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">-2\big[\ell(\hat{\boldsymbol{\mu}})-\ell(\mathbf{y})\big]</annotation></semantics></math>；推导的关键是<strong>先算
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mi>θ</mi><mo>−</mo><mi>b</mi><mo stretchy="false" form="prefix">(</mo><mi>θ</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">y\theta-b(\theta)</annotation></semantics></math>
+的整体极限</strong>，而不是把
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>θ</mi><mo accent="true">̃</mo></mover><mo>=</mo><mi>±</mi><mi>∞</mi></mrow><annotation encoding="application/x-tex">\tilde\theta=\pm\infty</annotation></semantics></math>
+直接代进去。</p></div></div>
+<div class="keybox"><div class="box-title">三种算法：一句话各自是什么</div><div class="box-body"><p>Newton
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>=</mo><annotation encoding="application/x-tex">=</annotation></semantics></math>
+用真实曲率；Fisher
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>=</mo><annotation encoding="application/x-tex">=</annotation></semantics></math>
+用平均曲率；IRLS
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>=</mo><annotation encoding="application/x-tex">=</annotation></semantics></math>
+把 Fisher 写成加权最小二乘。<br />
+<strong>典则连接</strong>（本讲义的
+logit）下，三者逐位相同；<strong>非典则</strong>（probit、伽马配 log
+等）下 Newton 与 Fisher 路径不同、极限相同，IRLS 只对应 Fisher。</p></div></div>
+<div class="stepbox"><div class="box-title">六条检查清单</div><div class="box-body"><p><strong>(1)</strong> 偏差公式里
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">y=0</annotation></semantics></math>
+时用
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\log(1-\hat\mu)</annotation></semantics></math>、<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">y=1</annotation></semantics></math>
+时用
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mover><mi>μ</mi><mo accent="true">̂</mo></mover></mrow><annotation encoding="application/x-tex">\log\hat\mu</annotation></semantics></math>，别写反。<br />
+<strong>(2)</strong>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>&gt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">n&gt;1</annotation></semantics></math>
+时检查
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mi>n</mi><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">-n\log n</annotation></semantics></math>
+有没有抵消。<br />
+<strong>(3)</strong> 典则模型收敛后验算
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>∑</mo><msub><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo>=</mo><mo>∑</mo><msub><mi>y</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\sum\hat\mu_i=\sum y_i</annotation></semantics></math>
+与
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>∑</mo><msub><mi>x</mi><mi>i</mi></msub><msub><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo>=</mo><mo>∑</mo><msub><mi>x</mi><mi>i</mi></msub><msub><mi>y</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\sum x_i\hat\mu_i=\sum x_iy_i</annotation></semantics></math>。<br />
+<strong>(4)</strong> 用
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mrow><mi mathvariant="normal">max</mi><mo>&#8289;</mo></mrow><mi>j</mi></msub><mo stretchy="false" form="prefix">|</mo><mi mathvariant="normal">Δ</mi><msub><mi>β</mi><mi>j</mi></msub><mo stretchy="false" form="prefix">|</mo></mrow><annotation encoding="application/x-tex">\max_j|\Delta\beta_j|</annotation></semantics></math>
+判停，不要只看
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>D</mi><annotation encoding="application/x-tex">D</annotation></semantics></math>。<br />
+<strong>(5)</strong> 逻辑回归里 Newton 与 Fisher
+的结果应当<strong>逐位相同</strong>；若不同，说明代码里某一处把
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>J</mi><annotation encoding="application/x-tex">J</annotation></semantics></math>
+和
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>I</mi><annotation encoding="application/x-tex">I</annotation></semantics></math>
+混了。<br />
+<strong>(6)</strong>
+换非典则连接后若两者仍完全相同，反而要怀疑：是不是根本没把
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>g</mi><mo>′</mo></msup><annotation encoding="application/x-tex">g&#39;</annotation></semantics></math>
+用上。</p></div></div>
+<div class="center">
+<hr />
+<p><br />
+<span>：<code>ch5_main.pdf</code>（第 5
+章）<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>⋅</mi><annotation encoding="application/x-tex">\cdot</annotation></semantics></math>
+<code>supp_main.pdf</code>（补篇）<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>⋅</mi><annotation encoding="application/x-tex">\cdot</annotation></semantics></math>
+<code>links_main.pdf</code>（链接专题）</span></p>
+</div>
+<div class="ai-note"><p>This page was generated by DeepSeek 4.1 Flash from the course LaTeX source; the derivations and numerical steps are reproduced verbatim.</p>
+<p>本页由 DeepSeek 4.1 Flash 依据课程 LaTeX 讲义生成，推导与数值迭代过程均按原讲义保留。</p></div>
+</div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var page = document.querySelector('.page');
+  var list = document.getElementById('toc-list');
+  if (!page || !list) return;
+  page.querySelectorAll('h1,h2').forEach(function (h) {
+    if (h.classList.contains('title')) return;
+    var t = (h.childNodes[0] ? h.childNodes[0].textContent : h.textContent).trim();
+    if (!t) return;
+    if (!h.id) h.id = 'sec-' + Math.abs(t.split('').reduce(function (a, c) { return (a * 31 + c.charCodeAt(0)) | 0; }, 7));
+    var li = document.createElement('li');
+    li.className = 'toc-' + h.tagName.toLowerCase();
+    var a = document.createElement('a');
+    a.href = '#' + h.id;
+    a.textContent = t;
+    li.appendChild(a);
+    list.appendChild(li);
+  });
+});
+</script>
+</body>
+</html>
