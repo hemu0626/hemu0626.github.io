@@ -28,6 +28,8 @@
 | `_data/socials.yml` | 邮箱、Google Scholar、ORCID |
 | `assets/img/` | 头像 `prof_pic.jpg`、项目封面 `projects-*.svg`、海报缩略图 `surf-YYYY-thumb.jpg` |
 | `assets/surf/` | **SURF 海报原图**（命名约定见 §5.5） |
+| `assets/teaching/` | **课程讲义网页**（每门课/每个主题一个子目录，清单见 §9） |
+| `.skills/course-notes-to-web/` | 给 AI 的「讲义 → 网页」技能包（规范 + 通用构建脚本 + 样式表），被 Jekyll 排除 |
 | `_includes/courses.liquid` | 本地覆盖：课程列表渲染（不可点击、Sem 2 在前、Resources 最后） |
 
 ## 3. 常见修改任务（按任务查）
@@ -149,3 +151,65 @@ git -c credential.helper= push "https://x-access-token:<PAT>@github.com/hemu0626
 - [ ] 涉及视觉/布局时参考 §5 的历史结论
 - [ ] 提交后等 2–4 分钟并用 §6 方式线上验证
 - [ ] 不提交临时脚本、不把敏感信息写进仓库
+- [ ] 动讲义页面前先读 §9 与 `.skills/course-notes-to-web/SKILL.md`
+
+## 9. 课程讲义网页（`assets/teaching/`）
+
+**性质**：课程补充材料，学生自学用的**独立静态 HTML**（不依赖 Jekyll 布局，不需要 PDF）。
+每页统一：左侧目录栏 + 白卡片 + 中文为主/英文对照 + 彩色提示框 + 底部 AI 生成声明。
+
+### 9.1 现有页面清单（新增/重建后**必须**更新本表）
+
+| 页面 | 课程页条目 | 源文件（会随课程树整理而变动） |
+| --- | --- | --- |
+| `assets/teaching/mth303-ch3-notes/ch3-notes.html` | Chapter 3: Multiple Linear Regression | `D:\teaching\mth303\ch03_multiple_linear_regression\v1_模型选择补充\MTH303_Ch3_MLR_Teaching_Notes.tex` + `MTH303_Ch3_Hat_Matrix_Handout.tex` |
+| `assets/teaching/mth303-model-selection/criteria.html` | Model Selection Criteria | `D:\teaching\MTH303_Criteria_Origins.pdf`（无 LaTeX 源，页面为手工撰写） |
+| `assets/teaching/mth303-glm-notes/ch4-glm-notes.html` | Chapter 4: GLM proofs | `D:\teaching\mth303\ch04_glm_introduction\v1_中文讲义_31页\main.tex` + `parts\` |
+| `assets/teaching/mth303-link-chain/links.html` | Canonical link and non-canonical link | `D:\teaching\mth303\ch04_glm_introduction\v4_参数关系链_21页\main.tex`（单文件） |
+| `assets/teaching/mth303-ch5-glm-mle/mle.html` | Chapter 5: GLM MLE | `D:\teaching\mth303\ch05_glm_mle\v1_中文讲义_22页\ch5_main.tex` + `parts5\` |
+| `assets/teaching/mth303-family-reference/families.html` | GLM Family Reference | `D:\teaching\mth303\ch04_glm_introduction\v2_补篇_九模型对照_11页\supp_main.tex` + `parts_supp\` |
+| `assets/teaching/mth303-deviance-scratch/scratch.html` | From Scratch: Deviance and Three Algorithms | `D:\teaching\mth303\ch05_glm_mle\v2_偏差与手算_9页\dev_main.tex` + `parts_dev\` |
+| `assets/teaching/mth303-cross-validation/MTH303_Cross_Validation.html` | Cross-Validation | `D:\teaching\mth303\ch03_multiple_linear_regression\v3_交叉验证\MTH303_Cross_Validation.qmd` |
+
+课程页 = `_teachings/mth303.md`（需 `linkable: true`）。条目顺序按教学顺序：
+Ch3 → Model Selection Criteria → Ch4 → Canonical link → Ch5 → Family Reference → From Scratch → Cross-Validation。
+条目用**英文标题**（用户明确要求，别加中文后缀）。
+
+### 9.2 课程源文件的位置
+
+课程材料在 `D:\teaching\mth303\`，用户会周期性重新整理（2026-10-31 已按章重组为 `ch01_*`–`ch07_*`，
+每章内 `vN_中文名`）。**重建前先读 `D:\teaching\mth303\00_INDEX.md`**，不要假设旧路径。
+`materials\` 只放原始课件，约定为只读，AI 产物不要放进去。
+
+### 9.3 重建/新建流程（细节见 skill）
+
+1. 读 `.skills/course-notes-to-web/SKILL.md`（含所有已知坑与替代写法）。
+2. 复制 `parts*/` + 主 `.tex` 到临时目录 → 展开课程自有宏（`\sect/\sub/\zh` 等）→ `pandoc --mathml`
+   （pandoc 在 `C:\Users\Mu He\AppData\Local\Pandoc\pandoc.exe`，**必须在该临时目录内运行**）。
+   目标：`Could not convert` 警告数 = 0；否则按 skill 的替换表修源码副本。
+3. `node .skills/course-notes-to-web/scripts/build-page.js --input … --output … --title "…" --subtitle "…"`
+   （自动做面板拆分、表格滚动、目录、返回链接、AI 声明）。
+4. 复制到 `assets/teaching/<course>-<topic>/<page>.html`，在课程页加/改一行链接。
+5. 提交 + 推送（沙箱需一次性 `danger-full-access`），2–4 分钟后用 node https 验证：
+   状态 200、`h1`/`h2` 数、`<math>` 数、`class="box-title"` 数、`id="toc-list"`、课程页是否含新链接。
+6. 更新 §9.1 表格 + §10 变更记录（写明日期、页面、源文件所在 `chNN/vN`）。
+
+### 9.4 硬性规则（用户要求，勿违）
+
+- **只有 HTML，不放 PDF 下载**；页面内所有公式用 MathML 原生渲染，不能露出 `$…$` 或 LaTeX 命令。
+- 提示框：白底 + 左侧 5px 彩色边 + 彩色标题，**不要整块填充背景色**（用户明确否掉过）。
+- 双语页面：中文为主，英文对照用小号灰字块；纯中文讲义保留原样。
+- 页面底部必须有 `DeepSeek 4.1 Flash` 生成声明（中英各一句）。
+- 一次推送一个提交，避免连续推送导致部署乱序；推送后必须线上验证。
+
+## 10. 变更记录（讲义页与文档）
+
+| 日期 | 变更 |
+| --- | --- |
+| 2026-10-19 | 新建 Ch3 双语讲义页（`mth303-ch3-notes`）；修复面板整块填色、主表拆成两个半表、导读 `$…$` 未渲染、`[eq:…]` 交叉引用 |
+| 2026-10-20 | 新建 Model Selection Criteria 页（`mth303-model-selection`，手写 HTML）；MTH303 条目改英文标题、按教学顺序排列；去掉 "(extra teaching load)" 标签 |
+| 2026-10-23 | 新建 Canonical / non-canonical link 页（`mth303-link-chain`）；修复 4 处 `\rm` 下标导致的公式失败 |
+| 2026-10-27 | 新建 Chapter 5: GLM MLE 页（`mth303-ch5-glm-mle`）与 From Scratch 算例页（`mth303-deviance-scratch`） |
+| 2026-10-28 | 新建 GLM Family Reference 页（`mth303-family-reference`） |
+| 2026-10-31 | 课程材料按章重组后的路径核对（8 个页面全部在线）；新增 `.skills/course-notes-to-web/` 技能包与本节文档 |
+
