@@ -37,15 +37,15 @@ gh-list-repos.js
 gh-poll.js
 gh-logs.js
 
-check-*.js
+/check-*.js
 fetch-crossref.js
 crossref-authors.json
 
 read-gem.js
 *.gem
 
-wait-*.js
+/wait-*.js
 
-read-*.js
-prep-*.js
-build-*.js
+/read-*.js
+/prep-*.js
+/build-*.js
