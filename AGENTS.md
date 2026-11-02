@@ -170,10 +170,11 @@ git -c credential.helper= push "https://x-access-token:<PAT>@github.com/hemu0626
 | `assets/teaching/mth303-family-reference/families.html` | GLM Family Reference | `D:\teaching\mth303\ch04_glm_introduction\v2_补篇_九模型对照_11页\supp_main.tex` + `parts_supp\` |
 | `assets/teaching/mth303-deviance-scratch/scratch.html` | From Scratch: Deviance and Three Algorithms | `D:\teaching\mth303\ch05_glm_mle\v2_偏差与手算_9页\dev_main.tex` + `parts_dev\` |
 | `assets/teaching/mth303-ch6-inference/inference.html` | Chapter 6: GLM inference, goodness of fit and diagnostics | `D:\teaching\mth303\ch06_glm_inference\v1_第6章讲义_44页\main.tex` + `sections\` + `figures\`（3 张 PNG 已复制到 `figures/`） |
+| `assets/teaching/mth303-deviance-kl/deviance-kl.html` | Deviance, KL divergence, likelihood ratio and Neyman–Pearson | `D:\teaching\mth303\ch05_glm_mle\v5_Deviance与KL_29页\main.tex` + `sections\` + `figures\`（2 张 PNG 已复制到 `figures/`） |
 | `assets/teaching/mth303-cross-validation/MTH303_Cross_Validation.html` | Cross-Validation | `D:\teaching\mth303\ch03_multiple_linear_regression\v3_交叉验证\MTH303_Cross_Validation.qmd` |
 
 课程页 = `_teachings/mth303.md`（需 `linkable: true`）。条目顺序按教学顺序：
-Ch3 → Model Selection Criteria → Ch4 → Canonical link → Ch5 → Family Reference → From Scratch → Ch6 → Cross-Validation。
+Ch3 → Model Selection Criteria → Ch4 → Canonical link → Ch5 → Family Reference → From Scratch → Deviance & KL → Ch6 → Cross-Validation。
 条目用**英文标题**（用户明确要求，别加中文后缀）。
 
 ### 9.2 课程源文件的位置
@@ -214,4 +215,5 @@ Ch3 → Model Selection Criteria → Ch4 → Canonical link → Ch5 → Family R
 | 2026-10-28 | 新建 GLM Family Reference 页（`mth303-family-reference`） |
 | 2026-10-31 | 课程材料按章重组后的路径核对（8 个页面全部在线）；新增 `.skills/course-notes-to-web/` 技能包与本节文档 |
 | 2026-11-02 | 新建 Chapter 6: GLM inference, goodness of fit and diagnostics 页（`mth303-ch6-inference`，44 节/692 公式/9 表/3 图/2 段代码）；首次用 skill 的 `build-page.js` 生成 |
+| 2026-11-02 | 新建 Deviance, KL divergence, likelihood ratio and Neyman–Pearson 页（`mth303-deviance-kl`，29 节/480 公式/2 图）；技能包新增通用 `prep-latex.js` |
 
