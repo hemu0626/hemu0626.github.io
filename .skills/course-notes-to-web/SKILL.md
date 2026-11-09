@@ -31,8 +31,37 @@ Never assume an old path.
 | --- | --- |
 | `.tex` with `\input{parts/...}` | copy `parts*/` + main `.tex` into a temp dir, preprocess, `pandoc --mathml` |
 | `.tex` single file | preprocess, `pandoc --mathml` |
+| `.qmd` (Quarto) | **render with the local Quarto** (see §1b), then restyle the rendered HTML |
 | `.qmd` already rendered to HTML | take the rendered HTML, strip its own `<style>`, wrap with the shared style |
 | `.pdf` only | extract text (pypdf is installed: `python -c "from pypdf import PdfReader; ..."`), then **hand-author** the page; math must be rebuilt manually. Never trust auto-extracted formulas. |
+
+### 1b. Quarto documents (Quarto and R ARE installed on this machine)
+
+Neither is on `PATH`; use the absolute paths:
+
+- Quarto 1.4.555 (bundled with RStudio): `C:\Program Files\RStudio\resources\app\bin\quarto\bin\quarto.exe`
+- R 4.4.2: prepend `C:\Program Files\R\R-4.4.2\bin` to `PATH` (also 4.4.1 exists)
+
+```powershell
+$work = "C:\Users\Mu He\AppData\Local\Temp\glm-qmd2"
+# copy the .qmd + its .R + css into $work (never render inside D:\teaching — it writes _files/_build)
+$env:PATH = "C:\Program Files\R\R-4.4.2\bin;" + $env:PATH
+& "C:\Program Files\RStudio\resources\app\bin\quarto\bin\quarto.exe" render "GLM_Complete_ZH.qmd" --to html
+```
+
+Two hard requirements:
+
+1. **Run it with `danger-full-access`** (one-shot escalation). Under the sandbox Quarto cannot start
+   `Rscript` with captured stdio and dies with `ERROR: Error executing 'CMD': Access is denied. (os error 5)`.
+2. Rendering takes 1–3 minutes and needs the R packages the document loads; if a package is missing,
+   fix the R library rather than editing the qmd.
+
+Then restyle the produced `*.html` (it is self-contained: 23 base64 images, MathJax from CDN, `~131`
+`div.cell` code blocks, `section` per heading): strip `<style>`/`<script>`, drop
+`#title-block-header`/`nav#TOC`/`#quarto-document-content` wrappers, map `section.callout-*` to the
+site's `.panel` boxes, and inject `assets/page-style.css` + left TOC + back link + AI note.
+**Prefer static MathML over MathJax** for pages that must work offline — the already-deployed
+`mth303-glm-complete` page was built from the pre-rendered HTML, which has MathML and no CDN call.
 
 ## 2. Preprocess LaTeX before pandoc
 

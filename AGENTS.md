@@ -171,7 +171,7 @@ git -c credential.helper= push "https://x-access-token:<PAT>@github.com/hemu0626
 | `assets/teaching/mth303-deviance-scratch/scratch.html` | From Scratch: Deviance and Three Algorithms | `D:\teaching\mth303\ch05_glm_mle\v2_偏差与手算_9页\dev_main.tex` + `parts_dev\` |
 | `assets/teaching/mth303-ch6-inference/inference.html` | Chapter 6: GLM inference, goodness of fit and diagnostics | `D:\teaching\mth303\ch06_glm_inference\v1_第6章讲义_44页\main.tex` + `sections\` + `figures\`（3 张 PNG 已复制到 `figures/`） |
 | `assets/teaching/mth303-deviance-kl/deviance-kl.html` | Deviance, KL divergence, likelihood ratio and Neyman–Pearson | `D:\teaching\mth303\ch05_glm_mle\v5_Deviance与KL_29页\main.tex` + `sections\` + `figures\`（2 张 PNG 已复制到 `figures/`） |
-| `assets/teaching/mth303-glm-complete/glm-complete.html` | GLM in R: complete teaching notes (two-hour core route) | `D:\teaching\mth303\ch07_glm_complete_teaching\v1_完整教学_Quarto双语\GLM_Complete_ZH.html`（Quarto **已渲染**版，图片为 base64 内嵌；源文件 `GLM_Complete_ZH.qmd` + `.R`，本机无 Quarto/R，不能重渲染） |
+| `assets/teaching/mth303-glm-complete/glm-complete.html` | GLM in R: complete teaching notes (two-hour core route) | `D:\teaching\mth303\ch07_glm_complete_teaching\v1_完整教学_Quarto双语\GLM_Complete_ZH.html`（Quarto 已渲染版，图片 base64 内嵌、公式为 MathML）；源 `GLM_Complete_ZH.qmd` + `.R`，本机 Quarto 1.4.555 + R 4.4.2 可用，见 §9.3 |
 | `assets/teaching/mth303-cross-validation/MTH303_Cross_Validation.html` | Cross-Validation | `D:\teaching\mth303\ch03_multiple_linear_regression\v3_交叉验证\MTH303_Cross_Validation.qmd` |
 
 课程页 = `_teachings/mth303.md`（需 `linkable: true`）。条目顺序按教学顺序：
@@ -190,6 +190,11 @@ Ch3 → Model Selection Criteria → Ch4 → Canonical link → Ch5 → Family R
 2. 复制 `parts*/` + 主 `.tex` 到临时目录 → 展开课程自有宏（`\sect/\sub/\zh` 等）→ `pandoc --mathml`
    （pandoc 在 `C:\Users\Mu He\AppData\Local\Pandoc\pandoc.exe`，**必须在该临时目录内运行**）。
    目标：`Could not convert` 警告数 = 0；否则按 skill 的替换表修源码副本。
+   **Quarto 文档（.qmd）**：本机装有 Quarto 1.4.555（RStudio 自带，
+   `C:\Program Files\RStudio\resources\app\bin\quarto\bin\quarto.exe`）与 R 4.4.2
+   （`C:\Program Files\R\R-4.4.2\bin`，需加入 PATH）。渲染命令与两个硬要求见 skill §1b；
+   关键点：必须一次性 `danger-full-access`（否则 Quarto 起不了 Rscript 子进程），
+   且要在临时目录渲染、不要写进 `D:\teaching`。
 3. `node .skills/course-notes-to-web/scripts/build-page.js --input … --output … --title "…" --subtitle "…"`
    （自动做面板拆分、表格滚动、目录、返回链接、AI 声明）。
 4. 复制到 `assets/teaching/<course>-<topic>/<page>.html`，在课程页加/改一行链接。
@@ -217,5 +222,7 @@ Ch3 → Model Selection Criteria → Ch4 → Canonical link → Ch5 → Family R
 | 2026-10-31 | 课程材料按章重组后的路径核对（8 个页面全部在线）；新增 `.skills/course-notes-to-web/` 技能包与本节文档 |
 | 2026-11-02 | 新建 Chapter 6: GLM inference, goodness of fit and diagnostics 页（`mth303-ch6-inference`，44 节/692 公式/9 表/3 图/2 段代码）；首次用 skill 的 `build-page.js` 生成 |
 | 2026-11-02 | 新建 Deviance, KL divergence, likelihood ratio and Neyman–Pearson 页（`mth303-deviance-kl`，29 节/480 公式/2 图）；技能包新增通用 `prep-latex.js` |
-| 2026-11-09 | 新建 GLM in R 完整讲义页（`mth303-glm-complete`，Quarto 已渲染 HTML 重排：20 节/39 小节/156 代码块/23 图/4 表/3 提示框）；本机无 Quarto/R，只能基于已渲染 HTML 更新 |
+| 2026-11-09 | 新建 GLM in R 完整讲义页（`mth303-glm-complete`，Quarto 已渲染 HTML 重排：20 节/39 小节/156 代码块/23 图/4 表/3 提示框） |
+| 2026-11-09 | **修复部署中断**：GitHub Actions 新镜像不再提供 Ruby 3.3.5（`Setup Ruby` 步骤 404 失败，站点连续多轮无法发布），`deploy.yml` 改为 `ruby-version: "3.3"` 后恢复正常 |
+| 2026-11-09 | 确认本机装有 Quarto 1.4.555（RStudio 自带）与 R 4.4.2，已把 `.qmd` 渲染流程（含路径、权限要求）写入 §9.3 与 skill §1b；实测可渲染成功 |
 
