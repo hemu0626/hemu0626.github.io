@@ -152,9 +152,9 @@ related_blog_posts:
 # Giscus comments (RECOMMENDED)
 # Follow instructions on https://giscus.app/ to setup for your repo to fill out the information below.
 giscus:
-  repo: # <your-github-user-name>/<your-github-repo-name>
-  repo_id: # leave empty or specify your repo_id (see https://giscus.app/)
-  category: Comments # name of the category under which discussions will be created
+  repo: hemu0626/hemu0626.github.io # <your-github-user-name>/<your-github-repo-name>
+  repo_id: R_kgDOL4twNQ # leave empty or specify your repo_id (see https://giscus.app/)
+  category: Announcements # name of the category under which discussions will be created
   category_id: # leave empty or specify your category_id (see https://giscus.app/)
   mapping: title # identify discussions by post title
   strict: 1 # use strict identification mode
@@ -163,7 +163,7 @@ giscus:
   dark_theme: dark # name of the dark color scheme (preferred works well with al-folio dark mode)
   light_theme: light # name of the light color scheme (preferred works well with al-folio light mode)
   emit_metadata: 0
-  lang: en
+  lang: zh-CN
 
 # Disqus comments (DEPRECATED)
 disqus_shortname: al-folio # put your disqus shortname
