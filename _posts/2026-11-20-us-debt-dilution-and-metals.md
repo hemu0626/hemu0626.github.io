@@ -110,7 +110,9 @@ tags: [macro, gold, investing]
 
 但金融抑制有一个数学上限：**利息支出本身。** 1.36 万亿的年利息在滚动再融资下只会惯性上行——只要 10 年期利率维持在 5% 附近，每一年都有更多低息旧债到期、换成高息新债。按当前斜率推算，两年内利息将超过社会保障成为第一大支出项。**到了那一步，财政对高利率的容忍度会触及数学红线，Fed 将被迫从"买短债的技术操作"升级为"接住长端"。** 不是会不会的问题，是财政数学倒逼的时点问题。
 
-![Fed接长端：美债收益率曲线上的"短端"与"长端"](/assets/img/us-debt-fed-long-end.svg)
+<p style="margin: 2rem 0 0.75rem; text-align: center;">
+  <img src="/assets/img/us-debt-fed-long-end.svg" alt="Fed 接长端示意图：美债收益率曲线上的短端与长端" style="width: 100%; max-width: 640px; height: auto;">
+</p>
 
 *图 1：Fed 接长端示意。绿色区是 Fed 当前 RMP 操作的范围（只买短端国库券），红色区是"接长端"意味着的范围（2~30 年期中长期国债）——跨越这条线，就是从"技术操作"到实质 QE 的分界。*
 
@@ -158,7 +160,11 @@ CDS 市场最诚实：七大 AI 核心标的的信用违约互换周均成交从
 
 如果上面的推论成立，资产端的受益顺序是清晰的：**一切以美元实际利率为贴现率的硬资产**——黄金、铜、以及它们的股票。
 
-![紫金矿业七面板估值图：PE/PB/ROE/美债10Y/Fed弹药库与债务/金铜价格/股价对比](/assets/img/zijin-valuation-7panel.png)
+<p style="margin: 2rem 0 0.75rem; text-align: center;">
+  <a href="/assets/img/zijin-valuation-7panel.png" target="_blank" rel="noopener" title="点击查看原图">
+    <img src="/assets/img/zijin-valuation-7panel.png" alt="紫金矿业七面板估值图（2008–2026.11.20）" style="width: 100%; max-width: 680px; height: auto; border: 1px solid rgba(0,0,0,0.08); border-radius: 4px;">
+  </a>
+</p>
 
 *图 2：紫金矿业估值全景（2008–2026.11.20，七面板）。自上而下：PE-TTM 历史新低 8.83 → PB 3.03（精确段 34% 分位）→ ROE 34.3% 顶档 → 美债 10Y 5.05%（20 年 99% 分位，压制一切估值的总阀门）→ Fed 总资产与联邦债务（2025-12 重启扩表、债务破 $40 万亿）→ 金价铜价（金价较 2026-01 峰值 -34%）→ 紫金 vs 纽蒙特 NEM vs 自由港 FCX 股价。红蓝竖线为美联储政策转向节点。*
 
