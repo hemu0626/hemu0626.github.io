@@ -64,7 +64,41 @@
     } catch (e) {}
     if (saved === 'zh' || saved === 'en') activate(saved);
   })();
-</script> </div> </article> <br> <hr> <br> <h2 class="text-3xl font-semibold mb-4 mt-12">Enjoy Reading This Article?</h2> <p class="mb-2">Here are some more articles you might like to read next:</p> <ul class="list-disc pl-7 my-3 space-y-2 marker:text-[var(--global-theme-color)]"> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2026/teaching-in-the-age-of-ai/">我不再自己编辑了 / I no longer edit my own work</a> </li> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2026/new-homepage/">A new homepage</a> </li> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2024/katago-memo/">Memo KataGo</a> </li> </ul> </div> </div> <footer class="fixed-bottom" role="contentinfo"> <div class="container mt-0"> © Copyright 2026 Mu He. © 2026 Mu He · Xi'an Jiaotong-Liverpool University. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> with the <a href="https://github.com/alshedivat/al-folio" rel="external nofollow noopener" target="_blank">al-folio</a> theme. Last updated: November 09, 2026. </div> </footer> <script>
+</script> </div> </article> <br> <hr> <br> <h2 class="text-3xl font-semibold mb-4 mt-12">Enjoy Reading This Article?</h2> <p class="mb-2">Here are some more articles you might like to read next:</p> <ul class="list-disc pl-7 my-3 space-y-2 marker:text-[var(--global-theme-color)]"> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2026/us-debt-dilution-and-metals/">无路可走，唯余稀释</a> </li> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2026/teaching-in-the-age-of-ai/">我不再自己编辑了 / I no longer edit my own work</a> </li> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2026/new-homepage/">A new homepage</a> </li> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2024/katago-memo/">Memo KataGo</a> </li> </ul> <div id="giscus_thread" style="max-width: 1300px; margin: 0 auto;"> <br> <script>
+    (function setupGiscus() {
+      function determineGiscusTheme() {
+        var theme = localStorage.getItem("theme") || document.documentElement.getAttribute("data-theme") || "system";
+if (theme === "dark") return "dark";
+if (theme === "light") return "light";
+var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+return prefersDark ? "dark" : "light";
+
+      }
+
+      var giscusTheme = determineGiscusTheme();
+      var attrs = {
+        src: "https://giscus.app/client.js",
+        "data-repo": "hemu0626/hemu0626.github.io",
+        "data-repo-id": "R_kgDOL4twNQ",
+        "data-category": "Announcements",
+        "data-category-id": "DIC_kwDOL4twNc4DLkaU",
+        "data-mapping": "title",
+        "data-strict": "1",
+        "data-reactions-enabled": "1",
+        "data-emit-metadata": "0",
+        "data-input-position": "bottom",
+        "data-theme": giscusTheme,
+        "data-lang": "zh-CN",
+        crossorigin: "anonymous",
+        async: true
+      };
+
+      var giscusScript = document.createElement("script");
+      Object.entries(attrs).forEach(function(entry) { giscusScript.setAttribute(entry[0], entry[1]); });
+      var host = document.getElementById("giscus_thread");
+      if (host) host.appendChild(giscusScript);
+    })();
+  </script> <noscript> Please enable JavaScript to view the <a href="http://giscus.app/?ref_noscript" rel="external nofollow noopener" target="_blank">comments powered by giscus.</a> </noscript> </div> </div> </div> <footer class="fixed-bottom" role="contentinfo"> <div class="container mt-0"> © Copyright 2026 Mu He. © 2026 Mu He · Xi'an Jiaotong-Liverpool University. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> with the <a href="https://github.com/alshedivat/al-folio" rel="external nofollow noopener" target="_blank">al-folio</a> theme. Last updated: November 20, 2026. </div> </footer> <script>
   window.alFolio = {
     compatBootstrap: false
   };
@@ -131,7 +165,18 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/blog/";
           },
-        },{id: "post-往圣还需不需要我来继绝学-do-the-sages-still-need-me",
+        },{id: "post-无路可走-唯余稀释",
+        
+          title: "无路可走，唯余稀释",
+        
+        description: "从美国财政的复利方程出发，推演美债化债的终局，并以紫金矿业为样本，看黄金与有色金属在 5% 无风险利率下的重估。",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2026/us-debt-dilution-and-metals/";
+          
+        },
+      },{id: "post-往圣还需不需要我来继绝学-do-the-sages-still-need-me",
         
           title: "往圣还需不需要我来继绝学 / Do the sages still need me?",
         
